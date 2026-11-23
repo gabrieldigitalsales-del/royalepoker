@@ -459,6 +459,7 @@ async function command(d, u, b) {
       return { destination };
     }
     case "buyShop": {
+      check(false, "Loja de diamantes em breve. Os resgates ainda estão bloqueados.");
       if (b.item === "vip") {
         check(
           !u.vip && (u.diamonds ?? 0) >= vipPrice,
