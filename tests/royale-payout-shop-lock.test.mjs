@@ -4,6 +4,7 @@ import { readFileSync } from "node:fs";
 import {
   showdownFlow,
   SHOWDOWN_RESULTS_GAP_MS,
+  FINAL_CARD_SETTLE_MS,
   SHOWDOWN_WINNER_HOLD_MS,
   SHOWDOWN_AWARD_GAP_MS,
 } from "../src/showdown-flow.mjs";
@@ -18,7 +19,7 @@ for (const runs of [2, 3]) {
         boards: Array.from({ length: runs }, () => ["As", "Kd", "Qh", "Jc", "Ts"]),
       };
       const end = f.runoutDelay + (runs * (5-from) - 1)*f.runoutStep;
-      const winnerAt = end + SHOWDOWN_RESULTS_GAP_MS;
+      const winnerAt = end + FINAL_CARD_SETTLE_MS + SHOWDOWN_RESULTS_GAP_MS;
       const awardAt = winnerAt + SHOWDOWN_WINNER_HOLD_MS + SHOWDOWN_AWARD_GAP_MS;
       assert.equal(showdownFlow(f, end - 1).resultsReady, false);
       assert.equal(showdownFlow(f, winnerAt).resultsReady, true);
