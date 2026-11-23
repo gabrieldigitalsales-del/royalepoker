@@ -1,6 +1,6 @@
 import { showdownFlow } from "../src/showdown-flow.mjs";
 import { diamondAwards } from "./rewards.mjs";
-import { prepareDealerChoice } from "./dealer-seat-sync.mjs";
+import { prepareDealerChoice, DEALER_REVIEW_MS } from "./dealer-seat-sync.mjs";
 import { takeRake, rakeAdmin, avatarFor } from "./progression.mjs";
 import { randomBytes, randomUUID, randomInt } from "node:crypto";
 import { step } from "./worker.mjs";
@@ -377,7 +377,7 @@ function finish(d, r) {
   // Never deal another hand until all boards and the winning hands were shown.
   const presentation = showdownFlow(f, 0);
   const multiRun = f.runoutFrom != null && (f.boards?.length ?? 0) > 1;
-  r.reviewUntil = h.ended + (multiRun ? presentation.awardAt + 3600 : 4400);
+  r.reviewUntil = h.ended + (multiRun ? presentation.awardAt : 0) + DEALER_REVIEW_MS;
   r.hand = null;
   // The selection countdown is server-authoritative and survives reconnects.
   if (r.game === "choice" && !r.paused && !r.closed) {
