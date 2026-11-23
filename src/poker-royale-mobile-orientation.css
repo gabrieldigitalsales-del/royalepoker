@@ -94,9 +94,9 @@
   .studio .portrait-table .portrait-seat .stackplate { font-size:10px!important;padding:1px 2px 3px!important; }
   .studio .portrait-table .empty-chair { width:clamp(30px,8vw,39px)!important;height:clamp(30px,8vw,39px)!important; }
   .studio .portrait-table .pot-tag { top:39%!important; }
-  .studio .portrait-table .portrait-board { top:50%!important;max-width:94vw!important; }
-  .studio .portrait-table .portrait-board .card,.studio .portrait-table .board-slot { width:clamp(22px,7vw,33px)!important;height:clamp(32px,10vw,46px)!important; }
-  .studio .portrait-table .extra-runout-boards { top:57%!important;max-width:95vw!important; }
+  .studio .portrait-table:not(.royale-multiple-boards) .portrait-board { top:50%!important;max-width:94vw!important; }
+  .studio .portrait-table:not(.royale-multiple-boards) .portrait-board .card,.studio .portrait-table .board-slot { width:clamp(22px,7vw,33px)!important;height:clamp(32px,10vw,46px)!important; }
+  .studio .portrait-table:not(.royale-multiple-boards) .extra-runout-boards { top:57%!important;max-width:95vw!important; }
   .studio .portrait-table .extra-board-cards { max-width:100%!important; }
   .studio .table-stage .dealer-choice-spot { top:32%!important;left:50%!important;min-width:0!important;max-width:90vw!important; }
   .studio .studio-layout>.console {
@@ -149,7 +149,7 @@
     -webkit-tap-highlight-color:transparent;
   }
   .studio .portrait-table .portrait-seat,.studio .portrait-table .empty-chair,
-  .studio .portrait-table .portrait-board,.studio .portrait-table .extra-runout-boards {
+  .studio .portrait-table:not(.royale-multiple-boards) .portrait-board,.studio .portrait-table:not(.royale-multiple-boards) .extra-runout-boards {
     transition:top .22s ease-out,left .22s ease-out,opacity .15s linear;
   }
   .studio .table-stage>.straddle-switch {
@@ -181,7 +181,7 @@
   .studio .portrait-table .table-rail::after {
     filter:drop-shadow(0 0 7px #e976ffaa);
   }
-  .studio .portrait-table .portrait-board,.studio .portrait-table .extra-runout-boards {
+  .studio .portrait-table:not(.royale-multiple-boards) .portrait-board,.studio .portrait-table:not(.royale-multiple-boards) .extra-runout-boards {
     width:max-content!important;
     max-width:calc(100vw - 32px)!important;
   }
@@ -192,13 +192,13 @@
 @media (max-width:800px) and (orientation:landscape) {
   .studio .studio-layout>.console { position:fixed!important; }
   .studio .table-stage>.host-controls { position:fixed!important; }
-  .studio .portrait-table .portrait-board,.studio .portrait-table .extra-runout-boards {
+  .studio .portrait-table:not(.royale-multiple-boards) .portrait-board,.studio .portrait-table:not(.royale-multiple-boards) .extra-runout-boards {
     max-width:70vw!important;
   }
 }
 @media (prefers-reduced-motion:reduce) {
   .studio .portrait-table .portrait-seat,.studio .portrait-table .empty-chair,
-  .studio .portrait-table .portrait-board,.studio .portrait-table .extra-runout-boards {
+  .studio .portrait-table:not(.royale-multiple-boards) .portrait-board,.studio .portrait-table:not(.royale-multiple-boards) .extra-runout-boards {
     transition:none!important;
   }
 }
