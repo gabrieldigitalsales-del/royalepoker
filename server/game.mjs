@@ -652,15 +652,17 @@ export function roomView(d, r, u, detail = false) {
         event.action === "fold" || event.action === "timeoutFold"
       ).map((event) => event.by));
       const participants = completed.players.map((player, index) => {
-        const received = frame.rows ? 0 : (grossPayouts[index] ?? 0);
-        const net = frame.rows ? frame.payouts[index] : publicGrossResult(frame, player, index);
-        const invested = frame.rows ? 0 : Math.max(0, player.stack + (frame.payouts[index] ?? 0) - frame.stacks[index]);
+        const received = frame.rows ? 0 : (frame.payouts[index] ?? 0);
+        const grossReceived = frame.rows ? 0 : (grossPayouts[index] ?? 0);
+        const net = frame.rows ? frame.payouts[index] : frame.stacks[index] - player.stack;
+        const grossNet = frame.rows ? net : publicGrossResult(frame, player, index);
+        const invested = frame.rows ? 0 : Math.max(0, player.stack + received - frame.stacks[index]);
         return {
           id: player.id, name: player.name, avatar: player.avatar,
           won: frame.rows ? frame.payouts[index] === best : received > 0,
           folded: foldedIds.has(player.id),
           cards: visibleFinal.hole?.[index] ?? [],
-          invested, received, net, stack: frame.stacks[index],
+          invested, received, net, grossReceived, grossNet, stack: frame.stacks[index],
         };
       });
       const boardSets = visibleFinal.boards?.length ? visibleFinal.boards : [visibleFinal.board ?? []];
