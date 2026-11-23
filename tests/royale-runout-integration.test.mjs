@@ -27,7 +27,7 @@ async function finishCash(votes){
  assert.ok(!r.hand,'mão deve ter terminado');
  assert.equal(confirmed,votes.length,'todos os votantes confirmaram');
  const frame=d.hands[r.last].frames.at(-1);
- assert.equal(frame.stacks.reduce((x,y)=>x+y,0),votes.length*200);
+ assert.equal(frame.stacks.reduce((x,y)=>x+y,0), votes.length*200 - (frame.rake ?? 0), 'o total das pilhas deve descontar somente o rake global');
  return {frame,room:r,actions:count};
 }
 test('Poker Royale: all-in real 3/3/3 votes, runs three boards',async()=>{
