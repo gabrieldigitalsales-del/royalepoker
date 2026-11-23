@@ -1,0 +1,93 @@
+/* NEXOR Royale | separated app shell, lobby and Royal Wallet */
+.royale-app-shell{--royale-gold:#edc983;--royale-purple:#24142e;}
+.royale-app-shell .content{min-width:0;min-height:100dvh;max-width:100%;overflow-x:hidden;}
+.royale-app-shell .page{min-width:0;max-width:100%;padding-bottom:calc(34px + env(safe-area-inset-bottom));}
+.royale-app-shell .content > header{position:sticky;top:0;z-index:55;min-height:62px;background:#160f25ed;backdrop-filter:blur(16px);border-bottom:1px solid #dab5752d;}
+.royale-app-shell .club-lobby{min-width:0;max-width:1200px;margin:auto;display:flex;flex-direction:column;gap:17px;}
+.royale-lobby-hero{position:relative;isolation:isolate;display:flex;align-items:center;justify-content:space-between;gap:24px;flex-wrap:wrap;padding:clamp(22px,4vw,37px);border:1px solid #d7b87575;border-radius:24px;background:linear-gradient(125deg,#352041,#1a102a 75%);overflow:hidden;box-shadow:0 14px 32px #10071f55;}
+.royale-lobby-hero:before{content:"♠";position:absolute;z-index:-1;right:13%;top:-32%;font-size:clamp(180px,27vw,350px);color:#e9c27510;transform:rotate(-15deg);pointer-events:none;}
+.royale-lobby-hero-copy{min-width:230px;flex:1;}
+.royale-lobby-hero-copy>small{color:#d7b17a;font-weight:900;letter-spacing:.15em;font-size:11px;}
+.royale-lobby-hero-copy h1{font-size:clamp(26px,3.5vw,40px);line-height:1.12;margin:10px 0;color:#fff0d1;}
+.royale-lobby-hero-copy p{max-width:510px;margin:10px 0 18px;color:#d8cbd9;font-size:14px;}
+.royale-lobby-hero-stats{display:flex;gap:9px;flex-wrap:wrap;}
+.royale-lobby-hero-stats span{border:1px solid #bba07057;background:#140c1e88;border-radius:100px;padding:6px 11px;color:#e5dae8;font-size:12px;}
+.royale-lobby-hero-stats b{color:#f2ce8b;}
+.royale-lobby-hero-actions{display:flex;gap:9px;flex-wrap:wrap;max-width:300px;}
+.royale-lobby-hero-actions button{flex:1 1 120px;white-space:nowrap;}
+.royale-app-shell button.primary,.royale-app-shell .royale-lobby-hero-actions button,.royale-app-shell .royal-wallet-form button,.royale-app-shell .royal-wallet-admin-actions button{
+  border-radius:12px;min-height:43px;display:inline-flex;align-items:center;justify-content:center;gap:7px;
+  font-weight:850;transition:transform .13s cubic-bezier(.2,.7,.2,1),box-shadow .17s ease,filter .17s ease;
+  box-shadow:inset 0 1px 0 #ffffff40,0 3px 10px #0006;
+  touch-action:manipulation;-webkit-tap-highlight-color:transparent;
+}
+.royale-app-shell button.primary:hover,.royale-app-shell .royale-lobby-hero-actions button:hover,.royale-app-shell .royal-wallet-form button:hover{filter:brightness(1.16);box-shadow:0 0 17px #e5ba6b4a,0 3px 13px #0007;transform:translateY(-1px)}
+.royale-app-shell button.primary:active,.royale-app-shell .royale-lobby-hero-actions button:active,.royale-app-shell .royal-wallet-form button:active{transform:scale(.965) translateY(2px);box-shadow:inset 0 2px 8px #0009;}
+.royale-app-shell button:focus-visible{outline:3px solid #ffe1a0;outline-offset:2px;}
+.royale-app-shell button:disabled{opacity:.5;filter:grayscale(.5);transform:none;cursor:not-allowed;}
+.royale-app-shell .club-lobby-heading{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:10px;}
+.royale-app-shell .club-lobby-heading h2{margin:0;color:#f7e5c4;font-size:20px;}
+.royale-app-shell .club-room-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,270px),1fr));gap:13px;min-width:0;}
+.royale-app-shell .club-room-card{min-width:0;overflow:hidden;position:relative;border:1px solid #af895c55;border-radius:17px;background:linear-gradient(140deg,#29203a,#171126);transition:transform .17s ease,border-color .17s ease,box-shadow .17s ease;}
+.royale-app-shell .club-room-card:hover{transform:translateY(-2px);border-color:#eed097a0;box-shadow:0 12px 22px #0005;}
+.royale-app-shell .club-room-card .club-room-open{max-width:100%;min-width:0;}
+.royale-app-shell .cash-shortcuts,.royale-app-shell .club-room-toolbar{max-width:100%;flex-wrap:wrap;gap:10px;}
+.royale-app-shell .cash-shortcuts input[type="search"]{min-width:min(100%,220px);flex:1 1 180px;}
+.royale-app-shell .cash-shortcuts select{flex:0 1 auto;}
+/* Wallet screens share the surrounding application shell; they never mount table HUDs. */
+.royal-wallet-page{width:min(1120px,100%);margin:0 auto;display:flex;flex-direction:column;gap:19px;color:#eee0e8;}
+.royal-wallet-intro{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:24px;border-radius:20px;border:1px solid #d8b77e5c;background:linear-gradient(110deg,#3a234a,#191127);}
+.royal-wallet-intro small{color:#e7c47c;letter-spacing:.13em;font-size:11px;font-weight:800;}
+.royal-wallet-intro h1{margin:7px 0;font-size:clamp(25px,3vw,35px);color:#ffe7bc;}
+.royal-wallet-intro p{max-width:600px;margin:0;font-size:14px;color:#cfc0d7;}
+.royal-wallet-intro svg{flex-shrink:0;color:#edc482;}
+.royal-wallet-metrics{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;}
+.royal-wallet-metrics>div{display:flex;flex-direction:column;gap:8px;padding:17px;border-radius:15px;background:#261c33;border:1px solid #9f815d6b;}
+.royal-wallet-metrics span{font-size:12px;color:#ddcadb;}
+.royal-wallet-metrics strong{font-size:clamp(23px,3.3vw,35px);color:#f7d28b;font-variant-numeric:tabular-nums;}
+.royal-wallet-metrics small{color:#ae9fac;}
+.royal-wallet-body{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+.royal-wallet-panel{min-width:0;padding:20px;border-radius:17px;background:#21192d;border:1px solid #9f815d55;}
+.royal-wallet-panel h2{color:#f8e2ba;margin:0 0 13px;font-size:19px;}
+.royal-wallet-panel p{line-height:1.5;}
+.royal-wallet-tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:22px;}
+.royal-wallet-tabs button{flex:1 1 170px;border:1px solid #7e6a79;background:#3e2e49;border-radius:11px;min-height:43px;display:inline-flex;align-items:center;justify-content:center;gap:7px;color:#e6d9e4;}
+.royal-wallet-tabs button.selected{background:#6f4a63;border-color:#eac58d;color:#ffedd2;}
+.royal-wallet-form{display:grid;gap:10px;margin:16px 0;}
+.royal-wallet-form label{font-size:13px;font-weight:700;}
+.royal-wallet-form input{min-height:45px;max-width:100%;border:1px solid #bea185;border-radius:10px;background:#120d1e;color:#fef2e2;padding:10px 14px;font-size:18px;}
+.royal-wallet-form button{border:0;background:linear-gradient(95deg,#b47737,#eed197);color:#281a27;}
+.royal-wallet-feedback{padding:10px;border-radius:10px;background:#463149;color:#fff4c7;font-size:13px;}
+.royal-wallet-disclaimer{display:block;padding:10px 12px;border-left:3px solid #edc984;background:#1b1425;color:#cfc0cf;font-size:12px;line-height:1.5;}
+.royal-wallet-requests{display:grid;gap:8px;max-height:470px;overflow-y:auto;overscroll-behavior:contain;}
+.royal-wallet-request,.royal-wallet-admin-request{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;border:1px solid #94785155;background:#191324;border-radius:12px;padding:12px;}
+.royal-wallet-request>span,.royal-wallet-admin-request>div{display:flex;flex-direction:column;gap:5px;}
+.royal-wallet-request>span:last-child{text-align:right;}
+.royal-wallet-request small,.royal-wallet-admin-request small{color:#b5a7bd;font-size:11px;}
+.royal-gain{color:#7de6b8;}.royal-loss{color:#f3a6b2;}
+.royal-wallet-section-head{display:flex;justify-content:space-between;align-items:center;}
+.royal-wallet-section-head button{background:#43304e;border:1px solid #967985;color:#f4dfbc;border-radius:10px;min-width:36px;min-height:36px;display:grid;place-items:center;}
+.royal-wallet-admin-actions{display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
+.royal-wallet-admin-actions button{padding:8px 12px;background:#b58a59;color:#241527;border:0;}
+@media(max-width:780px){
+  .royale-app-shell{height:100dvh;min-height:100dvh;max-height:100dvh;overflow:hidden;display:flex;flex-direction:column;}
+  .royale-app-shell .content{display:flex;flex-direction:column;min-height:0;height:100dvh;overflow:hidden;flex:1;}
+  .royale-app-shell .content>header{position:relative;flex:0 0 auto;padding-top:env(safe-area-inset-top);}
+  .royale-app-shell .page{flex:1 1 auto;min-height:0;overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;padding-bottom:calc(88px + env(safe-area-inset-bottom));}
+  .royale-app-shell .lobby-app-nav{position:fixed!important;bottom:0!important;left:0!important;right:0!important;z-index:110;min-height:calc(66px + env(safe-area-inset-bottom));padding:8px 6px calc(8px + env(safe-area-inset-bottom));background:#1c1129f2;backdrop-filter:blur(16px);border-top:1px solid #c2985c65;}
+  .royale-app-shell .lobby-app-nav a{flex:1;min-width:0;display:flex;flex-direction:column;gap:4px;align-items:center;justify-content:center;padding:5px 3px;font-size:10px;white-space:nowrap;}
+  .royale-app-shell .lobby-app-nav a[aria-current="page"]{color:#fbe0a5;}
+  .royale-lobby-hero{padding:17px;border-radius:17px;}
+  .royale-lobby-hero-copy{min-width:0;}
+  .royale-lobby-hero-actions{max-width:none;width:100%;}
+  .royale-lobby-hero-actions button{flex:1 1 auto;font-size:12px;}
+  .royal-wallet-body{grid-template-columns:1fr;}
+  .royal-wallet-intro{padding:17px;}
+  .royal-wallet-panel{padding:15px;}
+  .royal-wallet-metrics{gap:7px;}
+  .royal-wallet-metrics>div{padding:11px 9px;gap:7px;}
+  .royal-wallet-metrics strong{font-size:clamp(17px,4.5vw,25px);}
+  .royal-wallet-metrics small{font-size:10px;}
+}
+@media(max-width:380px){.royale-lobby-hero-stats{gap:5px}.royale-lobby-hero-stats span{padding:5px 7px;font-size:11px}.royal-wallet-metrics{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media(prefers-reduced-motion:reduce){.royale-app-shell button,.royale-app-shell .club-room-card{transition:none!important;animation:none!important}}
