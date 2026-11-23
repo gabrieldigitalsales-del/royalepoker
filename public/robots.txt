@@ -1,0 +1,13 @@
+User-agent: *
+Allow: /
+Disallow: /admin
+Disallow: /mesa/
+Disallow: /perfil
+Disallow: /historico
+Disallow: /jogadores
+Disallow: /torneios
+Disallow: /convite
+Disallow: /api
+Disallow: /avatar/
+
+Sitemap: https://royalepoker-2ga9.onrender.com/sitemap.xml
