@@ -418,6 +418,7 @@ export default function Table() {
     [linkCopied, Copy] = useState(false),
     [info, setInfo] = useState(false),
     [resultHand, setResultHand] = useState<any>(),
+    [dealerReviewActive, setDealerReviewActive] = useState(false),
     [historyOpen, setHistoryOpen] = useState(false),
     [handSearch, setHandSearch] = useState(""),
     [historyFilter, setHistoryFilter] = useState("all"),
@@ -518,6 +519,25 @@ export default function Table() {
     const timer = setTimeout(() => setMoveStatus(""), 3500);
     return () => clearTimeout(timer);
   }, [moveStatus, unconfirmed, busy]);
+  async function openDealerReview() {
+    if (busy || !r?.lastHand) return;
+    const previous = r.lastHand;
+    try {
+      if (r.game === "choice" && r.nextChoice?.selecting && r.nextChoice.dealer === me.id)
+        await api("choiceHold", { room: id });
+      setDealerReviewActive(true);
+      setResultHand({ hand: previous, frame: previous.frames.at(-1) });
+      await refresh();
+    } catch (error) { fail(error); }
+  }
+  async function closeDealerReview() {
+    setResultHand(undefined);
+    if (dealerReviewActive) {
+      setDealerReviewActive(false);
+      try { await api("choiceResume", { room: id }); await refresh(); }
+      catch (error) { fail(error); }
+    }
+  }
   async function openDealerChoice() {
     if (busy) return;
     try {
@@ -989,24 +1009,33 @@ export default function Table() {
             </div>
           )}
           {r.game === "choice" &&
-            !revealing &&
-            !r.live &&
-            !r.paused &&
+            !r.live && !r.paused &&
             (r.choiceStarted || r.count > 0) &&
             eligible.length >= 2 && (
-              <div className="dealer-choice-spot royale-dealer-pot-anchored" style={{"--choice-progress": r.nextChoice?.selecting ? `${Math.max(0, Math.min(100, ((r.nextChoice.heldAt ? r.nextChoice.remainingMs : r.nextChoice.at-time)) / 5000 * 100))}%` : "100%"} as React.CSSProperties}>
-                {r.nextChoice ? (
-                  <span>
-                    {
-                      home.catalog.find((game) => game.id === r.nextChoice.id)
-                        ?.name
-                    }{" "}
-                    · {Math.max(0, Math.ceil((r.nextChoice.heldAt ? r.nextChoice.remainingMs : r.nextChoice.at - time) / 1000))}{" "}
-                    s
-                    {r.nextChoice.selecting && r.nextChoice.dealer === me.id && <button type="button" onClick={openDealerChoice}>Escolher jogo</button>}
+              <div className="dealer-choice-spot royale-dealer-pot-anchored"
+                style={{"--choice-progress": r.nextChoice?.selecting
+                  ? `${Math.max(0, Math.min(100, (r.nextChoice.heldAt
+                    ? r.nextChoice.remainingMs
+                    : r.nextChoice.at - serverNow) / 5000 * 100))}%`
+                  : "100%"} as React.CSSProperties}>
+                {r.nextChoice && serverNow < r.nextChoice.openedAt ? (
+                  <span role="status">Analisando a última mão · {Math.ceil((r.nextChoice.openedAt-serverNow)/1000)}s
+                    {r.nextChoice.dealer === me.id && r.lastHand &&
+                      <button type="button" onClick={openDealerReview}>Analisar mão</button>}
+                  </span>
+                ) : r.nextChoice ? (
+                  <span role="status">
+                    {r.nextChoice.heldAt && serverNow < (r.nextChoice.holdUntil ?? 0)
+                      ? `Dealer analisando a mão · pausa até ${Math.ceil(((r.nextChoice.holdUntil ?? 0)-serverNow)/1000)}s`
+                      : `${home.catalog.find((game) => game.id === r.nextChoice.id)?.name ?? "Modalidade"} · ${Math.max(0, Math.ceil((r.nextChoice.heldAt ? r.nextChoice.remainingMs : r.nextChoice.at-serverNow)/1000))}s`}
+                    {r.nextChoice.selecting && r.nextChoice.dealer === me.id &&
+                      <>
+                        <button type="button" onClick={openDealerChoice}>Escolher jogo</button>
+                        {r.lastHand && <button type="button" onClick={openDealerReview}>Analisar mão</button>}
+                      </>}
                   </span>
                 ) : next?.id === me.id ? (
-                  <span>Aguardando sua janela de escolha…</span>
+                  <span>Preparando a escolha do próximo dealer…</span>
                 ) : (
                   <span>{next?.name ?? "Próximo dealer"} vai escolher o jogo</span>
                 )}
@@ -1052,7 +1081,7 @@ export default function Table() {
             }
             revealing={revealing}
             runoutElapsed={runoutElapsed}
-            choiceRemaining={r.nextChoice?.selecting ? Math.max(0, r.nextChoice.heldAt ? r.nextChoice.remainingMs : r.nextChoice.at - time) : null}
+            choiceRemaining={r.nextChoice?.selecting ? Math.max(0, r.nextChoice.heldAt ? r.nextChoice.remainingMs : r.nextChoice.at - serverNow) : null}
             clockNow={time}
             secondsLeft={
               r.live
@@ -1943,7 +1972,7 @@ export default function Table() {
           {resultHand && (
             <Modal
               title={"Resultado · mão #" + resultHand.hand.number}
-              close={() => setResultHand(undefined)}
+              close={closeDealerReview}
             >
               <Result h={resultHand.hand} f={resultHand.frame} />
               {!!resultHand.frame.potDetails?.length && (
