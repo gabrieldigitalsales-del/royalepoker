@@ -9,6 +9,8 @@ import {
   progress,
   rakeAdmin,
   avatarFor,
+  publicGrossResult,
+  grossPayoutsFor,
 } from "./progression.mjs";
 import http from "node:http";
 import {
@@ -206,6 +208,8 @@ function summary(h, id) {
       )
       .map((p) => p.name),
     payout: f.payouts[i],
+    grossNet: publicGrossResult(f, h.players[i], i),
+    grossPayout: grossPayoutsFor(f)[i],
     diamonds: f.diamonds?.[i] ?? 0,
     cards: f.hole?.[i] ?? [],
     blind: h.blind,
