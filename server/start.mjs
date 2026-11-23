@@ -128,6 +128,7 @@ const publicUser = (u) => ({
   avatar: avatarFor(u),
   customAvatar: u.avatar || "",
   shopAvatar: u.shopAvatar,
+  freeAvatar: Number.isInteger(u.freeAvatar) ? u.freeAvatar : null,
   diamonds: u.diamonds ?? 0,
   photo: u.shopAvatar ? null : u.photoId,
   appearance: u.appearance,
@@ -373,6 +374,13 @@ async function command(d, u, b) {
       u.photoId = uid();
       u.photoBytes = jpeg;
       u.shopAvatar = "";
+      u.freeAvatar = null;
+      break;
+    }
+    case "selectFreeAvatar": {
+      const selection = z.number().int().min(0).max(15).nullable().parse(b.selection);
+      u.freeAvatar = selection;
+      if (selection !== null) u.shopAvatar = "";
       break;
     }
     case "grantChips": {
