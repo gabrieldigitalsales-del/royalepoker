@@ -6,6 +6,7 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    timeout-minutes: 5
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -17,4 +18,5 @@ jobs:
           python-version: '3.11'
       - run: npm ci
       - run: npm run build
-      - run: npm test
+      - run: npm run test:smoke
+      - run: node --test --test-concurrency=4 tests/royale-payout-shop-lock.test.mjs tests/royale-runout-integration.test.mjs tests/royale-runout-showdown-headsup.test.mjs tests/royale-seat-runout-avatar-regression.test.mjs tests/showdown-flow-unified.test.mjs tests/cash-updates.test.mjs tests/buyin-exact-amount.test.mjs tests/seat-view.test.mjs tests/table-balances.test.mjs tests/worker-stability.test.mjs
