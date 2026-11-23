@@ -162,8 +162,20 @@ export function notify(user, message, room) {
     { id: uid(), message, room, at: Date.now() },
   ].slice(-30);
 }
+// A finished multi-board hand is financially settled by the engine but its
+// prize is NOT yet public/redeemable until all cards and the winner are shown.
+// Shared by the room, lobby, history, and cash-out gates.
+export function pendingPrizeHand(d, r, now = Date.now()) {
+  if (r.hand || !r.last) return null;
+  const hand = d.hands[r.last];
+  const frame = hand?.frames?.at(-1);
+  if (!hand?.ended || !frame?.finished || frame.runoutFrom == null ||
+      (frame.boards?.length ?? 0) < 2) return null;
+  return showdownFlow(frame, now - hand.ended).awardsReady ? null : hand;
+}
 export function leave(d, u, r) {
   check(!r.hand && !r.tour, "Aguarde o fim da mão ou torneio.");
+  check(!pendingPrizeHand(d, r), "Aguarde a revelação final e a premiação antes de sair da mesa.");
   const seat = r.seats.find((s) => s.id === u.id);
   check(seat, "Assento inválido.");
   u.wallet += seat.stack;
@@ -372,8 +384,11 @@ function finish(d, r) {
     // Start the next dealer's five seconds only AFTER the hand/replay finishes.
     prepareDealerChoice(r, catalog, r.reviewUntil, h.game);
   }
-  for (const seat of r.seats.filter((entry) => entry.leaveAfterHand))
-    leave(d, d.users[seat.id], r);
+  // Defer automatic cash-outs during 2/3 run presentations. Otherwise a
+  // leave-after-hand instruction moves the prize to the wallet before run 3.
+  if (!multiRun)
+    for (const seat of r.seats.filter((entry) => entry.leaveAfterHand))
+      leave(d, d.users[seat.id], r);
 }
 export function automatic(f, expired = false) {
   const l = f.legal;
@@ -567,17 +582,9 @@ export function roomView(d, r, u, detail = false) {
   // at the post-bet/pre-award amount.  The server has settled the hand once,
   // but must not visually credit winners before the last board and the
   // winning five-card combination have been presented.
-  const settlingHand = !hand && r.last ? d.hands[r.last] : null;
+  const settlingHand = pendingPrizeHand(d, r);
   const settlingFrame = settlingHand?.frames.at(-1);
-  const settlingPresentation = settlingFrame && showdownFlow(
-    settlingFrame, Date.now() - (settlingHand.ended ?? Date.now()),
-  );
-  const pendingAward = !!(
-    settlingHand && settlingFrame?.finished &&
-    settlingFrame.runoutFrom != null &&
-    (settlingFrame.boards?.length ?? 0) > 1 &&
-    !settlingPresentation.awardsReady
-  );
+  const pendingAward = !!settlingHand;
   const preAwardStacks = new Map();
   if (pendingAward) settlingHand.players.forEach((player, index) => {
     const current = r.seats.find(seat => seat.id === player.id);
