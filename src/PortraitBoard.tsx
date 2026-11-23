@@ -94,7 +94,8 @@ export function Board({
   useEffect(() => setSelectedPot(null), [h?.id]);
   const layer = useRef<HTMLDivElement>(null),
     previous = useRef<any>(null),
-    revealClock = useRef<{ key: string; elapsed: number }>();
+    revealClock = useRef<{ key: string; elapsed: number }>(),
+    awardedHand = useRef<string>("");
   const handPlayers = h?.players ?? [];
   const order = h
       ? [
@@ -136,7 +137,7 @@ export function Board({
     };
   }, [h?.id, resultsReady, handBelow]);
   const dismissScore = () => {
-    if (!handBelow || scoreVisibility !== "visible") return;
+    if (!handBelow || !awardsReady || scoreVisibility !== "visible") return;
     setScoreVisibility("leaving");
     // A click is immediate, but the exit animation is still allowed to play.
     manualDismissTimer.current = setTimeout(() => setScoreVisibility("hidden"), 550);
@@ -306,31 +307,54 @@ export function Board({
         if (stake > 0 && seatIndex(i) >= 0)
           fly(betAt(point(i)), pot, stake, paid ? 330 : 40, "collect");
       });
-      if (f.finished) {
-        const delay = Math.max(0,
-          showdownFlow(f, elapsedAtArrival, !!me.preferences?.motion).awardAt - elapsedAtArrival
-        );
-        if (f.awards?.length)
-          f.awards.forEach((award, index) =>
-            award.winners.forEach((winner) => {
-              if (seatIndex(winner.index) < 0) return;
-              fly(
-                pot,
-                point(winner.index),
-                winner.amount,
-                Math.max(0, delay + index * 180),
-                "award",
-              );
-            }),
-          );
-        else
-          f.payouts.forEach((v, i) => {
-            if (v > 0 && seatIndex(i) >= 0)
-              fly(pot, point(i), v, Math.max(0, delay), "award");
-          });
-      }
+
     }
   }, [key]);
+  // All prize flights are triggered by the presentation phase, never by the
+  // engine's finished flag. This cannot race ahead of run 3's last river card.
+  useLayoutEffect(() => {
+    if (!handBelow || !f?.finished || !awardsReady || !layer.current) return;
+    if (awardedHand.current === id) return;
+    awardedHand.current = id;
+    const surface = layer.current;
+    if (me.preferences?.motion || matchMedia("(prefers-reduced-motion: reduce)").matches)
+      return;
+    const box = surface.getBoundingClientRect();
+    const flights: Animation[] = [];
+    const launch = (seat: number, amount: number, order: number) => {
+      if (!Number.isFinite(amount) || amount <= 0 || seatIndex(seat) < 0) return;
+      const destination = point(seat);
+      const dx = (destination[0] - pot[0]) * box.width / 100;
+      const dy = (destination[1] - pot[1]) * box.height / 100;
+      chips(amount).forEach((color, index) => {
+        const chip = document.createElement("i");
+        chip.className = "flying-token token-disc royale-final-award-token";
+        chip.dataset.flight = "award";
+        Object.assign(chip.style, position(pot));
+        chip.style.setProperty("--ink", color);
+        surface.append(chip);
+        const flight = chip.animate([
+          {transform:"translate(-50%,-50%) scale(.68)",opacity:0},
+          {offset:.12,transform:"translate(-50%,-50%) scale(1.24)",opacity:1},
+          {offset:.55,transform:`translate(calc(-50% + ${dx*.56}px),calc(-50% + ${dy*.45-55}px)) rotate(-22deg) scale(1.52)`,opacity:1},
+          {offset:.87,opacity:1},
+          {transform:`translate(calc(-50% + ${dx}px),calc(-50% + ${dy}px)) rotate(9deg) scale(.84)`,opacity:0}
+        ], {duration:950,delay:order*125+index*48,easing:"cubic-bezier(.2,.67,.23,1)",fill:"both"});
+        flights.push(flight);
+        flight.onfinish=()=>chip.remove();
+        flight.oncancel=()=>chip.remove();
+      });
+    };
+    if (f.awards?.length) {
+      f.awards.forEach((potAward: any, order: number) =>
+        potAward.winners?.forEach((winner: any) => launch(winner.index,winner.amount,order)));
+    } else {
+      f.payouts?.forEach((amount: number, seat: number) => launch(seat,amount,seat));
+    }
+    return () => {
+      for (const flight of flights) flight.cancel();
+    };
+  }, [id, awardsReady, handBelow]);
   const code = game?.id?.startsWith("om")
     ? "PLO " + game.id[2] + (game.id.endsWith("lo") ? " HI/LO" : "")
     : game?.name;
@@ -429,7 +453,7 @@ export function Board({
       {f && !f.rows && (
         <div className="pot-tag" style={position(pot)}>
           <div className="center-chips" aria-hidden>
-            {(!f.finished || revealing) &&
+            {(!f.finished || !awardsReady) &&
               Array.from(
                 {
                   length: Math.min(
