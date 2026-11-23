@@ -297,88 +297,7 @@
 .studio[data-visual-effects="high"] .royale-showdown-win {box-shadow:0 0 22px #ffdb73b8;}
 .royale-spectator-status {color:#ffe8af;background:#27132ff0;border:1px solid #c79a51;border-radius:11px;padding:5px 10px;display:inline-flex;align-items:center;font-weight:900;font-size:12px;}
 
-/* Poker Royale | one authoritative layout for multiple community boards.
-   Layout positions, not zoom transforms, keep all three complete rows visible. */
-.studio .portrait-table.royale-multiple-boards .royale-board-cluster {
-  --royale-community-w: clamp(22px, 2.25vw, 38px);
-  --royale-community-h: clamp(32px, 3.12vw, 53px);
-  --royale-community-gap: clamp(3px, .35vw, 6px);
-  top: 46%!important;
-  width: min(40%, 470px)!important;
-  max-height: 62%!important;
-  gap: clamp(10px, 1.6vh, 15px)!important;
-}
-.studio .portrait-table.royale-boards-3 .royale-board-cluster {
-  --royale-community-w: clamp(20px, 2.05vw, 34px);
-  --royale-community-h: clamp(29px, 2.8vw, 47px);
-  top: 46%!important;
-  gap: clamp(9px, 1.35vh, 13px)!important;
-}
-/* The first/second/third board have exactly the same reserved label/card area. */
-.studio .portrait-table.royale-multiple-boards .royale-board-cluster > .portrait-board,
-.studio .portrait-table.royale-multiple-boards .royale-board-cluster .extra-board {
-  display: flex!important;
-  flex-direction: row!important;
-  align-items: center!important;
-  justify-content: center!important;
-  position: relative!important;
-  overflow: visible!important;
-}
-.studio .portrait-table.royale-multiple-boards .royale-board-cluster .portrait-board > .double-board-first-label,
-.studio .portrait-table.royale-multiple-boards .royale-board-cluster .extra-board > small {
-  top: -17px!important;
-  max-width: 260px!important;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  line-height: 1.2!important;
-}
-.studio .portrait-table.royale-multiple-boards .royale-board-cluster > .extra-runout-boards {
-  gap: clamp(10px, 1.6vh, 15px)!important;
-}
-/* Move announcements and side-pot information off the community-card corridor. */
-.studio .portrait-table.royale-multiple-boards .royale-runout-announcement {
-  left: 4%!important;
-  top: 66%!important;
-  width: min(20%, 235px)!important;
-  max-width: 20%!important;
-  transform: none!important;
-}
-.studio .portrait-table.royale-multiple-boards .royale-showdown-results {
-  right: 3%!important;
-  top: 43%!important;
-  max-height: 36%!important;
-  overflow: hidden!important;
-}
-/* The seat and hero-pocket layers never occupy the community-board centre. */
-.studio .portrait-table.royale-multiple-boards .royale-board-cluster {z-index: 32!important;}
-@media (max-width: 850px), (max-height: 660px) {
-  .studio .portrait-table.royale-multiple-boards .royale-board-cluster {
-    --royale-community-w: clamp(15px, 2.9vw, 28px);
-    --royale-community-h: clamp(22px, 4.3vw, 39px);
-    gap: 9px!important;
-    width: min(43%, 360px)!important;
-    top: 45%!important;
-  }
-  .studio .portrait-table.royale-boards-3 .royale-board-cluster {
-    --royale-community-w: clamp(14px, 2.7vw, 26px);
-    --royale-community-h: clamp(21px, 4vw, 36px);
-    gap: 9px!important;
-  }
-  .studio .portrait-table.royale-multiple-boards .royale-board-cluster > .extra-runout-boards {gap:9px!important;}
-  .studio .portrait-table.royale-multiple-boards .royale-board-cluster .portrait-board > .double-board-first-label,
-  .studio .portrait-table.royale-multiple-boards .royale-board-cluster .extra-board > small {
-    top:-13px!important;
-    font-size:8px!important;
-    padding:1px 4px!important;
-  }
-}
-@media (prefers-reduced-motion: reduce) {
-  .studio .portrait-table :is(.runout-card-visible,.royale-showdown-win,.royale-winning-community) {
-    animation: none!important;
-    transition: none!important;
-  }
-}
-
+/* Community board alignment is centralized in royale-double-board-final.css. */
 /* === Showdown premium update: bigger revealed cards + final hand summary === */
 .studio .portrait-table .royale-opponent-showdown {
   gap:4px;
@@ -761,9 +680,6 @@
   pointer-events:none;
   white-space:nowrap;
 }
-.studio .portrait-table.royale-double-board .portrait-board{top:42.8%!important;}
-.studio .portrait-table.royale-double-board .extra-runout-boards{top:59.6%!important;}
-.studio .portrait-table.royale-double-board .pot-tag{top:21.8%!important;}
 @media (max-width:900px){
   .studio .portrait-table .royale-board-game-name{top:30.4%; max-width:65%; padding:5px 11px; font-size:12px;}
 }
