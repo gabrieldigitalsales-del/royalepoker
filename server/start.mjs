@@ -154,8 +154,10 @@ function authorizeRoom(r, u) {
 }
 function signed(d, u) {
   check(!u.banned, "Conta suspensa.");
+  // Do not invalidate an active phone or desktop when this account signs in
+  // from another device. Expired sessions are pruned without forcing logout.
   for (const [k, s] of Object.entries(d.sessions))
-    if (s.user === u.id || s.until < Date.now()) delete d.sessions[k];
+    if (s.until < Date.now()) delete d.sessions[k];
   const raw = token();
   d.sessions[digest(raw)] = { user: u.id, until: Date.now() + 30 * 86400000 };
   u.last = Date.now();
