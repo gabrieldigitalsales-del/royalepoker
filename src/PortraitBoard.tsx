@@ -351,7 +351,8 @@ export function Board({
   const heroSeatPoint = heroSeatIndex >= 0 && seatIndex(heroSeatIndex) >= 0 ? point(heroSeatIndex) : null;
   const heroCards = heroSeatIndex >= 0 ? (f?.hole?.[heroSeatIndex] ?? []) : [];
 
-  const runoutAnimates = f?.finished && f?.runoutFrom != null && !me.preferences?.motion;
+  // Card progression follows the authoritative reveal clock even with reduced motion.
+  const runoutAnimates = f?.finished && f?.runoutFrom != null;
   const showRunoutCard = (boardIndex: number, cardIndex: number) =>
     !runoutAnimates || revealAt({
       runIndex: boardIndex, cardIndex,
