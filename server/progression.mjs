@@ -57,7 +57,41 @@ export function takeRake(frame, ratePercent = 3) {
   frame.payouts = frame.payouts.map((amount, index) => amount - shares[index]);
   frame.stacks = frame.stacks.map((amount, index) => amount - shares[index]);
   frame.rake = fee;
+  frame.rakeShares = shares;
   frame.rakePercent = ratePercent;
   frame.grossPot = total;
   return fee;
+}
+
+/** Amounts before the house fee, for public hand-history presentation only.
+ *  This never changes balances, wallet entries or the accounting ledger.
+ */
+export function grossPayoutsFor(frame) {
+  if (!frame?.payouts) return [];
+  if (frame.rows || !frame.rake) return [...frame.payouts];
+  const shares = Array.isArray(frame.rakeShares) &&
+    frame.rakeShares.length === frame.payouts.length
+      ? frame.rakeShares
+      : (() => {
+        // Backward compatibility with hands completed before rakeShares
+        // was persisted: distribute the known fee proportionally.
+        const fee = Math.max(0, Number(frame.rake) || 0);
+        const total = frame.payouts.reduce((sum, amount) => sum + amount, 0);
+        if (!total) return frame.payouts.map(() => 0);
+        let cumulative = 0, assigned = 0;
+        return frame.payouts.map(amount => {
+          cumulative += amount;
+          const next = Math.floor(cumulative * fee / total);
+          const share = next - assigned;
+          assigned = next;
+          return share;
+        });
+      })();
+  return frame.payouts.map((net, i) => net + (Number(shares[i]) || 0));
+}
+
+export function publicGrossResult(frame, player, index) {
+  if (frame.rows) return frame.payouts[index];
+  return frame.stacks[index] - player.stack +
+    (grossPayoutsFor(frame)[index] - frame.payouts[index]);
 }
