@@ -1,0 +1,130 @@
+/* Poker Royale: orientation-aware mobile stage and touch lobby, 2026-11-22.
+   Loaded after the other style sheets, so this is the mobile layout authority. */
+@media (max-width: 800px) {
+  html, body, #root { max-width: 100%; }
+  .lobby-shell, .lobby-shell .content, .lobby-shell .page,
+  .lobby-shell .club-lobby { max-width: 100vw!important; min-width:0!important; }
+  .lobby-shell .page { overflow-x:clip!important; }
+  .lobby-shell .club-lobby { width:100%!important; padding-inline:clamp(10px,3vw,18px)!important; }
+  .club-lobby-heading { display:flex!important; flex-direction:column!important; align-items:stretch!important; gap:10px!important; margin-bottom:12px!important; }
+  .club-lobby-heading h1 { font-size:clamp(23px,6vw,32px)!important; line-height:1.12!important; overflow-wrap:anywhere; }
+  .club-quick-actions { display:grid!important; grid-template-columns:repeat(3,minmax(0,1fr))!important; width:100%!important; gap:6px!important; }
+  .club-quick-actions button { width:100%!important; min-width:0!important; min-height:46px!important; padding:7px 5px!important; font-size:clamp(10px,2.7vw,13px)!important; gap:3px!important; white-space:normal!important; text-align:center!important; }
+  .royale-lobby-visuals { width:100%!important; max-width:100%!important; margin:12px 0!important; padding:11px!important; overflow:hidden!important; }
+  .royale-lobby-visual-grid { grid-template-columns:1fr!important; gap:8px!important; min-width:0!important; }
+  .royale-lobby-visual-preset { width:100%!important; min-width:0!important; max-width:100%!important; }
+  .royale-lobby-overview,.club-room-toolbar,.cash-shortcuts { max-width:100%!important; min-width:0!important; }
+  .club-room-toolbar { display:flex!important; flex-wrap:wrap!important; gap:8px!important; }
+  .club-room-toolbar > * { max-width:100%!important; min-width:0!important; }
+  .club-room-groups,.club-family-tabs,.club-filters,.club-room-toolbar .tabs {
+    max-width:100%!important; min-width:0!important; overflow-x:auto!important; overflow-y:hidden!important;
+    flex-wrap:nowrap!important; -webkit-overflow-scrolling:touch; touch-action:pan-x; overscroll-behavior-x:contain;
+    scrollbar-width:none; scroll-snap-type:x proximity;
+  }
+  .club-room-groups::-webkit-scrollbar,.club-family-tabs::-webkit-scrollbar,.club-filters::-webkit-scrollbar { display:none; }
+  .club-room-groups > *, .club-family-tabs > *, .club-filters > * {
+    flex:0 0 auto!important; scroll-snap-align:start; white-space:nowrap!important;
+  }
+  .club-room-grid { grid-template-columns:minmax(0,1fr)!important; }
+  .club-room-card { min-width:0!important; max-width:100%!important; }
+  .lobby-shell input,.lobby-shell select { min-width:0!important; max-width:100%!important; }
+}
+@media (max-width: 800px) and (orientation:portrait) {
+  html:has(.studio),body:has(.studio),#root:has(.studio) { height:100dvh!important;overflow:hidden!important; }
+  .studio {
+    width:100vw!important;height:100dvh!important;overflow:hidden!important;
+    background:radial-gradient(ellipse at 50% 48%,#692184 0%,#341141 52%,#190a2c 81%,#12081f 100%)!important;
+    background-image:none!important;
+    isolation:isolate;
+  }
+  .studio::before { background:linear-gradient(180deg,#0d061d 0%,transparent 19%,transparent 85%,#0b0619 100%)!important; }
+  .studio::after {
+    content:"";position:absolute;top:calc(54px + env(safe-area-inset-top));left:50%;transform:translateX(-50%);
+    width:min(40vw,150px);height:72px;
+    background:url('/poker-royale-logo.svg') center/contain no-repeat;
+    filter:drop-shadow(0 3px 6px #000b);z-index:1;pointer-events:none;opacity:.94;
+  }
+  /* Portrait-specific upright felt oval.  The actual seats, boards and chips remain DOM elements. */
+  .studio .table-stage>.portrait-table::before {
+    content:"";position:absolute!important;
+    inset:21% 4.2% 18%!important;
+    border:clamp(8px,2.8vw,15px) ridge #e9a847!important;
+    border-radius:49% / 43%!important;
+    background:radial-gradient(ellipse at 50% 47%,#711c89 0%,#4e135f 50%,#250a38 100%)!important;
+    box-shadow:0 0 0 4px #4a1b18,0 0 0 7px #e4a32c,0 0 22px 6px #df55ff99,inset 0 0 0 4px #f769fbcc,inset 0 0 42px #10051a!important;
+    z-index:0!important;pointer-events:none!important;
+  }
+  .studio .table-stage>.portrait-table { overflow:visible!important; }
+  .studio .portrait-table .table-rail { inset:23% 6% 21%!important; border-radius:49%/43%!important; }
+  .studio .studio-top {
+    top:env(safe-area-inset-top)!important;left:0!important;right:0!important;
+    height:54px!important;padding:4px 8px!important;gap:5px!important;
+    background:linear-gradient(180deg,#1c0c2bf5,#1c0c2bd6)!important;
+    border-bottom:1px solid #d3a0577a!important;
+  }
+  .studio .studio-top .studio-nav { gap:4px!important; flex:1 1 auto!important; min-width:0!important; }
+  .studio .studio-top .studio-nav button { min-height:37px!important; padding:5px 7px!important; font-size:11px!important; gap:3px!important; }
+  .studio .studio-top .table-voice-settings { margin:0!important; }
+  .studio .studio-top .table-voice-settings button { font-size:0!important; width:38px!important; padding:4px!important; }
+  .studio .studio-top .table-voice-settings button::first-letter { font-size:17px!important; }
+  .studio .studio-top .studio-title { flex:0 1 auto!important; min-width:0!important; gap:4px!important; }
+  .studio .studio-title>div:first-child { max-width:min(25vw,110px)!important; padding:3px 6px!important; }
+  .studio .studio-title h1 { font-size:11px!important; }
+  .studio .studio-title p,.studio .studio-title .unit-switch { display:none!important; }
+  .studio .studio-top .studio-title>button.icon { min-width:35px!important; }
+  .studio .studio-title .table-balances,.studio .studio-title [class*="balance"] { max-width:52px!important; }
+  /* Sit the host actions under the title bar, not across the table or crest. */
+  .studio .table-stage>.host-controls {
+    inset:calc(59px + env(safe-area-inset-top)) 8px auto auto!important;
+    top:calc(59px + env(safe-area-inset-top))!important;right:8px!important;left:auto!important;
+    max-width:47vw!important;padding:4px!important;
+  }
+  .studio .table-stage>.host-controls button { white-space:normal!important; min-height:37px!important; font-size:11px!important; }
+  .studio .table-stage>.straddle-switch {
+    top:calc(128px + env(safe-area-inset-top))!important;left:50%!important;
+    width:calc(100vw - 20px)!important;max-width:calc(100vw - 20px)!important;
+    padding:5px 7px!important;display:flex!important;flex-wrap:nowrap!important;justify-content:center!important;gap:5px!important;
+    font-size:10px!important;overflow:hidden!important;
+  }
+  .studio .table-stage>.straddle-switch button { flex:none!important;padding:4px 6px!important;font-size:10px!important;min-height:29px!important; }
+  .studio .table-stage>.straddle-switch small { flex:1!important;min-width:0!important;font-size:10px!important;line-height:1.15!important;max-height:24px!important;overflow:hidden!important; }
+  .studio .portrait-table .portrait-seat { width:clamp(45px,13vw,65px)!important; }
+  .studio .portrait-table .portrait-seat .portrait-avatar { width:clamp(30px,10vw,49px)!important;height:clamp(30px,10vw,49px)!important; }
+  .studio .portrait-table .portrait-seat .nameplate { padding:4px 2px 1px!important;font-size:9px!important; }
+  .studio .portrait-table .portrait-seat .stackplate { font-size:10px!important;padding:1px 2px 3px!important; }
+  .studio .portrait-table .empty-chair { width:clamp(30px,8vw,39px)!important;height:clamp(30px,8vw,39px)!important; }
+  .studio .portrait-table .pot-tag { top:39%!important; }
+  .studio .portrait-table .portrait-board { top:50%!important;max-width:94vw!important; }
+  .studio .portrait-table .portrait-board .card,.studio .portrait-table .board-slot { width:clamp(22px,7vw,33px)!important;height:clamp(32px,10vw,46px)!important; }
+  .studio .portrait-table .extra-runout-boards { top:57%!important;max-width:95vw!important; }
+  .studio .portrait-table .extra-board-cards { max-width:100%!important; }
+  .studio .table-stage .dealer-choice-spot { top:32%!important;left:50%!important;min-width:0!important;max-width:90vw!important; }
+  .studio .studio-layout>.console {
+    width:calc(100vw - 12px)!important;max-height:25dvh!important;
+    bottom:max(7px,env(safe-area-inset-bottom))!important;
+  }
+  .studio .studio-layout>.console>.panel.actions { max-height:24dvh!important;min-height:58px!important;padding:5px!important; }
+  .studio .studio-layout>.console>.player-hand { bottom:20dvh!important; }
+  .studio .studio-layout>.console>.hand-rank { bottom:28dvh!important; }
+  .studio .console .betbar>.action-choices { grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:3px!important; }
+  .studio .console .betbar>.action-choices>button { min-width:0!important;height:48px!important;padding:3px!important;font-size:10px!important; }
+}
+@media (max-height: 540px) and (orientation:landscape) {
+  .studio { background-size:100% 100%!important;background-position:center!important; }
+  .studio .studio-top { padding:2px 7px!important;height:43px!important; }
+  .studio .studio-title>div:first-child { max-width:26vw!important;padding:3px 6px!important; }
+  .studio .studio-title p { display:none!important; }
+  .studio .studio-top .studio-nav { gap:3px!important; }
+  .studio .studio-top .studio-nav button { padding:3px 6px!important;min-height:33px!important;font-size:11px!important; }
+  .studio .studio-top .table-voice-volume { display:none!important; }
+  .studio .table-stage>.host-controls { top:49px!important;right:8px!important;left:auto!important;max-width:26vw!important; }
+  .studio .table-stage>.straddle-switch { top:96px!important;left:50%!important;max-width:70vw!important;padding:4px!important; }
+  .studio .table-stage>.straddle-switch small { font-size:10px!important; }
+  .studio .portrait-table .portrait-seat .portrait-avatar { width:clamp(29px,9vh,49px)!important;height:clamp(29px,9vh,49px)!important; }
+  .studio .studio-layout>.console { bottom:2px!important;max-height:19vh!important; }
+  .studio .studio-layout>.console>.panel.actions { padding:4px!important;min-height:40px!important; }
+  .studio .console .betbar>.action-choices>button { height:38px!important;font-size:11px!important; }
+}
+@media (prefers-reduced-motion:reduce) {
+  .club-room-groups,.club-family-tabs,.club-filters { scroll-behavior:auto!important; }
+}
