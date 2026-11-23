@@ -19,4 +19,4 @@ jobs:
       - run: npm ci
       - run: npm run build
       - run: npm run test:smoke
-      - run: node --test --test-concurrency=4 tests/royale-payout-shop-lock.test.mjs tests/royale-runout-integration.test.mjs tests/royale-runout-showdown-headsup.test.mjs tests/royale-seat-runout-avatar-regression.test.mjs tests/showdown-flow-unified.test.mjs tests/cash-updates.test.mjs tests/buyin-exact-amount.test.mjs tests/seat-view.test.mjs tests/table-balances.test.mjs tests/worker-stability.test.mjs tests/royale-watermelon-runout-settlement.test.mjs
+      - run: node --test --test-concurrency=4 tests/royale-payout-shop-lock.test.mjs tests/royale-runout-integration.test.mjs tests/royale-runout-showdown-headsup.test.mjs tests/royale-seat-runout-avatar-regression.test.mjs tests/showdown-flow-unified.test.mjs tests/cash-updates.test.mjs tests/buyin-exact-amount.test.mjs tests/seat-view.test.mjs tests/table-balances.test.mjs tests/worker-stability.test.mjs tests/royale-watermelon-runout-settlement.test.mjs tests/royale-allin-multimode-end-to-end.test.mjs
