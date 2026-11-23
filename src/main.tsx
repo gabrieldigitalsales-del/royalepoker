@@ -32,6 +32,7 @@ import { Brand, Modal } from "./ui";
 import { LoadingGate } from "./ProgressSplash";
 import { AdminGate } from "./AdminGate";
 import { SystemNotice } from "./SystemNotice";
+import RoyalWallet, { RoyalWalletAdmin } from "./RoyalWallet";
 import "./style.css";
 import "./mobile-game-redesign.css";
 import "./poker-royale.css";
@@ -146,6 +147,7 @@ function App() {
   }, [home?.me.id, home?.me.appearance?.cards]);
   const links: any[] = [
     ["/", "Lobby", LayoutGrid],
+    ["/carteira", "Carteira", Coins],
 
     ["/historico", "Histórico", Clock],
     ["/jogadores", "Jogadores", UsersRound],
@@ -282,7 +284,7 @@ function App() {
             {loc.pathname === "/" && (
               <nav className="lobby-app-nav" aria-label="Navegação do clube">
                 {links
-                  .filter(([path]) => path !== "/admin" && path !== "/torneios")
+                  .filter(([path]) => ["/", "/carteira", "/historico", "/perfil"].includes(path))
                   .map(([path, label, Icon]) => (
                     <NavLink key={path} to={path} end>
                       <Icon size={21} />
