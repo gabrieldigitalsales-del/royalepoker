@@ -382,3 +382,4 @@ import "./poker-royale-mobile-orientation.css";
 import "./royale-loading-screen.css";
 import "./royale-double-board-final.css";
 import "./royale-showdown-ceremony.css";
+import "./nexor-interface.css";
