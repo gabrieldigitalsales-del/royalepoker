@@ -428,23 +428,17 @@ test("API, WebSocket, carteiras, torneio, recuperação, privacidade e reinício
     }
     assert.equal((await call("home", b.token)).me.diamonds, 12);
     const beforeShop = await wallet(b.token);
-    await call("buyShop", b.token, { item: "gold" });
-    await assert.rejects(call("buyShop", b.token, { item: "gold" }));
-    await call("buyShop", b.token, { item: "vip" });
+    const diamondsBeforeShop = (await call("home", b.token)).me.diamonds;
+    await assert.rejects(call("buyShop", b.token, { item: "gold" }), /em breve/i);
+    await assert.rejects(call("buyShop", b.token, { item: "vip" }), /em breve/i);
     const shopper = await call("home", b.token);
-    assert.equal(shopper.me.vip, true);
-    assert.equal(shopper.me.diamonds, 1);
-    assert.equal(shopper.me.shopAvatar, "gold");
+    assert.equal(shopper.me.vip, false);
+    assert.equal(shopper.me.diamonds, diamondsBeforeShop, "blocked purchases cannot consume diamonds");
+    assert.equal(shopper.me.shopAvatar ?? "", "", "blocked items cannot be equipped");
     assert.equal(shopper.me.wallet, beforeShop);
     assert.ok(shopper.progress.hands >= 2);
-    assert.ok(
-      shopper.me.notices.some((entry) =>
-        entry.message.includes("Saída concluída"),
-      ),
-    );
-    const vip = await call("stats", b.token, { target: id });
-    assert.equal("vpip" in vip, true);
-    assert.equal("sessions" in vip, false);
+    assert.ok(shopper.me.notices.some((entry) => entry.message.includes("Saída concluída")));
+    await assert.rejects(call("stats", b.token, { target: id }), "VIP statistics require an activated entitlement");
 
     const reset = await call("recover", "", {
       email: "bravo@example.net",
