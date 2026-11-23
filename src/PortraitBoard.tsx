@@ -94,7 +94,6 @@ export function Board({
   useEffect(() => setSelectedPot(null), [h?.id]);
   const layer = useRef<HTMLDivElement>(null),
     previous = useRef<any>(null),
-    revealClock = useRef<{ key: string; elapsed: number }>(),
     awardedHand = useRef<string>("");
   const handPlayers = h?.players ?? [];
   const order = h
@@ -201,10 +200,6 @@ export function Board({
     f?.sequence ?? (h?.frames.length > 1 ? h.frames.indexOf(f) : 0);
   const id = h?.id || "",
     key = id + ":" + frameIndex;
-  if (revealClock.current?.key !== key) {
-    revealClock.current = { key, elapsed: runoutElapsed ?? 0 };
-  }
-  const elapsedAtArrival = revealClock.current.elapsed;
   useLayoutEffect(() => {
     const old = previous.current;
     previous.current = { id, idx: frameIndex, f };
@@ -228,7 +223,7 @@ export function Board({
     ) {
       const dx = ((end[0] - start[0]) * box.width) / 100,
         dy = ((end[1] - start[1]) * box.height) / 100;
-      const isAward = kind === "award";
+      const isAward = false; // wager/collection effects only; awards use phase-gated effect.
       chips(value).forEach((color, j) => {
         const el = document.createElement("i");
         el.className = "flying-token token-disc";
