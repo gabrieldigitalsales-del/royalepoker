@@ -441,7 +441,7 @@ export default function Table() {
     api("room", { room: id })
       .then((x) => {
         if (ok) {
-          R(x);
+          R({ ...x, clientReceivedAt: Date.now() });
           setRoomError(undefined);
         }
       })
@@ -460,7 +460,8 @@ export default function Table() {
     const frame = last?.frames?.at(-1);
     if (!last || !frame?.finished || frame.runoutFrom == null || (frame.boards?.length ?? 0) < 2) return;
     const releaseAt = last.ended + showdownFlow(frame, 0).awardAt;
-    const remaining = releaseAt - Date.now();
+    const offset = (r?.clientReceivedAt ?? Date.now()) - (r?.serverTime ?? Date.now());
+    const remaining = releaseAt - (Date.now() - offset);
     if (remaining < -500) return;
     const timer = window.setTimeout(() => setRetry(value => value + 1), Math.max(70, remaining + 150));
     return () => window.clearTimeout(timer);
@@ -758,7 +759,11 @@ export default function Table() {
     f = h?.frames.at(-1),
     game = home.catalog.find((g) => g.id === (h?.game || r.game)),
     myturn = r.live && h.players[f.actor]?.id === me.id;
-  const runoutElapsed = Math.max(0, time - (h?.ended ?? time));
+  // Derive animation time from the server's clock, not the phone's wall clock.
+  // Incorrect phone time must never make a winner appear before run 3's river.
+  const serverOffset = (r?.clientReceivedAt ?? time) - (r?.serverTime ?? time);
+  const serverNow = time - serverOffset;
+  const runoutElapsed = h?.ended == null ? 0 : Math.max(0, serverNow - h.ended);
   const showdownPresentation = showdownFlow(f, runoutElapsed, !!me.preferences?.motion);
   const revealing = !!(
     f?.finished &&
