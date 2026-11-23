@@ -222,8 +222,8 @@ export function History() {
                     r.net < 0 ? "loss" : r.net > 0 ? "gain" : "even"
                   }
                 >
-                  {r.net > 0 ? "+" : ""}
-                  {num(r.net)}
+                  {(r.grossNet ?? r.net) > 0 ? "+" : ""}
+                  {num(r.grossNet ?? r.net)}
                   {r.points ? " pts" : ""}
                 </strong>
               </button>
@@ -941,8 +941,11 @@ export function RakeControl() {
           <h2>Últimas mãos com rake</h2>
           {report.hands.length ? report.hands.slice(0, 30).map((hand) => (
             <div className="club-cashier-line" key={hand.id}>
-              <span>{hand.name} · Mão #{hand.number} · {date(hand.at)}</span>
-              <strong>{num(hand.fee)} fichas</strong>
+              <span>
+                <strong>{hand.name} · Mão #{hand.number}</strong>
+                <small style={{ display: "block" }}>{date(hand.at)} · Pote {num(hand.gross)} · {hand.percent ?? "—"}% de rake</small>
+              </span>
+              <strong>+{num(hand.fee)} fichas</strong>
             </div>
           )) : <p>Nenhuma mão cobrada até agora.</p>}
         </>
