@@ -941,3 +941,81 @@ export function Admin() {
     </>
   );
 }
+
+
+export function RakeControl() {
+  const home = useApp((s) => s.home);
+  const [report, setReport] = useState<any>(null);
+  const [percent, setPercent] = useState(3);
+  const [busy, setBusy] = useState(false);
+  const [message, setMessage] = useState("");
+  useEffect(() => {
+    if (!home?.me?.admin) return;
+    let active = true;
+    api("globalRake").then((result) => {
+      if (!active) return;
+      setReport(result);
+      setPercent(result.percent);
+    }).catch(fail);
+    return () => { active = false; };
+  }, [home?.me?.admin]);
+  if (!home?.me?.admin) return <Empty>Acesso reservado à administração do Poker Royale.</Empty>;
+  async function save(event: React.FormEvent) {
+    event.preventDefault();
+    setBusy(true);
+    setMessage("");
+    try {
+      await api("setGlobalRake", { percent });
+      const next = await api("globalRake");
+      setReport(next);
+      await refresh();
+      setMessage("Taxa global atualizada. A nova taxa vale para as próximas mãos.");
+    } catch (error) {
+      fail(error);
+    } finally {
+      setBusy(false);
+    }
+  }
+  return (
+    <section className="panel poker-rake-control" style={{ maxWidth: 850, margin: "0 auto" }}>
+      <small style={{ letterSpacing: "0.15em", opacity: 0.65 }}>POKER ROYALE · ADMINISTRAÇÃO PRIVADA</small>
+      <h1>Controle global de rake</h1>
+      <p>Uma única taxa para todas as mesas de cash game. Não existe rake por agente ou responsável de mesa.</p>
+      {report ? (
+        <>
+          <div className="overview" style={{ margin: "22px 0" }}>
+            <div><strong>{report.percent}%</strong><span>Rake atual do jogo</span></div>
+            <div><strong>{num(report.collected)}</strong><span>Fichas retidas pelo jogo</span></div>
+            <div><strong>{num(report.chargedHands)}</strong><span>Mãos com rake</span></div>
+          </div>
+          <form onSubmit={save} className="panel" style={{ display: "grid", gap: 16 }}>
+            <Field title="Percentual aplicado às próximas mãos">
+              <select value={percent} onChange={(e) => setPercent(Number(e.target.value))}>
+                {Array.from({length: 11}, (_, n) => <option key={n} value={n}>{n === 0 ? "0% — Sem rake" : n + "% de rake"}</option>)}
+              </select>
+            </Field>
+            <p style={{ margin: 0 }}>O Poker Royale está configurado para cobrar <strong>{report.percent}%</strong>. Uma mudança não altera mãos já iniciadas ou finalizadas.</p>
+            <button className="primary" type="submit" disabled={busy || percent === report.percent}>
+              {busy ? "Salvando…" : "Aplicar nova taxa global"}
+            </button>
+            {message && <p role="status">{message}</p>}
+          </form>
+          <h2>Histórico de alterações</h2>
+          {report.changes.length ? report.changes.map((entry) => (
+            <div className="club-cashier-line" key={entry.id}>
+              <span>{date(entry.at)} · {entry.by}</span>
+              <strong>{entry.previous}% → {entry.percent}%</strong>
+            </div>
+          )) : <p>Nenhuma alteração registrada.</p>}
+          <h2>Últimas mãos com rake</h2>
+          {report.hands.length ? report.hands.slice(0, 30).map((hand) => (
+            <div className="club-cashier-line" key={hand.id}>
+              <span>{hand.name} · Mão #{hand.number} · {date(hand.at)}</span>
+              <strong>{num(hand.fee)} fichas</strong>
+            </div>
+          )) : <p>Nenhuma mão cobrada até agora.</p>}
+        </>
+      ) : <p>Carregando os dados de rake…</p>}
+    </section>
+  );
+}
