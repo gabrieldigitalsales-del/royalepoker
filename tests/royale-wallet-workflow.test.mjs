@@ -53,7 +53,7 @@ test("deposit is only pending intention and never credits wallet or marks Pix pa
  assert.equal(royalWalletView(d,user).depositsEnabled,false);
  assert.equal(royalWalletAdminView(d).length,1);
 });
-test("wallet UI and server permissions never embed a pix payment secret",()=>{
+test("wallet UI and server permissions never embed a pix payment secret",async()=>{
  const fs=await import("node:fs");
  const path=await import("node:url");
  const read=p=>fs.readFileSync(path.fileURLToPath(new URL(p,import.meta.url)),"utf8");
