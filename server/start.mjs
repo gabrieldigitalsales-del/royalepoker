@@ -1291,7 +1291,7 @@ const server = http.createServer(async (req, res) => {
   if (req.socket.encrypted || req.headers["x-forwarded-proto"] === "https")
     res.setHeader("Strict-Transport-Security", "max-age=31536000");
   const requestPath = new URL(req.url ?? "/", "http://localhost").pathname;
-  if (/^\\/(?:admin|mesa|perfil|historico|jogadores|torneios|convite|api|avatar)(?:\\/|$)/.test(requestPath))
+  if (/^\/(?:admin|mesa|perfil|historico|jogadores|torneios|convite|api|avatar)(?:\/|$)/.test(requestPath))
     res.setHeader("X-Robots-Tag", "noindex, nofollow, noarchive");
   const send = (status, obj) => {
     res.writeHead(status, {
