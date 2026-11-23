@@ -10,11 +10,11 @@
   object-fit:cover;object-position:center;border-radius:50%;
 }
 /* Keep the ring and turn outline, but remove the green/purple placeholder fill. */
-.shell .avatar:has(> :is(.player-face--photo,.player-face--custom)),
-.shell .sidefoot .avatar:has(:is(.player-face--photo,.player-face--custom)),
-.shell .photo-editor :is(.player-face--photo,.player-face--custom),
-.studio .portrait-table .portrait-seat .portrait-avatar:has(> :is(.player-face--photo,.player-face--custom)),
-.royale-closing-avatar:has(:is(.player-face--photo,.player-face--custom)) {
+.shell .avatar:has(> :is(.player-face--photo,.player-face--custom,.player-face--free)),
+.shell .sidefoot .avatar:has(:is(.player-face--photo,.player-face--custom,.player-face--free)),
+.shell .photo-editor :is(.player-face--photo,.player-face--custom,.player-face--free),
+.studio .portrait-table .portrait-seat .portrait-avatar:has(> :is(.player-face--photo,.player-face--custom,.player-face--free)),
+.royale-closing-avatar:has(:is(.player-face--photo,.player-face--custom,.player-face--free)) {
   background:transparent!important;
   background-image:none!important;
 }
@@ -25,3 +25,36 @@
 
 .player-face--custom {background:transparent!important;background-image:none!important;}
 .shell .avatar:has(> .player-face--custom){border-color:#e6b967;}
+
+/* Avatar chosen in the profile must display identically in every table seat. */
+.studio .portrait-table .portrait-seat .portrait-avatar:has(> .player-face--free),
+.shell .avatar:has(> .player-face--free),
+.shell .sidefoot .avatar:has(.player-face--free) {
+  background: transparent !important;
+  background-image: none !important;
+  overflow: hidden !important;
+}
+.studio .portrait-table .portrait-seat .portrait-avatar > .player-face--free {
+  display: block !important;
+  width: 100% !important;
+  height: 100% !important;
+  min-width: 100% !important;
+  min-height: 100% !important;
+  background: transparent !important;
+  overflow: hidden !important;
+  border-radius: 50% !important;
+  text-shadow: none !important;
+}
+.studio .portrait-table .portrait-seat .portrait-avatar .royale-avatar-art,
+.shell .avatar .royale-avatar-art {
+  display: block !important;
+  width: 100% !important;
+  height: 100% !important;
+  background-image: url('/royale-avatars.svg') !important;
+  background-repeat: no-repeat !important;
+  background-size: 400% 400% !important;
+  border-radius: 50% !important;
+}
+.studio .portrait-table .portrait-seat .portrait-avatar:has(.player-face--free)::after {
+  pointer-events: none;
+}
