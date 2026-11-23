@@ -700,6 +700,7 @@ export function roomView(d, r, u, detail = false) {
             : frame.rows
               ? frame.payouts[ownIndex]
               : frame.stacks[ownIndex] - completed.players[ownIndex].stack,
+        grossNet: ownIndex < 0 ? null : publicGrossResult(frame, completed.players[ownIndex], ownIndex),
       });
       completed.players.forEach((player, index) => {
         const totals = (results[player.id] ??= { won: 0, lost: 0, hands: 0 });
