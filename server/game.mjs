@@ -361,16 +361,11 @@ function finish(d, r) {
   h.ended = Date.now();
   d.hands[h.id] = h;
   r.last = h.id;
-  // Keep the same finished hand on the table throughout the full presentation:
-  // all runout cards, winning five-card hands, then the visual transfer of chips.
-  // The settlement itself stays authoritative on the server.
-  const runoutBoards = Math.max(1, f.boards?.length ?? 1);
-  const multiRun = f.runoutFrom != null && runoutBoards > 1;
-  const newCardsPerBoard = f.runoutFrom == null ? 0 : Math.max(0, f.board.length - f.runoutFrom);
-  const runoutRevealEnd = f.runoutFrom == null ? 0 :
-    (f.runoutDelay ?? 650) +
-    Math.max(0, runoutBoards * newCardsPerBoard - 1) * (f.runoutStep ?? 530);
-  r.reviewUntil = h.ended + runoutRevealEnd + (multiRun ? 7700 : 4400);
+  // Server and client use the EXACT same runout/award timeline.
+  // Never deal another hand until all boards and the winning hands were shown.
+  const presentation = showdownFlow(f, 0);
+  const multiRun = f.runoutFrom != null && (f.boards?.length ?? 0) > 1;
+  r.reviewUntil = h.ended + (multiRun ? presentation.awardAt + 3600 : 4400);
   r.hand = null;
   // The selection countdown is server-authoritative and survives reconnects.
   if (r.game === "choice" && !r.paused && !r.closed) {
@@ -591,6 +586,7 @@ export function roomView(d, r, u, detail = false) {
   });
   const out = {
     ...info,
+    serverTime: Date.now(),
     seats: r.seats.map(({ funding, initialBuy, ...seat }, i) => ({
       ...seat,
       stack: preAwardStacks.get(seat.id) ?? seat.stack,
