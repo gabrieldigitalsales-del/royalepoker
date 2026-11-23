@@ -221,6 +221,7 @@ function dashboard(d, u) {
     shop: { avatars, vipPrice },
     progress: playerProgress(d, u),
     rakeAvailable: !!rakeAdmin(d.users),
+    rakePercent: Number.isInteger(d.cashier?.globalRakePercent) ? d.cashier.globalRakePercent : 3,
     clubChips: d.cashier.club?.balance ?? 0,
     catalog: Object.values(catalog),
     rooms: Object.values(d.rooms)
@@ -1083,6 +1084,29 @@ async function command(d, u, b) {
       check(t?.owner === u.id, "Somente o organizador.");
       startTour(d, t);
       break;
+    case "globalRake": {
+      check(u.admin, "Sem permissão.");
+      return {
+        percent: Number.isInteger(d.cashier?.globalRakePercent) ? d.cashier.globalRakePercent : 3,
+        collected: d.cashier?.rakeCollected ?? 0,
+        chargedHands: d.cashier?.rakeHands ?? 0,
+        hands: rakeReport(d.hands),
+        changes: Object.values(d.events).filter(e => e.action === "globalRake").slice(-30).reverse(),
+      };
+    }
+    case "setGlobalRake": {
+      check(u.admin, "Sem permissão.");
+      const percent = z.number().int().min(0).max(10).parse(b.percent);
+      const previous = Number.isInteger(d.cashier?.globalRakePercent) ? d.cashier.globalRakePercent : 3;
+      if (percent === previous) return { ok: true, percent };
+      d.cashier.globalRakePercent = percent;
+      const id = uid();
+      d.events[id] = {
+        id, by: u.name, action: "globalRake", target: "Poker Royale",
+        previous, percent, at: Date.now(),
+      };
+      return { ok: true, percent };
+    }
     case "adminFeePreview": {
       check(u?.admin && r, "Sem permissão.");
       const code = process.env.POKER_ROYALE_ADMIN_CODE;
@@ -1249,6 +1273,7 @@ const reads = new Set([
   "walletHistory",
   "practiceResume",
   "adminFeePreview",
+  "globalRake",
 ]);
 const server = http.createServer(async (req, res) => {
   const send = (status, obj) => {
