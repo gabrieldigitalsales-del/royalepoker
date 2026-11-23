@@ -527,13 +527,7 @@ export default function Lobby() {
       <div className="club-lobby-heading">
         <h2>Mesas disponíveis</h2>
         <div className="club-quick-actions">
-          <button className="primary" onClick={() => M("create")}>
-            <Plus size={21} /> Criar mesa
-          </button>
-          <button onClick={() => M("invite")}>
-            <KeyRound size={19} /> Usar convite
-          </button>
-          <button onClick={() => M("training")}>Treinar</button>
+          <button onClick={() => M("training")}>Treinar poker</button>
         </div>
       </div>
       <div className="cash-shortcuts">
