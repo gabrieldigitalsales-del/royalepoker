@@ -26,7 +26,7 @@ import { Wallet } from "./CashTools";
 import Auth from "./Auth";
 import Lobby, { Invite } from "./Lobby";
 import Table from "./Table";
-import { History, Tours, People, Profile, Admin } from "./Club";
+import { History, Tours, People, Profile, Admin, RakeControl } from "./Club";
 import { api, session, useApp, refresh, fail, backend } from "./api";
 import { Brand, Modal } from "./ui";
 import "./style.css";
@@ -270,6 +270,7 @@ function App() {
                 <Route path="/jogadores" element={<People />} />
                 <Route path="/perfil" element={<Profile />} />
                 <Route path="/admin" element={<Admin />} />
+                <Route path="/admin/rake" element={<RakeControl />} />
                 <Route path="*" element={<Lobby />} />
               </Routes>
             </motion.div>
