@@ -25,7 +25,8 @@ export function holdDealerChoice(choice, now = Date.now()) {
 
 export function resumeDealerChoice(choice, now = Date.now()) {
   if (!choice?.heldAt) return false;
-  choice.at = now + Math.max(0, choice.remainingMs ?? 0);
+  // The pause can never exceed twenty seconds, even if the worker wakes late.
+  choice.at = Math.min(now, choice.holdUntil ?? (choice.heldAt + DEALER_PAUSE_MS)) + Math.max(0, choice.remainingMs ?? 0);
   delete choice.heldAt;
   delete choice.holdUntil;
   delete choice.remainingMs;
