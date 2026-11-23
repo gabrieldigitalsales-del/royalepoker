@@ -507,8 +507,25 @@ export default function Lobby() {
   );
   return (
     <div className="club-lobby">
+      <div className="royale-lobby-hero">
+        <div className="royale-lobby-hero-copy">
+          <small>POKER ROYALE · CLUBE ONLINE</small>
+          <h1>Escolha sua mesa</h1>
+          <p>Encontre uma partida, entre com convite ou crie sua própria mesa.</p>
+          <div className="royale-lobby-hero-stats">
+            <span><b>{rooms.length}</b> mesas</span>
+            <span><b>{rooms.filter(room=>room.seats.length<room.capacity).length}</b> com vagas</span>
+            <span><b>{h.me.wallet.toLocaleString("pt-BR")}</b> fichas</span>
+          </div>
+        </div>
+        <div className="royale-lobby-hero-actions">
+          <button className="primary" onClick={()=>M("create")}><Plus size={19}/> Criar mesa</button>
+          <button onClick={()=>M("invite")}><KeyRound size={18}/> Convite</button>
+          <button onClick={()=>nav("/carteira")}>Carteira Royal</button>
+        </div>
+      </div>
       <div className="club-lobby-heading">
-        <h1>Lobby de mesas</h1>
+        <h2>Mesas disponíveis</h2>
         <div className="club-quick-actions">
           <button className="primary" onClick={() => M("create")}>
             <Plus size={21} /> Criar mesa
@@ -519,36 +536,6 @@ export default function Lobby() {
           <button onClick={() => M("training")}>Treinar</button>
         </div>
       </div>
-      <section className="royale-lobby-visuals" aria-label="Escolher experiência visual pessoal">
-        <div className="royale-lobby-visuals-heading">
-          <strong>Sua experiência visual</strong>
-          <small>Escolha uma combinação. Ela vale para a sua conta, sem alterar a mesa dos outros jogadores.</small>
-        </div>
-        <div className="royale-lobby-visual-grid">
-          {royalePresets.map((preset) => {
-            const selected = (h.me.appearance?.theme ?? "wood") === preset.theme &&
-              (h.me.appearance?.cards ?? "vivid") === preset.cards;
-            return <button key={preset.key} type="button" data-arena={preset.key}
-              className="royale-lobby-visual-preset" aria-pressed={selected}
-              disabled={applyingVisual !== null}
-              onClick={async () => {
-                setApplyingVisual(preset.key);
-                try {
-                  await api("appearance", { appearance: { theme: preset.theme, cards: preset.cards } });
-                  document.documentElement.dataset.cardStyle = preset.cards;
-                  localStorage.setItem("mesa-card-style", preset.cards);
-                  localStorage.setItem("mesa-table-theme", preset.theme);
-                  await refresh();
-                } catch (error) { fail(error); }
-                finally { setApplyingVisual(null); }
-              }}>
-              <span className="royale-lobby-visual-icon" aria-hidden="true">{preset.icon}</span>
-              <span><b>{preset.label}</b><small>{preset.description}</small></span>
-              <span className="royale-lobby-preset-status">{applyingVisual === preset.key ? "Salvando…" : selected ? "Selecionado" : "Escolher"}</span>
-            </button>;
-          })}
-        </div>
-      </section>
       <div className="cash-shortcuts">
         {h.rooms
           .filter((r) => r.joined && !r.tour)
@@ -561,11 +548,6 @@ export default function Lobby() {
               Voltar · {r.name}
             </button>
           ))}
-      </div>
-      <div className="royale-lobby-overview" role="status">
-        <span><b>{rooms.length}</b> mesas encontradas</span>
-        <span><b>{rooms.filter((room) => room.seats.length < room.capacity).length}</b> com vagas</span>
-        <span><b>{h.rooms.filter((room) => room.joined && !room.tour).length}</b> suas mesas</span>
       </div>
       <div className="cash-shortcuts">
         <input
