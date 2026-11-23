@@ -1,6 +1,6 @@
 import test, { after } from "node:test";
 import assert from "node:assert/strict";
-import { makeRoom, deal, move, roomView, automatic } from "../server/game.mjs";
+import { makeRoom, deal, move, roomView, automatic, leave, pendingPrizeHand } from "../server/game.mjs";
 import { showdownFlow } from "../src/showdown-flow.mjs";
 import { revealAt } from "../src/runout-reveal.mjs";
 import { stop } from "../server/worker.mjs";
@@ -61,6 +61,9 @@ async function play(game, runs) {
     const seat=view.seats.find(x=>x.id===player.id);
     assert.equal(seat.stack, f.stacks[i]-f.payouts[i],game+" must hide prize in public balance");
   });
+  assert.equal(pendingPrizeHand(d,r)?.id,h.id);
+  assert.throws(()=>leave(d,users[0],r), /Aguarde a revelação final/,game+" cannot cash out until all boards finish");
+  assert.equal(users[0].wallet,2000,"blocked cash-out must not change wallet");
   assert.ok(r.reviewUntil>=h.ended+flow.awardAt+3000,
     "next hand cannot start before winner celebration");
 }
