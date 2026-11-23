@@ -735,10 +735,9 @@ export default function Table() {
   const runoutElapsed = Math.max(0, time - (h?.ended ?? time));
   const showdownPresentation = showdownFlow(f, runoutElapsed, !!me.preferences?.motion);
   const revealing = !!(
-    f?.runoutFrom != null &&
-    r.reviewUntil &&
-    time < r.reviewUntil - 3500 &&
-    !me.preferences.motion
+    f?.finished &&
+    f.runoutFrom != null &&
+    !showdownPresentation.resultsReady
   );
   const ownIndex = h?.players.findIndex((p) => p.id === me.id) ?? -1;
   const selectedRevealCards: number[] = h?.showCards?.[me.id] ?? [];
@@ -810,7 +809,7 @@ export default function Table() {
     <div
       data-table-theme={theme}
       data-visual-effects={visualEffects}
-      className={"studio" + (me.preferences.largeCards ? " large-cards" : "") + (mobileDock ? " mobile-game-dock" : "") + (f?.runoutCount >= 2 && f?.boards?.length >= 2 && f?.runoutFrom != null ? " royale-triple-run-active" : "")}
+      className={"studio" + (me.preferences.largeCards ? " large-cards" : "") + (mobileDock ? " mobile-game-dock" : "") + (f?.runoutCount >= 2 && f?.boards?.length >= 2 && f?.runoutFrom != null ? " royale-triple-run-active" : "") + (revealing ? " royale-runout-settling" : "")}
     >
       {grant && (
         <Grant
@@ -1015,7 +1014,7 @@ export default function Table() {
               !accepted &&
               !r.tour &&
               !r.closed &&
-              (!r.queueLength || r.queuePosition === 1)
+              r.seats.length < r.capacity
                 ? (position) => setEntry({ position, amount: r.buy })
                 : undefined
             }
