@@ -360,14 +360,16 @@ function finish(d, r) {
   h.ended = Date.now();
   d.hands[h.id] = h;
   r.last = h.id;
-  r.reviewUntil =
-    h.ended +
-    4400 +
-    (f.runoutFrom != null
-      ? Math.max(0, (f.boards?.length ?? 1) * Math.max(0, 5 - f.runoutFrom) - 1) * (f.runoutStep ?? 500) +
-        (f.runoutDelay ?? 0) +
-        1100
-      : 0);
+  // Keep the same finished hand on the table throughout the full presentation:
+  // all runout cards, winning five-card hands, then the visual transfer of chips.
+  // The settlement itself stays authoritative on the server.
+  const runoutBoards = Math.max(1, f.boards?.length ?? 1);
+  const multiRun = f.runoutFrom != null && runoutBoards > 1;
+  const newCardsPerBoard = f.runoutFrom == null ? 0 : Math.max(0, f.board.length - f.runoutFrom);
+  const runoutRevealEnd = f.runoutFrom == null ? 0 :
+    (f.runoutDelay ?? 650) +
+    Math.max(0, runoutBoards * newCardsPerBoard - 1) * (f.runoutStep ?? 530);
+  r.reviewUntil = h.ended + runoutRevealEnd + (multiRun ? 7700 : 4400);
   r.hand = null;
   // The selection countdown is server-authoritative and survives reconnects.
   if (r.game === "choice" && !r.paused && !r.closed) {
