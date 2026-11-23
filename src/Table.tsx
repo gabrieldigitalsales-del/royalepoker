@@ -2149,7 +2149,7 @@ export default function Table() {
                           </span>
                           <span className="royale-hand-pot">Pote <strong>{hand.totalPot == null ? "—" : num(hand.totalPot)}</strong></span>
                           <span className="royale-hand-net" data-balance={hand.net == null ? "none" : balanceTone(hand.net)}>
-                            {hand.net == null ? "Não participou" : signed(hand.net)}
+                            {hand.net == null ? "Não participou" : signed(hand.grossNet ?? hand.net)}
                           </span>
                           <span className="royale-hand-expand" aria-hidden="true">⌄</span>
                         </summary>
@@ -2170,7 +2170,7 @@ export default function Table() {
                               </div>;
                             })}
                             {!!hand.winningCombos?.length && <div className="royale-history-combo-legend">
-                              {hand.winningCombos.map((combo, i) => <span key={i}>🏆 {hand.participants.find((player) => player.id === combo.playerId)?.name ?? "Jogador"} · {pokerText(combo.label ?? "Combinação vencedora")} · +{num(combo.amount)}</span>)}
+                              {hand.winningCombos.map((combo, i) => <span key={i}>🏆 {hand.participants.find((player) => player.id === combo.playerId)?.name ?? "Jogador"} · {pokerText(combo.label ?? "Combinação vencedora")}</span>)}
                             </div>}
                           </section>
                           <section className="royale-hand-participants">
@@ -2188,8 +2188,8 @@ export default function Table() {
                                   </div>
                                   <div className="royale-history-player-money">
                                     <span>Apostou <b>{num(player.invested ?? 0)}</b></span>
-                                    <span>Recebeu <b>{num(player.received ?? 0)}</b></span>
-                                    <strong data-balance={balanceTone(player.net)}>{signed(player.net)}</strong>
+                                    <span>Recebeu <b>{num(player.grossReceived ?? player.received ?? 0)}</b></span>
+                                    <strong data-balance={balanceTone(player.net)}>{signed(player.grossNet ?? player.net)}</strong>
                                   </div>
                                 </div>;
                               })}
