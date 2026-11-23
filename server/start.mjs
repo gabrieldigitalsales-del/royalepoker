@@ -6,7 +6,6 @@ import { training } from "./training.mjs";
 import { rakeReport } from "./cash-updates.mjs";
 import {
   avatars,
-  vipPrice,
   progress,
   rakeAdmin,
   avatarFor,
@@ -225,7 +224,7 @@ function dashboard(d, u) {
   return {
     me: publicUser(u),
     practiceAvailable: !!u.practice,
-    shop: { avatars, vipPrice },
+    shop: { avatars: avatars.map(({ id, symbol, name }) => ({ id, symbol, name })) },
     progress: playerProgress(d, u),
     rakeAvailable: !!rakeAdmin(d.users),
     rakePercent: Number.isInteger(d.cashier?.globalRakePercent) ? d.cashier.globalRakePercent : 3,
@@ -458,30 +457,9 @@ async function command(d, u, b) {
       );
       return { destination };
     }
-    case "buyShop": {
+    case "buyShop":
       check(false, "Loja de diamantes em breve. Os resgates ainda estão bloqueados.");
-      if (b.item === "vip") {
-        check(
-          !u.vip && (u.diamonds ?? 0) >= vipPrice,
-          "VIP já ativo ou saldo insuficiente.",
-        );
-        u.diamonds -= vipPrice;
-        u.vip = true;
-      } else {
-        const item = avatars.find((entry) => entry.id === b.item);
-        check(
-          item &&
-            (!item.level || playerProgress(d, u).level >= item.level) &&
-            !u.ownedAvatars?.includes(item.id) &&
-            (u.diamonds ?? 0) >= item.price,
-          "Avatar indisponível ou saldo insuficiente.",
-        );
-        u.diamonds = (u.diamonds ?? 0) - item.price;
-        u.ownedAvatars = [...(u.ownedAvatars ?? []), item.id];
-        u.shopAvatar = item.id;
-      }
       break;
-    }
     case "equipAvatar":
       check(
         b.item === "" || u.ownedAvatars?.includes(b.item),
