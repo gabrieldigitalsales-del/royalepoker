@@ -386,3 +386,4 @@ import "./royale-double-board-final.css";
 import "./royale-showdown-ceremony.css";
 import "./nexor-interface.css";
 import "./royale-app-layout.css";
+import "./royale-action-buttons.css";
