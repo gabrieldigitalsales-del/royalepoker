@@ -452,6 +452,19 @@ export default function Table() {
       ok = false;
     };
   }, [id, home, retry, liveStatus]);
+  // The authoritative server exposes pre-award stacks during the last-board
+  // reveal. Refresh exactly at the award boundary so winners appear on time,
+  // rather than waiting for the lobby's next 15-second polling tick.
+  useEffect(() => {
+    const last = r?.lastHand;
+    const frame = last?.frames?.at(-1);
+    if (!last || !frame?.finished || frame.runoutFrom == null || (frame.boards?.length ?? 0) < 2) return;
+    const releaseAt = last.ended + showdownFlow(frame, 0).awardAt;
+    const remaining = releaseAt - Date.now();
+    if (remaining < -500) return;
+    const timer = window.setTimeout(() => setRetry(value => value + 1), Math.max(70, remaining + 150));
+    return () => window.clearTimeout(timer);
+  }, [r?.id, r?.lastHand?.id, r?.lastHand?.ended]);
   useEffect(() => {
     if (!player) { setVipStats(null); return; }
     const canSee = player.id === me.id || !!me.vip;
