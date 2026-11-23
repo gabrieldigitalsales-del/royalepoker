@@ -1,0 +1,21 @@
+POKER ROYALE - PACOTE UNICO PARA TESTES
+
+WINDOWS
+1. Extraia toda a pasta MesaReal.
+2. Execute INICIAR-DOIS-TERMINAIS.cmd para abrir backend e frontend.
+3. Abra dois navegadores/perfis distintos para simular dois usuarios.
+4. Para testes de motor: TESTAR-REGRAS.cmd (ou npm run test:smoke).
+
+GITHUB + RENDER
+1. PUBLICAR-GITHUB.cmd envia apenas os arquivos rastreaveis; a pasta portable esta no .gitignore.
+2. No Render crie um Blueprint ligado ao repositorio e use render.yaml.
+3. Adicione DATABASE_URL de PostgreSQL persistente nas variaveis privadas do Render antes de usar dados duradouros.
+4. Aguarde build e verifique /health no dominio publicado.
+
+PENDENCIAS DE HOMOLOGACAO
+- Build npm ci + npm run build em ambiente Node 24 com dependencias.
+- Teste WebSocket em dois dispositivos/rede externa.
+- Testar manualmente Mostrar carta depois de fold, premiação/runout e reconexao.
+- Suite integral npm test pode deixar testes de integracao pendurados em ambiente sem dependencias.
+
+Nenhuma credencial privada deve ser colocada no GitHub.

@@ -1,0 +1,34 @@
+/* Bomb pot and viewport consistency. Does not alter approved desktop table geometry. */
+.royale-special-rules{display:grid;gap:8px;min-width:0;margin:12px 0;padding:14px;border:1px solid #c2964c;border-radius:12px;background:rgba(90,31,106,.09)}
+.royale-special-rules legend{font-weight:900;color:#e3b35e;padding:0 8px}
+.royale-special-rules label{font-weight:800}
+.royale-special-rules select{max-width:100%;min-width:0;padding:9px}
+.royale-bomb-alert{position:absolute;left:50%;top:24%;transform:translateX(-50%);z-index:29;pointer-events:none;display:flex;flex-direction:column;align-items:center;gap:2px;white-space:nowrap;animation:royale-bomb-vanish 2.4s ease-out forwards}
+.royale-bomb-icon{font-size:clamp(32px,5cqw,72px);line-height:1;filter:drop-shadow(0 0 16px #ffad38);animation:royale-bomb-burst .65s ease-out both}
+.royale-bomb-alert strong{font-size:clamp(15px,2.2cqw,35px);font-weight:1000;color:#ffe097;text-shadow:0 3px 1px #511612,0 0 18px #fe7d00}
+.royale-bomb-alert small{font-size:clamp(9px,1cqw,15px);font-weight:900;background:#29112bce;padding:3px 9px;border-radius:7px;color:#fff}
+@keyframes royale-bomb-burst{0%{transform:translateY(-100px) scale(.3) rotate(-35deg);opacity:0}40%{transform:translateY(0) scale(1.2) rotate(9deg);opacity:1}64%{transform:scale(2.5) rotate(-14deg);filter:drop-shadow(0 0 32px #ff9300)}100%{transform:scale(1);opacity:1}}
+@keyframes royale-bomb-vanish{0%,65%{opacity:1}100%{opacity:0;visibility:hidden}}
+@media(max-width:850px){.studio{min-width:0!important}.studio .studio-top{max-width:100%;min-width:0;flex-wrap:nowrap!important}.studio .studio-title{min-width:0;overflow:hidden}.studio .studio-title p{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.studio .portrait-table{transform-origin:center center}.studio .console .actions{gap:4px!important}.studio .console .actions button{min-width:0!important;font-size:clamp(11px,2vw,18px)!important}.royale-bomb-alert{top:20%}}
+@media(max-width:650px) and (orientation:portrait){.studio .studio-top{gap:2px!important}.studio .studio-top button{font-size:11px!important;padding:5px!important}.studio .console{max-height:23dvh!important;overflow:auto!important}.studio .table-stage{min-height:0!important}.studio .table-stage>.portrait-table{max-width:100%!important}}
+@media(prefers-reduced-motion:reduce){.royale-bomb-alert,.royale-bomb-icon{animation:none}}
+
+.royale-bomb-icon{position:relative;isolation:isolate}.royale-bomb-shockwave{position:absolute;inset:22%;border:3px solid #ffd36f;box-shadow:0 0 18px #ff842a;border-radius:50%;z-index:-1;animation:royale-bomb-wave 1.2s .38s both}.royale-bomb-spark{position:absolute;left:45%;top:45%;width:clamp(4px,.7cqw,12px);height:clamp(8px,1.2cqw,22px);border-radius:50% 50% 15% 15%;background:linear-gradient(#fffbd4,#ffac26,#ff3d1f);box-shadow:0 0 9px #ff7c1a;transform:rotate(calc(var(--spark) * 36deg));animation:royale-bomb-sparks .8s .4s both}
+@keyframes royale-bomb-wave{from{transform:scale(.1);opacity:1}to{transform:scale(5);opacity:0}}@keyframes royale-bomb-sparks{from{transform:rotate(calc(var(--spark) * 36deg)) translateY(0);opacity:1}to{transform:rotate(calc(var(--spark) * 36deg)) translateY(-85px);opacity:0}}
+@media(prefers-reduced-motion:reduce){.royale-bomb-shockwave,.royale-bomb-spark{animation:none;opacity:0}}
+
+.royale-cucu-banner{position:absolute;top:23%;left:50%;transform:translateX(-50%);z-index:12;background:linear-gradient(120deg,#412049,#27152d);color:#ffeab6;border:2px solid #e7ae54;border-radius:14px;padding:5px 12px;font-weight:900;font-size:clamp(9px,1.1cqw,14px);white-space:nowrap;box-shadow:0 4px 14px #0008;pointer-events:none}
+.royale-cucu-controls{display:flex;align-items:center;justify-content:center;gap:12px;flex-wrap:wrap;color:#ffe9ac;font-weight:900}.royale-cucu-controls button{border:2px solid #deb458;border-radius:14px;padding:10px 20px;font-weight:900}.royale-cucu-controls .primary{background:linear-gradient(#ffd16d,#ad6f13);color:#211028}
+@media(max-width:650px){.royale-cucu-controls{gap:4px;font-size:11px}.royale-cucu-controls button{padding:6px 9px}.royale-cucu-banner{white-space:normal;max-width:70%;text-align:center}}
+
+/* Cucurucho never covers the pot or a community-card row. */
+.studio .portrait-table .royale-cucu-banner{top:12%!important;z-index:18!important;font-size:clamp(10px,0.85vw,13px)!important;max-width:48%;overflow:hidden;text-overflow:ellipsis;}
+.studio .portrait-table .royale-cucu-marker{position:absolute;top:-7px;left:-14px;z-index:6;padding:3px 5px;background:linear-gradient(150deg,#f7d57f,#b87821);border:1px solid #fff1bf;border-radius:6px;color:#321026;font:950 9px/1 system-ui,sans-serif;box-shadow:0 2px 6px #10061f91;}
+.royale-cucu-controls{padding:10px 12px;border:1px solid #ffd26c;border-radius:12px;background:linear-gradient(160deg,#31153b,#1a102c);box-shadow:0 6px 19px #10061fbb;}
+.royale-cucu-controls strong{font-size:14px;letter-spacing:.05em;color:#ffe1a4;}
+.royale-cucu-controls span{font-size:13px;color:#fff4d1;}
+.royale-cucu-controls button{min-height:44px;touch-action:manipulation;border-radius:9px;}
+.royale-cucu-controls button:disabled{opacity:.4;cursor:not-allowed;}
+.royale-cucu-enable{display:flex;gap:10px;align-items:center;font-weight:900;color:#ffe0a6;}
+.royale-cucu-enable input{width:18px;height:18px;}
+@media(max-width:680px){.studio .portrait-table .royale-cucu-banner{top:10%!important;font-size:9px!important;max-width:55%;padding:3px 7px!important;}.royale-cucu-controls{gap:7px;padding:9px;}}

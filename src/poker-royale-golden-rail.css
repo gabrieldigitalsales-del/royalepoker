@@ -1,0 +1,43 @@
+/* Golden rail polish: keep the table and backdrop at their approved scale. */
+/* Avatar anchor sits on the oval's rail; name/stack extend toward the outside. */
+.studio .portrait-table .portrait-seat {
+  transform: translate(-50%, -50%) !important;
+  overflow: visible !important;
+}
+.studio .portrait-table .portrait-seat .portrait-avatar {
+  box-shadow: 0 0 0 2px #351225, 0 0 0 4px #f2c265,
+              0 0 10px 4px #ffc45f70, 0 6px 12px #120512a8 !important;
+}
+.studio .portrait-table .portrait-seat .nameplate,
+.studio .portrait-table .portrait-seat .stackplate {
+  background: linear-gradient(180deg, #26112eeb, #120719f5) !important;
+  border-color: #e2ab63aa !important;
+}
+/* Move the evaluated hand from purple felt onto the lower golden rim,
+   beside the hero's avatar and clear of the player's nameplate. */
+.studio .studio-layout > .console > .hand-rank {
+  position: fixed !important;
+  top: auto !important;
+  bottom: clamp(104px, 15.2vh, 155px) !important;
+  left: calc(50% + clamp(58px, 6.8vw, 110px)) !important;
+  right: auto !important;
+  transform: none !important;
+  z-index: 36 !important;
+}
+.studio .studio-layout > .console > .hand-rank span {
+  color: #2f1639 !important;
+  background: linear-gradient(180deg,#fff0b1,#deb062) !important;
+  border: 2px solid #74431d !important;
+  border-radius: 100px !important;
+  box-shadow: 0 3px 5px #16061799, inset 0 1px #fff5 !important;
+  font-weight: 900 !important;
+  font-family: 'Trebuchet MS','Arial Rounded MT Bold',system-ui,sans-serif !important;
+  font-size: clamp(10px,.84vw,13px) !important;
+  padding: 3px 9px !important;
+}
+@media(max-width:720px) {
+  .studio .studio-layout > .console > .hand-rank {
+    left: calc(50% + 47px) !important;
+    bottom: clamp(70px, 14vh, 110px) !important;
+  }
+}

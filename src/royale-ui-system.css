@@ -1,0 +1,53 @@
+/* Unified UI additions. Existing royal arena and table geometry remain intact. */
+:root { font-family: system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif; }
+body,button,input,select,textarea,.club-lobby,.studio,.modal { font-family:system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif!important; }
+/* Square-ish game controls, not generic pills. */
+.club-lobby button:not(.icon),.club-lobby select,.studio .studio-top button,.studio .console button,
+.royale-replay-dialog button,.table-look-options button,.royale-lobby-visual-preset {
+ border-radius:9px!important; transition:transform .16s ease, box-shadow .19s ease, filter .2s ease, border-color .2s ease;
+}
+.club-lobby button:not(:disabled):active,.studio button:not(:disabled):active,.royale-replay-dialog button:not(:disabled):active { transform:translateY(2px) scale(.985); filter:brightness(1.09); }
+@media(hover:hover){.club-lobby button:not(:disabled):hover,.studio button:not(:disabled):hover,.royale-replay-dialog button:not(:disabled):hover{filter:brightness(1.13);box-shadow:0 0 0 1px #e9be7e70,0 6px 16px #12081666;}}
+:where(button,input,select,textarea):focus-visible{outline:2px solid #f9d783!important;outline-offset:3px!important;}
+/* Three saved, user-specific combinations; each uses only established server-enforced theme IDs. */
+.royale-lobby-visuals {margin:14px 0 17px;padding:13px;border:1px solid #956847;border-radius:14px;background:linear-gradient(115deg,#2a1539,#190e29);color:#fff1dc;}
+.royale-lobby-visuals-heading {display:grid;gap:3px;margin-bottom:10px;}
+.royale-lobby-visuals-heading strong {font-size:15px;color:#ffe0a0;font-weight:900;}
+.royale-lobby-visuals-heading small {font-size:11px;color:#dbc2e1;}
+.royale-lobby-visual-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px;}
+.royale-lobby-visual-preset{min-width:0;display:flex;align-items:center;gap:8px;text-align:left;padding:10px!important;border:1px solid #8e6786!important;background:linear-gradient(145deg,#4b2758,#291b3b)!important;color:#fff1df!important;}
+.royale-lobby-visual-preset[data-arena=midnight]{background:linear-gradient(145deg,#223a62,#18233b)!important;}
+.royale-lobby-visual-preset[data-arena=ruby]{background:linear-gradient(145deg,#69263d,#2b112d)!important;}
+.royale-lobby-visual-preset[aria-pressed=true]{border-color:#ffde87!important;box-shadow:inset 0 0 0 1px #fff1b088,0 0 14px #dba34a44!important;}
+.royale-lobby-visual-icon{flex:none;display:grid;place-items:center;width:36px;height:43px;border:1px solid #f8d49b;border-radius:5px;background:#f8f0e6;color:#282038;font-size:24px;box-shadow:0 4px 0 #281226;}
+.royale-lobby-visual-preset>span:nth-child(2){display:grid;gap:3px;min-width:0;}
+.royale-lobby-visual-preset b{font-size:12px;line-height:1.15;}
+.royale-lobby-visual-preset small{font-size:10px;color:#f2ddec;line-height:1.25;}
+.royale-lobby-preset-status{margin-left:auto;font-size:10px;color:#ffdfa0;font-weight:900;white-space:nowrap;}
+/* Replay is genuinely miniature, never a clipped full-screen arena. */
+.royale-replay-dialog .modal{width:min(740px,96vw)!important;max-width:740px!important;gap:10px!important;padding:clamp(12px,2vw,20px)!important;}
+.royale-replay-dialog .royale-replay-miniature{width:min(100%,430px)!important;max-width:430px!important;max-height:none!important;height:auto!important;overflow:visible!important;box-sizing:border-box;justify-self:center;align-self:center;}
+.royale-replay-mini-boards{width:100%;gap:5px!important;}
+.royale-replay-mini-board{justify-content:center!important;flex-wrap:nowrap!important;}
+.royale-replay-mini-players{max-height:106px!important;overflow-y:auto!important;overflow-x:hidden!important;}
+.royale-replay-mini-cardline{flex-wrap:nowrap!important;}
+.royale-replay-tools{display:flex!important;flex-wrap:wrap!important;justify-content:center!important;gap:6px!important;}
+.royale-replay-tools button,.royale-replay-export{width:auto!important;max-width:100%;flex:0 1 auto!important;white-space:normal;min-height:34px!important;padding:6px 12px!important;}
+.royale-replay-dialog .royale-replay-action-strip{max-height:82px;overflow:auto;}
+.royale-replay-dialog .replay-streets{gap:5px!important;}
+.royale-replay-dialog .replay-streets button{min-height:34px!important;padding:6px 10px!important;}
+@media(max-width:780px){.royale-lobby-visual-grid{grid-template-columns:1fr;}.royale-lobby-visual-preset{min-height:59px;}.royale-replay-dialog .royale-replay-miniature{width:min(100%,390px)!important;}}
+@media(max-width:430px){.royale-replay-dialog .royale-replay-miniature{max-width:min(100%,340px)!important;padding:8px!important;}.royale-replay-mini-card{width:21px!important;height:29px!important;}.royale-replay-dialog .royale-replay-tools button{font-size:11px!important;}}
+@media(prefers-reduced-motion:reduce){.club-lobby button,.studio button,.royale-replay-dialog button{transition:none!important;animation:none!important;}}
+
+.royale-lobby-overview{display:flex;align-items:center;flex-wrap:wrap;gap:7px;margin:4px 0 12px;}
+.royale-lobby-overview span{padding:6px 9px;border:1px solid #80618d;border-radius:7px;background:#27152f;color:#d9c3dc;font-size:11px;}
+.royale-lobby-overview b{color:#ffe0a0;font-size:14px;}
+.royale-look-presets{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin:8px 0 15px;}
+.royale-look-preset{min-width:0;display:grid;gap:4px;min-height:72px;padding:10px!important;border:1px solid #966b7e!important;border-radius:9px!important;background:linear-gradient(145deg,#4e285b,#2d1536)!important;color:#fff2dc!important;text-align:left;}
+.royale-look-preset:nth-child(2){background:linear-gradient(145deg,#26497b,#182137)!important;}
+.royale-look-preset:nth-child(3){background:linear-gradient(145deg,#74273e,#290f22)!important;}
+.royale-look-preset[aria-pressed=true]{border-color:#ffe4a7!important;box-shadow:inset 0 0 0 1px #f0c478,0 0 12px #f0c47855!important;}
+.royale-look-preset b{font-size:13px;}
+.royale-look-preset small{color:#e8cade;font-size:10px;}
+@media(max-width:600px){.royale-look-presets{grid-template-columns:1fr;}.royale-look-preset{min-height:52px;}}

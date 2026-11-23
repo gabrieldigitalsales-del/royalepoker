@@ -1,0 +1,41 @@
+/* Poker Royale — the player's hand evaluation belongs beside their own seat,
+   not over the community board. Loaded after all legacy board styles. */
+.studio .studio-layout > .console > .hand-rank {
+  position: fixed !important;
+  inset: auto auto 18.5vh calc(50% + 100px) !important;
+  top: auto !important;
+  bottom: 18.5vh !important;
+  left: calc(50% + 100px) !important;
+  right: auto !important;
+  transform: none !important;
+  z-index: 35 !important;
+  display: inline-flex !important;
+  width: max-content !important;
+  max-width: min(23vw, 180px) !important;
+  pointer-events: none !important;
+  margin: 0 !important;
+}
+.studio .studio-layout > .console > .hand-rank span {
+  display: block;
+  font-size: clamp(10px, 0.83vw, 13px) !important;
+  padding: 4px 9px !important;
+  line-height: 1.2 !important;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  box-shadow: 0 2px 10px #0009;
+}
+@media (max-width: 900px) {
+  .studio .studio-layout > .console > .hand-rank {
+    left: calc(50% + 70px) !important;
+    bottom: 18vh !important;
+    max-width: 25vw !important;
+  }
+}
+@media (max-width: 680px) and (orientation: portrait) {
+  .studio .studio-layout > .console > .hand-rank {
+    left: calc(50% + 52px) !important;
+    bottom: 17vh !important;
+    max-width: 32vw !important;
+  }
+}

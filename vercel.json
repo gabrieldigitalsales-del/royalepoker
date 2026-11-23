@@ -1,0 +1,1 @@
+{"framework":"vite","buildCommand":"npm run build:web","outputDirectory":"dist","rewrites":[{"source":"/((?!assets/|mark.svg|manifest.webmanifest|sw.js|icon192.png|icon512.png).*)","destination":"/index.html"}]}

@@ -1,0 +1,27 @@
+/* Shared photo rendering: eliminate the green placeholder on real player photos. */
+.player-face--photo {
+  width:100%;height:100%;min-width:0;min-height:0;
+  display:inline-grid;place-items:center;
+  overflow:hidden;border-radius:50%;background:transparent!important;
+  color:inherit;
+}
+.player-face--photo > img {
+  display:block;width:100%;height:100%;min-width:100%;min-height:100%;
+  object-fit:cover;object-position:center;border-radius:50%;
+}
+/* Keep the ring and turn outline, but remove the green/purple placeholder fill. */
+.shell .avatar:has(> :is(.player-face--photo,.player-face--custom)),
+.shell .sidefoot .avatar:has(:is(.player-face--photo,.player-face--custom)),
+.shell .photo-editor :is(.player-face--photo,.player-face--custom),
+.studio .portrait-table .portrait-seat .portrait-avatar:has(> :is(.player-face--photo,.player-face--custom)),
+.royale-closing-avatar:has(:is(.player-face--photo,.player-face--custom)) {
+  background:transparent!important;
+  background-image:none!important;
+}
+.shell .avatar:has(> .player-face--photo){overflow:hidden;}
+.studio .portrait-table .portrait-seat .portrait-avatar:has(> .player-face--photo) {
+  border-color:#e6b967!important;
+}
+
+.player-face--custom {background:transparent!important;background-image:none!important;}
+.shell .avatar:has(> .player-face--custom){border-color:#e6b967;}

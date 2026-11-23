@@ -1,0 +1,130 @@
+/* Poker Royale — Etapa 1: acabamento dos assentos.
+   Não modifica o palco, o tamanho da mesa nem o feltro. */
+
+/* Assentos ocupados NÃO exibem a base verde reservada a assentos vazios. */
+.studio .portrait-table .portrait-seat::before,
+.studio .portrait-table .portrait-seat::after { content: none !important; display: none !important; }
+/* O placeholder verde permanece apenas para lugares realmente vazios. */
+.studio .portrait-table .empty-chair { opacity: .68; }
+
+/* Avatar e placa são uma unidade visual compacta. */
+.studio .portrait-table .portrait-seat {
+  width: clamp(60px, 7.8vw, 124px) !important;
+  min-width: 0 !important;
+  gap: 0 !important;
+}
+.studio .portrait-table .portrait-seat .portrait-avatar {
+  width: clamp(40px, 5.1vw, 74px) !important;
+  height: clamp(40px, 5.1vw, 74px) !important;
+  flex-shrink: 0 !important;
+  z-index: 3 !important;
+}
+.studio .portrait-table .portrait-seat .portrait-avatar .player-face {
+  font-size: clamp(23px, 3.45vw, 50px) !important;
+}
+.studio .portrait-table .portrait-seat .nameplate,
+.studio .portrait-table .portrait-seat .stackplate {
+  max-width: 100% !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  white-space: nowrap !important;
+  box-sizing: border-box !important;
+  font-family: 'Trebuchet MS', 'Arial Rounded MT Bold', system-ui, sans-serif !important;
+  font-weight: 900 !important;
+}
+.studio .portrait-table .portrait-seat .nameplate {
+  font-size: clamp(10px, .87vw, 14px) !important;
+  line-height: 1.06 !important;
+  padding: 5px 6px 3px !important;
+  margin-top: -4px !important;
+}
+.studio .portrait-table .portrait-seat .stackplate {
+  font-size: clamp(11px, 1.13vw, 18px) !important;
+  line-height: 1.08 !important;
+  padding: 2px 5px 5px !important;
+}
+
+/* Marcadores não cobrem rosto, nome nem saldo. */
+.studio .portrait-table .portrait-seat .dealer-marker {
+  right: -7% !important; left: auto !important;
+  top: 35% !important;
+  width: clamp(17px,1.6vw,23px) !important;
+  height: clamp(17px,1.6vw,23px) !important;
+  padding: 0 !important;
+  display: grid !important; place-items: center !important;
+  font-size: clamp(10px,.9vw,14px) !important;
+}
+/* Ação/ganho fica ao lado do avatar, nunca entre avatar e nome. */
+.studio .portrait-table .portrait-seat .seat-badge {
+  position: absolute !important;
+  left: calc(100% - 4px) !important;
+  right: auto !important;
+  top: 12% !important;
+  transform: translateY(-50%) !important;
+  margin: 0 !important;
+  padding: 3px 6px !important;
+  font-size: clamp(9px,.78vw,12px) !important;
+  line-height: 1.1 !important;
+  white-space: nowrap !important;
+  z-index: 8 !important;
+  max-width: 105px !important;
+  pointer-events: none !important;
+}
+.studio .portrait-table .portrait-seat.right .seat-badge {
+  left: auto !important;
+  right: calc(100% - 4px) !important;
+}
+.studio .portrait-table .portrait-seat .turn-clock {
+  z-index: 7 !important;
+}
+
+/* Cartas fechadas seguem o avatar em vez de ficarem soltas pelo feltro.
+   Cartas do próprio jogador em HUD separado continuam nas posições já aprovadas. */
+.studio .portrait-table .portrait-seat .pocket:not(.faceup) {
+  top: 0 !important;
+  left: calc(50% + 18px) !important;
+  right: auto !important;
+  bottom: auto !important;
+  transform: scale(.70) !important;
+  transform-origin: left top !important;
+  z-index: 2 !important;
+}
+.studio .portrait-table .portrait-seat.right .pocket:not(.faceup) {
+  right: calc(50% + 18px) !important;
+  left: auto !important;
+  transform-origin: right top !important;
+}
+.studio .portrait-table .portrait-seat .pocket.faceup {
+  top: -13% !important;
+  bottom: auto !important;
+  left: 50% !important;
+  right: auto !important;
+  transform: translateX(-50%) scale(.63) !important;
+  transform-origin: center bottom !important;
+  z-index: 4 !important;
+}
+
+@media(max-width:680px) {
+  .studio .portrait-table .portrait-seat { width: clamp(45px, 11vw, 76px) !important; }
+  .studio .portrait-table .portrait-seat .portrait-avatar {
+    width: clamp(30px,7.8vw,52px) !important;
+    height: clamp(30px,7.8vw,52px) !important;
+  }
+  .studio .portrait-table .portrait-seat .nameplate { font-size: clamp(8px,1.9vw,11px) !important; padding: 3px 3px 2px !important; }
+  .studio .portrait-table .portrait-seat .stackplate { font-size: clamp(9px,2.1vw,12px) !important; padding: 1px 3px 3px !important; }
+  .studio .portrait-table .portrait-seat .seat-badge {font-size:8px !important;}
+}
+
+/* Sequential Run It: cards mount on their real reveal tick with the same pop as main board. */
+.studio .portrait-table.royale-multiple-boards .mini-board-card.runout-card-visible > .card {
+  animation: royale-runout-flip .38s cubic-bezier(.18,.84,.34,1.22) both;
+  transform-origin: center bottom;
+}
+.studio .portrait-table.royale-multiple-boards .mini-board-card.runout-card-pending .board-slot {
+  display:block; width:clamp(22px,2.6vw,43px);height:clamp(31px,3.7vw,59px);
+  border:1px dashed #efce9c5e; border-radius:4px; background:#150b273d;
+}
+@keyframes royale-runout-flip {from{opacity:0;transform:translateY(-15px) rotateY(76deg) scale(.8)} to{opacity:1;transform:translateY(0) rotateY(0) scale(1)}}
+@media(max-width:680px){
+ .studio .portrait-table .portrait-seat .seat-badge{font-size:8px!important;max-width:62px!important;padding:2px 3px!important;}
+}

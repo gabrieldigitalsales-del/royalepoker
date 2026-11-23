@@ -1,0 +1,138 @@
+
+/* POKER ROYALE · illustrated, responsive game-world identity */
+:root{--gold:#f9c96e;--line:#6e496c;--panel:#241532}
+.content:has(.studio){background:radial-gradient(ellipse at 50% 5%,#593879 0%,#22142f 48%,#100a1c 100%);color:#fff4d9}
+.studio{background:radial-gradient(ellipse at 50% 0%,#44265b 0%,#1b1229 72%)!important;color:#fff4d9;max-width:1500px}
+.studio-top{justify-content:center;gap:10px;position:relative;z-index:15}
+.royale-hud-logo{width:clamp(92px,10vw,170px);height:74px;object-fit:contain;flex:none;filter:drop-shadow(0 6px 6px #100818)}
+.studio .studio-title h1{font-family:Georgia,serif;color:#ffdb91;text-shadow:0 3px 4px #0d0713}
+.studio .studio-title p{color:#edc8e7}
+.studio .portrait-table{background:radial-gradient(ellipse at 50% 40%,#5f3c63,#211429 75%);border:2px solid #bf8746;box-shadow:inset 0 0 0 2px #ffecb14d,0 12px 0 #100a19,0 28px 46px #08040a95}
+.studio .table-rail{inset:9% 4.1%;border-radius:50% / 39%;padding:3.1%;background:repeating-linear-gradient(13deg,transparent 0 26px,#f6ca7a0c 27px 29px,transparent 30px 55px),linear-gradient(115deg,#71321d,#c07b32 13%,#542819 30%,#ce8936 45%,#623420 72%,#e4ad50 90%,#71331f);box-shadow:inset 0 3px 2px #ffe6ae,inset 0 -8px 5px #3c1818,0 8px 0 #30141b,0 15px 22px #07030a9e}
+.studio .table-cloth{border-radius:inherit;background:radial-gradient(ellipse at 50% 35%,#8e269b 0%,#612075 42%,#341044 80%,#210e32 100%);box-shadow:inset 0 0 0 3px #e59cec55,inset 0 0 0 6px #381744,inset 0 0 25px 11px #14071f}
+.studio .table-cloth:before{opacity:.08;mix-blend-mode:screen}
+.studio .cloth-seam{border:2px solid #de4cf0!important;border-radius:inherit;box-shadow:0 0 9px #df4ef6,inset 0 0 13px #df4ef644;opacity:.8}
+/* Keep the selection countdown exactly on the oval rail; never across the felt */
+.studio .choice-perimeter{inset:0;width:100%;height:100%;transform:none;filter:drop-shadow(0 0 2px #f8ba49);color:#ffea95;z-index:8}
+.studio .choice-perimeter ellipse{rx:46;ry:46;stroke-width:1.2}
+.royale-table-insignia{display:block!important;font:900 clamp(8px,1.5cqw,15px) Georgia,serif!important;color:#f9d18b!important;letter-spacing:.14em;text-shadow:0 2px 4px #0d0816}
+.studio .table-wordmark strong{color:#ffe5a9}
+.studio .portrait-seat .seat-badge,.studio .seat-badge{background:linear-gradient(#342135,#130d21)!important;border:1.5px solid #b78246!important;color:#ffe6cb!important;box-shadow:0 4px 0 #0c0812,0 7px 12px #09040b94}
+.studio .portrait-avatar{border:3px solid #f7b64d;border-radius:50%;box-shadow:0 3px 0 #6a3018,0 0 12px #ffca5999}
+.studio .pot-tag span{color:#ffdc84}
+.studio button:not(.card){border-radius:12px;border:1px solid #aa763a;box-shadow:inset 0 2px #fff4cf42,0 4px 0 #160f24,0 7px 12px #09050d70;background:linear-gradient(#5a3572,#291938);color:#ffe7b5}
+.studio button:not(.card):hover:not(:disabled){filter:brightness(1.17)}
+.studio button.primary,.studio .actions .primary{background:linear-gradient(#ffe59b,#c7842e);border:2px solid #fff2be;color:#392110;box-shadow:inset 0 2px #ffffff88,0 4px 0 #6a361a,0 7px 10px #06030a9a}
+.studio button.danger,.studio .actions .danger{background:linear-gradient(#eb566b,#962e46);color:white;border:2px solid #f8a4a7;box-shadow:0 4px 0 #4e142c}
+.studio .actions{border:2px solid #94618c;background:linear-gradient(135deg,#332040,#1d142e);box-shadow:0 7px 15px #08050e77;border-radius:14px;color:#ffe9ca}
+.studio .actions p,.studio .actions .section span{color:#dac9de}
+.studio .player-hand .card{border:2px solid #ffd68a;box-shadow:0 4px 0 #562850,0 7px 10px #0008}
+.studio .studio-tools,.studio .console{position:relative;z-index:6}
+.poker-royale-brand{height:auto;font-size:0!important;gap:0!important}
+.poker-royale-logo{display:block;width:clamp(155px,19vw,245px);height:auto;filter:drop-shadow(0 8px 10px #100819)}
+.auth{background:radial-gradient(ellipse at 42% 15%,#623477 0%,#211327 63%,#130b1d 100%)}
+.auth-art{background:radial-gradient(ellipse at 45% 30%,#593167,#1d0c26)}
+.auth-art h1{color:#ffeaca;text-shadow:0 3px 0 #1f0921}
+.auth-form{background:linear-gradient(145deg,#3b224a,#160f26);border-color:#b77c51}
+.runout-vote{position:relative;z-index:21;border:3px solid #f7cc72!important;background:linear-gradient(160deg,#4b2862,#1f132f)!important;box-shadow:inset 0 2px 0 #fff7d977,0 8px 0 #6e391c,0 16px 33px #000d!important;max-width:520px;margin:auto}
+.runout-vote strong{font-size:clamp(18px,2.2vw,28px)!important;color:#ffe49b}
+.runout-vote p{line-height:1.4;color:#f0d7ec}
+.runout-options button{background:linear-gradient(#7e488f,#332046)!important;border:2px solid #c9a174!important;color:#fff4d3!important;font-weight:900}
+.runout-options button[aria-pressed=true]{background:linear-gradient(#ffe69e,#ca832f)!important;color:#39200f!important}
+.runout-options button.runout-unavailable{opacity:.3!important;filter:grayscale(1);pointer-events:none}
+.royale-runout-overlay{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);z-index:60;width:min(92%,540px);pointer-events:auto}
+.table-stage{position:relative}
+.royale-runout-overlay::before{content:"";position:absolute;inset:-12px;background:#0e0716ad;filter:blur(9px);border-radius:24px;z-index:-1}
+@media (min-width:900px) and (min-height:620px){
+ .studio{height:100dvh;padding:0 20px 10px;max-width:1600px}
+ .studio-top{flex:0 0 90px;justify-content:flex-start}
+ .studio .studio-layout{display:flex;flex-direction:column;flex:1;min-height:0;gap:7px}
+ .studio .table-stage{flex:1;min-height:0;width:100%;display:flex;align-items:center;justify-content:center;position:relative}
+ .studio .portrait-table{height:min(100%,calc(100vw / 1.72));width:min(100%,calc((100dvh - 245px) * 1.85));max-width:1320px;aspect-ratio:1.82;min-height:0}
+ .studio .table-rail{inset:10% 4% 7%;border-radius:50% / 49%}
+ .studio .portrait-board{top:48%}
+ .studio .table-wordmark{top:64%}
+ .studio .portrait-seat{width:clamp(70px,9cqw,150px)}
+ .studio .portrait-avatar{height:clamp(36px,6cqw,85px);width:clamp(36px,6cqw,85px)}
+ .studio .console{flex:0 0 auto;max-width:1050px;width:100%;align-self:center}
+ .studio .player-hand{margin:3px auto}
+ .studio .player-hand .card{height:clamp(55px,7vh,86px);width:clamp(42px,5.5vh,62px)}
+ .studio .actions{padding:8px 14px}
+ .studio .studio-title{max-width:750px}
+ .studio .pot-tag{top:31%!important}
+}
+@media(max-width:899px){
+ .royale-hud-logo{width:82px;height:62px}
+ .studio-top{gap:4px}
+ .studio .portrait-table{border-radius:17px}
+ .studio .table-rail{inset:9% 4% 8%;border-radius:49% / 36%}
+ .royale-runout-overlay{position:fixed;top:48%;width:calc(100vw - 22px);max-width:490px}
+ .runout-vote{padding:12px}
+ .runout-options button{padding:13px 2px}
+}
+@media(prefers-reduced-motion:reduce){.royale-runout-overlay,.studio button{transition:none!important}}
+
+/* In place of the distorted SVG line, the choice timer glows along the wood rail only. */
+.studio .table-rail.royal-choice-active::after{content:"";position:absolute;inset:-3px;border-radius:inherit;border:3px solid #ffe39a;box-shadow:0 0 14px #ffd274,0 0 18px #bd4eda;pointer-events:none;z-index:6;animation:royal-rail-pulse .9s ease-in-out infinite alternate}
+@keyframes royal-rail-pulse{from{opacity:.45}to{opacity:1}}
+@media(prefers-reduced-motion:reduce){.studio .table-rail.royal-choice-active::after{animation:none}}
+/* Royale treatment throughout lobby, profile, shop and history */
+.shell:not(:has(.studio)) {background:radial-gradient(ellipse at 60% 0,#54306a 0,#21142e 46%,#100a1a 100%)}
+.shell:not(:has(.studio)) aside {background:linear-gradient(180deg,#301b40,#140e21);border-right:2px solid #8f5b48}
+.shell:not(:has(.studio)) .content {background:transparent}
+.shell:not(:has(.studio)) .page {color:#fff1db}
+.shell:not(:has(.studio)) h1,.shell:not(:has(.studio)) h2 {color:#ffe3a3;font-family:Georgia,serif;text-shadow:0 3px 4px #10081c}
+.shell:not(:has(.studio)) .panel,.shell:not(:has(.studio)) .club-room-card,.shell:not(:has(.studio)) .club-cashier,.shell:not(:has(.studio)) .club-hand-row {background:linear-gradient(145deg,#382343,#21152d);border:1px solid #8d5976;box-shadow:inset 0 1px #ffffff15,0 8px 15px #09051177;border-radius:16px}
+.shell:not(:has(.studio)) button.primary {background:linear-gradient(#ffdd94,#be7325);border:2px solid #ffe9a6;color:#352014;box-shadow:0 4px 0 #6c371e,0 8px 12px #07040c66;font-weight:900}
+.shell:not(:has(.studio)) button:not(.primary),.shell:not(:has(.studio)) .club-room-groups button {border-radius:11px}
+.shell:not(:has(.studio)) .club-table-pill{background:radial-gradient(ellipse at 50% 25%,#682e79,#321a47);border:4px solid #c18b44;box-shadow:inset 0 0 0 3px #622c2e,0 6px 0 #221126,0 11px 13px #080510a9;border-radius:48% / 28%;min-height:118px}
+.shell:not(:has(.studio)) .club-table-title{color:#ffeab5}
+.shell:not(:has(.studio)) .club-lobby-heading:before {content:"♛  POKER ROYALE  ♠";display:block;color:#f0be61;font:900 13px Georgia,serif;letter-spacing:.19em;margin-bottom:7px}
+.shell:not(:has(.studio)) .club-room-open:focus-visible {outline-color:#f5d38a}
+@media(max-width:750px){.shell:not(:has(.studio)) .lobby-mobile-brand .poker-royale-logo{width:100px}.shell:not(:has(.studio)) .page{padding-bottom:75px}}
+
+/* POKER ROYALE / FULL-VIEW TABLE LOCK: no document scroll or page jump. */
+html:has(.studio),body:has(.studio),#root:has(.studio){height:100%;overflow:hidden!important}
+.shell:has(.studio){height:100dvh!important;min-height:0!important;width:100vw!important;overflow:hidden!important;display:flex!important}
+.shell:has(.studio) > aside{display:none!important}
+.shell:has(.studio) > .content{height:100dvh!important;min-height:0!important;min-width:0!important;flex:1!important;overflow:hidden!important;padding:0!important;margin:0!important;max-width:none!important}
+.studio{width:100%!important;height:100dvh!important;max-width:none!important;overflow:hidden!important;display:flex!important;flex-direction:column!important;padding:4px clamp(8px,1.2vw,20px) 8px!important;gap:3px!important}
+.studio .studio-top{flex:0 0 auto!important;min-height:0!important;display:flex;gap:5px!important;align-items:center!important;justify-content:space-between!important}
+.studio .studio-top .studio-nav{margin:0!important;gap:5px!important}
+.studio .studio-title{margin:0!important;display:flex;align-items:center;gap:8px;min-width:0;max-width:none!important}
+.studio .studio-title h1{font-size:clamp(13px,1.3vw,20px)!important;line-height:1.15}
+.studio .studio-title p{font-size:clamp(9px,.8vw,12px)!important}
+.studio .royale-hud-logo{width:clamp(98px,11.5vw,205px)!important;height:clamp(48px,7vh,85px)!important;object-fit:contain!important}
+.studio .studio-layout{flex:1 1 auto!important;min-height:0!important;min-width:0!important;width:100%!important;max-width:none!important;display:flex!important;flex-direction:column!important;align-items:stretch!important;justify-content:space-between!important;gap:3px!important;overflow:hidden!important}
+.studio .table-stage{flex:1 1 auto!important;min-height:0!important;min-width:0!important;width:100%!important;max-width:none!important;display:flex!important;align-items:center!important;justify-content:center!important;position:relative!important;overflow:visible!important}
+.studio .table-stage > .portrait-table{flex:none!important;height:auto!important;width:min(97vw, calc((100dvh - 175px) * 1.95))!important;max-width:none!important;max-height:100%!important;min-height:0!important;aspect-ratio:1.95!important;border-radius:clamp(12px,2vw,28px)!important;box-shadow:0 10px 35px #040106!important}
+.studio .table-rail{inset:12% 3.4% 8%!important;border-radius:49% / 47%!important}
+.studio .table-cloth{border-radius:inherit!important}
+.studio .console{flex:0 0 auto!important;align-self:center!important;width:min(100%,1250px)!important;max-width:none!important;min-height:0!important;max-height:29vh!important;overflow:auto!important;scrollbar-width:thin}
+.studio .console .actions{padding:5px 10px!important;margin:0!important}
+.studio .portrait-table .table-wordmark{top:63%!important;z-index:1!important;pointer-events:none!important}
+.studio .portrait-table .royale-table-watermark{display:block;width:clamp(110px,24cqw,310px);max-height:17cqw;object-fit:contain;opacity:.16;mix-blend-mode:screen;filter:grayscale(.15) drop-shadow(0 1px 1px #11031b);pointer-events:none}
+.studio .portrait-table .table-wordmark strong{font-size:clamp(10px,2cqw,18px)!important;opacity:.65}
+.studio .table-rail.royal-choice-active::after{animation:royal-rail-pulse .9s ease-in-out infinite alternate}
+@media(max-width:800px){
+ .studio{padding:2px 4px 5px!important}
+ .studio .studio-top{gap:2px!important;flex-wrap:nowrap!important}
+ .studio .royale-hud-logo{width:90px!important;height:45px!important}
+ .studio .studio-title h1{font-size:13px!important}
+ .studio .studio-title p{font-size:9px!important}
+ .studio .table-stage > .portrait-table{width:min(99vw,calc((100dvh - 195px) * 1.95))!important;aspect-ratio:1.95!important}
+ .studio .console{max-height:34vh!important;width:100%!important}
+}
+@media(max-height:600px){
+ .studio .royale-hud-logo{height:38px!important}
+ .studio .table-stage > .portrait-table{width:min(98vw,calc((100dvh - 125px) * 1.95))!important}
+ .studio .console{max-height:26vh!important}
+}
+/* The global app header wastes 66px and causes the dark letterbox above the table. */
+.content:has(.studio) > header{display:none!important}
+.content:has(.studio) > .page{margin:0!important;padding:0!important;max-width:none!important;width:100%!important;height:100%!important;overflow:hidden!important}
+/* The only allowed scrolling belongs to dialogs and auxiliary control panels. */
+.content:has(.studio) .modal{max-height:min(92dvh,850px);overflow:auto}
+@media (max-width:700px) and (orientation:portrait){
+  .studio .table-stage > .portrait-table{width:min(100vw,calc((100dvh - 205px) * 1.95))!important}
+}

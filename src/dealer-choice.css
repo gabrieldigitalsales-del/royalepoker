@@ -1,0 +1,263 @@
+.dealer-gallery {
+  min-width: 0;
+  color: #f7efdf;
+}
+.dealer-gallery-nav {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 6px;
+}
+.dealer-gallery-nav > span {
+  margin-right: auto;
+  color: #c5cdc4;
+  font-size: 0.85rem;
+}
+.dealer-gallery-nav button {
+  min-width: 42px;
+  min-height: 42px;
+  padding: 6px;
+}
+.dealer-gallery-track {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: clamp(150px, 29%, 218px);
+  gap: 11px;
+  padding: 9px 3px 15px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-padding-inline: 3px;
+  scrollbar-color: #9b8052 #171f1a;
+  overscroll-behavior-inline: contain;
+}
+.studio .dealer-gallery-track .dealer-tile {
+  display: grid;
+  position: relative;
+  grid-template-rows: 141px 1fr;
+  justify-content: stretch;
+  justify-items: stretch;
+  align-items: stretch;
+  gap: 0;
+  min-width: 0;
+  padding: 0;
+  overflow: hidden;
+  scroll-snap-align: start;
+  text-align: left;
+  border: 1px solid #6a8175;
+  border-radius: 13px;
+  color: #fcf5e5;
+  background: #172821;
+  animation: dealer-tile-in 0.46s cubic-bezier(0.18, 0.72, 0.34, 1)
+    var(--tile-delay, 0ms) backwards;
+}
+.studio .dealer-gallery-track .dealer-tile[aria-pressed="true"] {
+  border-color: #ffe0a0;
+  box-shadow: 0 0 0 2px #e2ad56;
+}
+.dealer-tile-copy {
+  display: grid;
+  align-content: start;
+  gap: 3px;
+  padding: 9px 11px 11px;
+}
+.dealer-tile-copy small {
+  color: #d4cfbd;
+  font-size: 0.72rem;
+}
+.dealer-tile-copy strong {
+  font-size: 1rem;
+  line-height: 1.2;
+}
+.dealer-selected-mark {
+  position: absolute;
+  top: 7px;
+  right: 7px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  width: 26px;
+  height: 26px;
+  background: #ffdf9d;
+  color: #242010;
+}
+.dealer-art {
+  --ink: #63370f;
+  --halo: #eda649;
+  position: relative;
+  display: block;
+  overflow: hidden;
+  isolation: isolate;
+  border-bottom: 1px solid #ffffff35;
+  background:
+    radial-gradient(ellipse at 50% 75%, var(--halo), transparent 68%),
+    linear-gradient(140deg, #0c1720, var(--ink));
+}
+.dealer-art[data-palette="blue"] {
+  --ink: #12355c;
+  --halo: #40a7e7;
+}
+.dealer-art[data-palette="pink"] {
+  --ink: #691636;
+  --halo: #f2798e;
+}
+.dealer-art[data-palette="green"] {
+  --ink: #124736;
+  --halo: #59cd9d;
+}
+.dealer-art[data-palette="violet"] {
+  --ink: #3f2668;
+  --halo: #ad83f3;
+}
+.dealer-orbit {
+  position: absolute;
+  inset: 26% 10% 16%;
+  border: 1px solid #fff8;
+  border-radius: 50%;
+  transform: rotate(-22deg);
+  box-shadow: 0 0 10px #fff3;
+}
+.dealer-fan {
+  position: absolute;
+  inset: 0;
+}
+.dealer-paper {
+  position: absolute;
+  top: 27%;
+  left: calc(50% - 19px);
+  width: 38px;
+  height: 57px;
+  border: 1px solid #fff;
+  border-radius: 6px;
+  background: linear-gradient(142deg, #fffcf3, #f2deb8);
+  box-shadow: 2px 5px 9px #0006;
+  color: var(--ink);
+  transform-origin: center 87%;
+  transform: translate(var(--shift), var(--lift)) rotate(var(--turn));
+  animation: dealer-unfold 0.54s cubic-bezier(0.23, 0.86, 0.36, 1.15)
+    var(--deal-delay) backwards;
+}
+.dealer-paper b {
+  position: absolute;
+  top: 3px;
+  left: 5px;
+  font-size: 13px;
+}
+.dealer-paper i {
+  position: absolute;
+  right: 5px;
+  bottom: 6px;
+  font-size: 24px;
+  font-style: normal;
+  line-height: 1;
+}
+.dealer-chip {
+  position: absolute;
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 3px dashed #fff1bc;
+  background: var(--ink);
+  color: #fff7dd;
+  box-shadow: 0 3px 0 #1118;
+}
+.dealer-chip-left {
+  left: 11%;
+  bottom: 11%;
+  transform: rotate(-20deg);
+}
+.dealer-chip-right {
+  right: 10%;
+  bottom: 16%;
+  transform: rotate(24deg) scale(0.78);
+}
+.dealer-sparkle {
+  position: absolute;
+  color: #fff3cc;
+  text-shadow: 0 0 7px #fff;
+}
+.dealer-sparkle-left {
+  left: 13%;
+  top: 19%;
+}
+.dealer-sparkle-right {
+  right: 13%;
+  top: 15%;
+  font-size: 19px;
+}
+.dealer-tile:is(:hover, :focus-visible, [aria-pressed="true"]):not(:disabled)
+  .dealer-fan {
+  animation: dealer-float 1.5s ease-in-out infinite alternate;
+}
+.dealer-tile:is(:hover, :focus-visible, [aria-pressed="true"]):not(:disabled)
+  .dealer-sparkle {
+  animation: dealer-twinkle 0.9s ease-in-out infinite alternate;
+}
+.dealer-confirm {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 12px 0 0;
+  border-top: 1px solid #9da89a44;
+}
+.dealer-confirm > div {
+  display: grid;
+  gap: 4px;
+}
+.dealer-confirm small {
+  color: #cad2c8;
+}
+.dealer-confirm button {
+  min-height: 44px;
+  flex-shrink: 0;
+}
+@keyframes dealer-tile-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px) scale(0.95);
+  }
+}
+@keyframes dealer-unfold {
+  from {
+    opacity: 0;
+    transform: translate(0, 42px) rotate(-28deg) scale(0.65);
+  }
+}
+@keyframes dealer-float {
+  to {
+    transform: translateY(-6px) rotate(-3deg);
+  }
+}
+@keyframes dealer-twinkle {
+  to {
+    transform: scale(1.28) rotate(15deg);
+    opacity: 0.65;
+  }
+}
+@media (max-width: 500px) {
+  .dealer-confirm {
+    align-items: stretch;
+    flex-direction: column;
+  }
+  .dealer-gallery-track {
+    grid-auto-columns: clamp(135px, 55%, 176px);
+  }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .dealer-gallery-track {
+    scroll-behavior: smooth;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .dealer-gallery * {
+    animation: none !important;
+  }
+}
+
+/* Swipe directly on the game cards, with a mouse or finger. */
+.dealer-gallery-track{touch-action:pan-y;cursor:grab;overscroll-behavior-x:contain;scrollbar-width:none}
+.dealer-gallery-track::-webkit-scrollbar{display:none}
+.dealer-gallery-track:active{cursor:grabbing}
+.dealer-gallery-track .dealer-tile{user-select:none;-webkit-user-select:none;-webkit-user-drag:none}

@@ -1,0 +1,16 @@
+POKER ROYALE - CORRECAO DE INICIALIZACAO
+
+Erro corrigido no inicializador: ele anteriormente verificava somente se Vite existia,
+permitindo abrir o servidor sem a dependencia ws.
+
+Agora, INICIAR-DOIS-TERMINAIS.cmd verifica Vite e ws, executa npm install quando
+falta qualquer um, e somente abre as duas janelas apos confirmar a instalacao.
+
+Se npm install falhar, verifique sua conexao com a internet e a mensagem do npm.
+A instalacao requer Node.js e npm. O jogo nao foi alterado nesta revisao.
+
+Para executar:
+1. Extraia todo o ZIP para uma pasta.
+2. Abra MesaReal.
+3. Clique duas vezes em INICIAR-DOIS-TERMINAIS.cmd.
+4. Navegue para http://127.0.0.1:5173.

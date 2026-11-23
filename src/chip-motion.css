@@ -1,0 +1,154 @@
+.chip-amount {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 10px 14px;
+  margin-block: 6px 10px;
+  border: 1px solid #cdad6760;
+  border-radius: 12px;
+  background:
+    radial-gradient(ellipse at left, #66512688, transparent 75%), #172e28;
+  color: #ffdfa0;
+}
+.chip-amount > span:last-child {
+  display: grid;
+  gap: 2px;
+}
+.chip-amount small {
+  color: #f3e9d4;
+}
+.chip-amount strong {
+  display: inline-block;
+  font-size: 1.3rem;
+  transform-origin: left;
+  animation: chip-value-in 0.23s ease-out;
+}
+.chip-amount-icon {
+  position: relative;
+  width: 34px;
+  height: 31px;
+  flex: 0 0 34px;
+}
+.chip-amount-icon i,
+.chip-receipt-burst i {
+  display: block;
+  position: absolute;
+  border-radius: 50%;
+  background: #c47821;
+  border: 2px dashed #ffe3a6;
+  box-shadow:
+    0 2px 0 #77431a,
+    inset 0 0 0 2px #9b5d24;
+}
+.chip-amount-icon i {
+  width: 32px;
+  height: 16px;
+  bottom: 0;
+  animation: chip-stack-in 0.45s cubic-bezier(0.18, 0.7, 0.35, 1.2) backwards;
+}
+.chip-amount-icon i:nth-child(2) {
+  bottom: 6px;
+  animation-delay: 80ms;
+}
+.chip-amount-icon i:nth-child(3) {
+  bottom: 12px;
+  animation-delay: 155ms;
+}
+.chip-receipt {
+  position: fixed;
+  z-index: 20;
+  inset: auto auto 17% 50%;
+  transform: translateX(-50%);
+  padding: 9px 19px;
+  min-width: 145px;
+  border: 1px solid #ffe1a0;
+  border-radius: 14px;
+  background: #182e25;
+  color: #ffe3a2;
+  text-align: center;
+  box-shadow: 0 0 28px #e6b75765;
+  pointer-events: none;
+  animation: chip-receipt-in 0.42s cubic-bezier(0.25, 0.9, 0.4, 1.25);
+}
+.chip-receipt > span:last-child {
+  display: block;
+  color: #fff4d9;
+}
+.chip-receipt-burst {
+  position: absolute;
+  inset: 50% 50% auto auto;
+}
+.chip-receipt-burst i {
+  width: 11px;
+  height: 11px;
+  opacity: 0;
+  animation: chip-burst 0.62s ease-out;
+}
+.studio .bet-popover {
+  animation: bet-panel-in 0.27s ease-out;
+}
+.studio .bet-summary strong {
+  animation: chip-value-in 0.23s ease-out;
+}
+@keyframes chip-value-in {
+  from {
+    opacity: 0.55;
+    transform: translateY(3px) scale(0.91);
+  }
+}
+@keyframes chip-stack-in {
+  from {
+    opacity: 0;
+    transform: translateY(-15px) rotate(-17deg);
+  }
+}
+@keyframes chip-receipt-in {
+  from {
+    opacity: 0;
+    transform: translate(-50%, 12px) scale(0.86);
+  }
+}
+@keyframes chip-burst {
+  from {
+    opacity: 1;
+    transform: rotate(var(--ray)) translateX(16px);
+  }
+  to {
+    opacity: 0;
+    transform: rotate(var(--ray)) translateX(104px);
+  }
+}
+@keyframes bet-panel-in {
+  from {
+    opacity: 0;
+    scale: 0.97;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .chip-amount *,
+  .chip-receipt,
+  .chip-receipt *,
+  .studio .bet-popover,
+  .studio .bet-summary strong {
+    animation: none !important;
+  }
+}
+
+/* Motion is brief on surfaces players open repeatedly. */
+@media (prefers-reduced-motion: no-preference) {
+  dialog[open] .modal {
+    animation: bet-panel-in 0.23s ease-out;
+  }
+  .create-game-grid button i {
+    transition: transform 0.24s cubic-bezier(0.17, 0.75, 0.39, 1.25);
+  }
+  .create-game-grid button:is(:hover, :focus-visible) i {
+    transform: translateY(-4px) rotate(-9deg) scale(1.16);
+  }
+  .club-table-arrow {
+    transition: transform 0.2s ease-out;
+  }
+  .club-room-open:is(:hover, :focus-visible) .club-table-arrow {
+    transform: translateX(4px);
+  }
+}

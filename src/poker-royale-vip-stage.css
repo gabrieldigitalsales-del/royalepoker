@@ -1,0 +1,28 @@
+/* Poker Royale: ajustes de palco sem afetar a arte de fundo, a escala da mesa
+   ou a lógica de apostas. Carregado por último para substituir folhas antigas. */
+.studio .portrait-table .portrait-seat { z-index: 12 !important; }
+.studio .portrait-table .portrait-seat .portrait-avatar { cursor: pointer !important; }
+.studio .portrait-table .portrait-seat .portrait-avatar:focus-visible { outline: 3px solid #ffde7c !important; outline-offset: 4px; }
+/* Não exibir a tarja de status quando não houver mão ativa. */
+.studio .studio-layout > .console.royale-between-hands > .panel.actions {
+  border: 0 !important; background: transparent !important;
+  box-shadow: none !important; min-height: 0 !important;
+  max-height: 44px !important; height: 44px !important;
+  padding: 0 8px !important; justify-content: flex-end !important;
+}
+.studio .studio-layout > .console.royale-between-hands > .panel.actions > .section {
+  border: 1px solid #a6785166 !important; border-radius: 12px !important;
+  padding: 6px 10px !important; max-width: min(240px, 35vw) !important;
+  flex: 0 1 auto !important; background: #210b2aaf !important;
+}
+.studio .studio-layout > .console.royale-between-hands > .panel.actions > .row:empty { display: none !important; }
+.royale-vip-player-stats { margin: 12px 0; }
+.royale-vip-player-stats h3 { font-size: 1.05rem; margin: 0 0 8px; }
+.royale-vip-grid { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 9px; margin: 12px 0; }
+.royale-vip-grid > div { display: grid; gap: 5px; padding: 12px; border: 1px solid #bb904f6b; border-radius: 10px; background: #23122ce5; }
+.royale-vip-grid small { color: #f2c980; font-weight: 800; }
+.royale-vip-grid strong { color: #fff; font-size: clamp(14px,1.3vw,19px); overflow-wrap: anywhere; }
+.royale-avatar-sitout { display: block; width: 100%; border: 1px solid #dfac5a !important; background: linear-gradient(#603179,#2d143e) !important; padding: 12px !important; border-radius: 12px; font-weight: 800; }
+@media (max-width: 720px) {
+  .royale-vip-grid {grid-template-columns: repeat(2,minmax(0,1fr));}
+}

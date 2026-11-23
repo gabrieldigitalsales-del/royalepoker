@@ -1,0 +1,135 @@
+dialog.balances-sheet {
+  position: fixed;
+  inset: 0 0 auto;
+  margin: 0 auto;
+  width: min(95vw, 430px);
+  max-height: min(75dvh, 650px);
+  padding: 0;
+  border: 1px solid #47785f;
+  border-radius: 0 0 20px 20px;
+  background: #12291f;
+  color: #fff;
+  transform: translateY(var(--pull, 0));
+  overflow: auto;
+  overscroll-behavior: contain;
+  box-shadow: 0 12px 48px #06140f70;
+}
+dialog.balances-sheet[open] {
+  animation: balance-slide 0.24s ease-out;
+}
+dialog.balances-sheet .modal {
+  position: relative;
+  padding: 26px 18px 18px;
+  background: linear-gradient(160deg, #214b39, #12291f 60%);
+  color: white;
+}
+dialog.balances-sheet h2,
+dialog.balances-sheet summary b {
+  color: white;
+}
+.balances-sheet .balances-handle {
+  position: absolute;
+  top: 0;
+  left: 20%;
+  width: 60%;
+  height: 26px;
+  display: grid;
+  place-items: center;
+  cursor: grab;
+  touch-action: none;
+  color: #9cb9aa;
+}
+.balances-sheet p,
+.balances-sheet small {
+  color: #bdd2c5;
+}
+.balances-list h3 {
+  font: 700 0.8rem system-ui;
+  color: #d9e6df;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.balances-list h3 i {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: #8e9b94;
+}
+.balances-list h3 i[data-online="true"] {
+  background: #5ce69e;
+}
+.balances-list details {
+  border-bottom: 1px solid #ffffff22;
+}
+.balances-list summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.7rem 0;
+  cursor: pointer;
+  min-height: 44px;
+}
+.balances-list summary span {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+}
+.balances-list small {
+  font: normal 0.72rem system-ui;
+}
+.balances-list strong,
+.balances-list em {
+  font-style: normal;
+  font-variant-numeric: tabular-nums;
+}
+.balances-list [data-sign="1"] {
+  color: #76efaa;
+}
+.balances-list [data-sign="-1"] {
+  color: #ff9696;
+}
+.balances-list [data-sign="0"] {
+  color: #d5dfd9;
+}
+.balances-list details p {
+  font-size: 0.84rem;
+  margin: 0.15rem 0 0.7rem;
+}
+@keyframes balance-slide {
+  from {
+    transform: translateY(-100%);
+    opacity: 0.5;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+.reduce dialog.balances-sheet[open] {
+  animation: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  dialog.balances-sheet[open] {
+    animation: none;
+  }
+}
+
+.balance-timeline{padding:6px 0 12px}.balance-timeline svg{width:100%;height:75px;background:#031b1540;border-radius:9px}.timeline-actions{display:flex;gap:6px;flex-wrap:wrap}.timeline-actions button{font-size:12px;padding:6px 8px;border:1px solid #ffffff35;color:#e7e9e2;border-radius:7px}
+
+.balances-toggle{position:relative;overflow:visible!important;min-width:52px!important;display:inline-flex!important;align-items:center;justify-content:center}
+.balances-toggle .balances-badge{position:absolute;top:100%;left:50%;transform:translateX(-50%);font-size:9px;letter-spacing:.09em;color:#efcb88;font-weight:900;pointer-events:none;white-space:nowrap}
+dialog.balances-sheet{z-index:99999!important;max-width:450px!important;max-height:82dvh!important}
+dialog.balances-sheet::backdrop{background:#020c08bc;backdrop-filter:blur(4px)}
+
+/* Placar acessível pelo ícone fixo no topo; puxar para baixo fecha o painel. */
+.balances-toggle .balances-count{position:absolute;top:-8px;right:-8px;min-width:18px;height:18px;padding:0 4px;border-radius:50%;display:grid;place-items:center;background:#ecb752;color:#231c11;font:900 11px system-ui;box-shadow:0 2px 6px #0008}
+.balances-sheet .balances-overview{display:flex;gap:10px;flex-wrap:wrap;margin:10px 0 14px}
+.balances-sheet .balances-overview span{display:inline-flex;gap:7px;align-items:center;border:1px solid #ffffff30;padding:7px 11px;border-radius:999px;background:#ffffff0d;font-size:.85rem}
+.balances-sheet .balances-overview i{width:9px;height:9px;border-radius:50%;background:#9dada5}
+.balances-sheet .balances-overview i[data-online="true"]{background:#5ce69e;box-shadow:0 0 7px #5ce69e70}
+.balances-sheet .balances-explainer{font-size:.84rem;line-height:1.45;margin-top:10px}
+.balances-sheet .balances-handle{cursor:grab}
+.balances-sheet .balances-handle:active{cursor:grabbing}
+@media(max-width:600px){.balances-toggle{min-height:44px!important;min-width:48px!important}.balances-sheet .balances-list summary{gap:12px}.balances-sheet .balances-list summary strong{white-space:nowrap}}

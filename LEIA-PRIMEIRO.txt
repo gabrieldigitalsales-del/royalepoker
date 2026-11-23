@@ -1,0 +1,22 @@
+MESA REAL • TESTE LOCAL NO WINDOWS 10/11 DE 64 BITS (x64)
+
+1. Clique com o botão direito no ZIP e escolha “Extrair tudo”.
+2. Abra a pasta MesaReal e dê dois cliques em INICIAR-WINDOWS.cmd.
+3. Mantenha a janela do servidor aberta. O navegador abre em
+   http://127.0.0.1:4190 . Se necessário, cole esse endereço manualmente.
+4. Clique em “Criar uma conta”. Use um apelido, e-mail e senha de pelo
+   menos 8 caracteres. Guarde o código de recuperação exibido.
+5. Clique em “Criar mesa”, selecione a modalidade e confirme.
+6. No mesmo PC, abra uma janela anônima (Ctrl+Shift+N no Chrome/Edge).
+   Entre no mesmo endereço e crie uma segunda conta com outro e-mail e
+   apelido. Abra a mesa e clique em “Sentar à mesa”. Se a mesa for privada,
+   entre com o código disponível em “Convidar” e informe a senha, se houver.
+7. Em uma das janelas, clique em “Distribuir cartas”. Alterne as duas
+   janelas para jogar. Ao terminar, abra Histórico e selecione a mão.
+8. Para encerrar o servidor, pressione Ctrl+C na janela do inicializador.
+   Abra o mesmo arquivo para voltar. Os dados ficam na pasta data.
+
+As fichas são virtuais. No modo local o e-mail é um identificador de
+teste. Node.js, Python, o motor de poker e a interface compilada já estão
+no pacote Windows x64. Para macOS, Linux, rede Wi-Fi, Supabase, Vercel,
+administração ou desenvolvimento, consulte README.md.

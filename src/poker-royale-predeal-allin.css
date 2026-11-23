@@ -1,0 +1,39 @@
+/* Poker Royale: HUD pré-mão, animação de all-in e escala de telas menores. */
+.studio .royale-prestraddle {
+  position:absolute; z-index:65; left:50%; bottom:clamp(70px,12vh,122px);
+  transform:translateX(-50%); width:min(630px,94vw); padding:13px 17px;
+  border:2px solid #ffcf65; border-radius:18px;
+  color:#fff5d6; background:linear-gradient(145deg,#361049f5,#160c26f9);
+  box-shadow:0 10px 34px #13041aca, inset 0 1px #fff5; text-align:center;
+  display:grid; gap:8px; font-weight:800; pointer-events:auto;
+}
+.royale-prestraddle>span {font-size:12px;color:#f5dfaf}
+.royale-prestraddle-buttons {display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px}
+.studio .royale-prestraddle-buttons button {border:2px solid #f5bc5a;border-radius:12px;
+  padding:11px 5px;color:white;font-size:clamp(13px,2vw,19px);font-weight:1000;
+  box-shadow:inset 0 2px #ffffff6b,0 4px #160b16; cursor:pointer;
+  display:flex;flex-direction:column;align-items:center;gap:4px}
+.royale-prestraddle-buttons button small {font-size:10px;color:#fff3df}
+.royale-prestraddle-buttons button:nth-child(1){background:linear-gradient(#ec4141,#811a28)}
+.royale-prestraddle-buttons button:nth-child(2){background:linear-gradient(#a64ce7,#601890)}
+.royale-prestraddle-buttons button:nth-child(3){background:linear-gradient(#f4b72e,#96600a)}
+.studio .royale-allin-fan-layer{position:absolute;inset:0;z-index:32;pointer-events:none;overflow:visible}
+.studio .royale-allin-flight{position:absolute;left:50%;top:var(--flight-destination-y);width:1px;height:1px;
+ animation:royale-allin-arrive 1100ms cubic-bezier(.2,.76,.24,1) both; filter:drop-shadow(0 7px 9px #0c061fb0)}
+.studio .royale-allin-flight>span{position:absolute;left:0;top:0;
+ transform:translate(calc((var(--fan-i) - (var(--fan-count) - 1)/2)*18px - 50%),-55%) rotate(calc((var(--fan-i) - (var(--fan-count) - 1)/2)*12deg));
+ transform-origin:bottom center}
+.studio .royale-allin-flight .card{width:clamp(29px,3.3vw,48px)!important;height:clamp(43px,4.7vw,69px)!important;font-size:clamp(12px,1.6vw,22px)!important}
+.studio .portrait-seat .pocket.royale-pocket-in-flight{opacity:.08!important}
+@keyframes royale-allin-arrive{0%{left:var(--flight-x);top:var(--flight-y);opacity:.7;scale:.6;rotate:-8deg}60%{opacity:1}100%{left:50%;top:var(--flight-destination-y);opacity:1;scale:1;rotate:0deg}}
+@media(max-width:950px){
+ .studio .royale-prestraddle{bottom:11vh;padding:8px;gap:4px}
+ .studio .royale-prestraddle-buttons button{padding:7px 3px}
+ .studio .portrait-table .portrait-seat .portrait-avatar{width:clamp(32px,6.2vw,61px)!important;height:clamp(32px,6.2vw,61px)!important}
+ .studio .portrait-table .portrait-seat .nameplate{font-size:clamp(9px,1.25vw,13px)!important}
+ .studio .portrait-table .portrait-seat .stackplate{font-size:clamp(10px,1.6vw,15px)!important}
+ .studio .portrait-table .pocket.faceup .card{max-width:clamp(24px,3.7vw,40px)!important;max-height:clamp(37px,5.4vw,59px)!important}
+ .studio .console{max-width:100vw!important}
+}
+@media(max-height:540px){.studio .royale-prestraddle{bottom:12vh;padding:5px 9px}.royale-prestraddle>span{display:none}}
+@media(prefers-reduced-motion:reduce){.studio .royale-allin-flight{animation:none!important}}

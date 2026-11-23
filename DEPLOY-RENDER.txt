@@ -1,0 +1,19 @@
+POKER ROYALE - TESTE ONLINE NO RENDER
+
+1) Recomenda-se tornar o repositorio privado em Settings > General > Change repository visibility.
+2) Extraia o ZIP e abra PUBLICAR-GITHUB.cmd (Git para Windows necessario).
+   Login no GitHub sera solicitado no navegador, caso necessario.
+   Repositorio: https://github.com/gabrieldigitalsales-del/royalepoker
+3) No Render, conecte seu GitHub e abra https://dashboard.render.com/blueprints
+   Clique New Blueprint Instance e escolha o repositorio royalepoker.
+   O render.yaml cria o Web Service Docker com Node, Python e WebSocket.
+4) Aguarde o log exibir a inicializacao e verifique https://<nome>.onrender.com/health
+   Para jogo, acesse a URL base do mesmo endereco.
+5) Plano gratuito: os dados SQLite locais podem desaparecer em reinicios/redeploys.
+   Para persistencia REAL, crie PostgreSQL e defina DATABASE_URL nas Environment Variables
+   do Web Service. NUNCA coloque DATABASE_URL no GitHub.
+6) Nao use fichas com valor real nessa beta. Teste primeiro 2 navegadores/redes
+   diferentes e confira Run2/3, showdown, reconexao e mostrar carta.
+
+IMPORTANTE: publicar depende do GitHub receber o codigo e do Render ser autorizado
+a acessar o repositorio. Este pacote ainda NAO foi publicado automaticamente.
