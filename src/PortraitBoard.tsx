@@ -109,7 +109,8 @@ export function Board({
       order.findIndex((p) => p.id === me.id),
     );
   const finishFlow = showdownFlow(f, handBelow ? (runoutElapsed ?? 0) : Infinity, !!me.preferences?.motion);
-  const resultsReady = !!f?.finished && !revealing && finishFlow.resultsReady;
+  const resultsReady = !!f?.finished && finishFlow.resultsReady;
+  const awardsReady = !!f?.finished && finishFlow.awardsReady;
   const settledBoards = resultsReady
     ? boardResults(f.awards ?? [], handPlayers, Math.max(1, f.boards?.length ?? 0, f.runoutCount ?? 0))
     : [];
@@ -126,8 +127,8 @@ export function Board({
     }
     setScoreVisibility("visible");
     if (!handBelow) return; // Keep the full result available in hand replay.
-    const fadeTimer = setTimeout(() => setScoreVisibility("leaving"), 3400);
-    const removeTimer = setTimeout(() => setScoreVisibility("hidden"), 3950);
+    const fadeTimer = setTimeout(() => setScoreVisibility("leaving"), 5600);
+    const removeTimer = setTimeout(() => setScoreVisibility("hidden"), 6150);
     return () => {
       clearTimeout(fadeTimer);
       clearTimeout(removeTimer);
@@ -264,7 +265,9 @@ export function Board({
           ],
           {
             duration: (isAward ? 650 : 410) * speed,
-            delay: (delay + j * 32) * speed,
+            // Keep the time-to-payout synchronized with the board/reveal clock;
+            // changing animation speed must not accelerate the award itself.
+            delay: isAward ? delay + j * 32 : (delay + j * 32) * speed,
             easing: "cubic-bezier(.21,.67,.28,1)",
             fill: "both",
           },
@@ -563,7 +566,7 @@ export function Board({
                 return <div key={winner.index} className="royale-run-score-player">
                   <div className="royale-run-score-identity">
                     <b><span aria-hidden="true">{entry.tied ? "🤝" : "👑"}</span> {winner.name}</b>
-                    <strong>+{label(winner.amount)}</strong>
+                    {awardsReady ? <strong>+{label(winner.amount)}</strong> : <strong className="royale-award-pending">MÃO VENCEDORA</strong>}
                   </div>
                   <small>{winner.label ?? (combo.length ? "Melhor combinação" : "Mão não revelada")}</small>
                   {combo.length === 5 && <div className="royale-run-score-five" aria-label={`Cinco cartas da combinação de ${winner.name}`}>
@@ -615,7 +618,7 @@ export function Board({
       {order.map((p, i) => {
         if (seatIndex(i) < 0) return null;
         const pt = point(i),
-          won = resultsReady && f.payouts[i] > 0,
+          won = awardsReady && f.payouts[i] > 0,
           latest =
             f?.by === p.id ? f.label?.split(" · ").slice(1).join(" · ") : "",
           net = won && !f.rows ? f.stacks[i] - h.players[i].stack : 0,
@@ -734,7 +737,7 @@ export function Board({
               <b className="stackplate">
                 {f?.rows
                   ? num(f.payouts[i] ?? p.points ?? 0) + " pts"
-                  : revealing
+                  : !awardsReady && f?.finished && f?.runoutFrom != null && handBelow
                     ? "—"
                     : label(f?.stacks[i] ?? p.stack)}
               </b>
