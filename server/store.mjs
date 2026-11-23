@@ -20,23 +20,11 @@ export async function storage() {
     const { Client } = await import("pg");
     pg = new Client({ connectionString: process.env.DATABASE_URL });
     await pg.connect();
-    // Render PostgreSQL does not automatically receive the old Supabase migrations.
-    // Only this trusted server accesses pokeroyale_private through DATABASE_URL.
-    await pg.query(`
-      CREATE SCHEMA IF NOT EXISTS pokeroyale_private;
-      CREATE TABLE IF NOT EXISTS pokeroyale_private.pokeroyale_records (
-        kind TEXT NOT NULL,
-        id TEXT NOT NULL,
-        body JSONB NOT NULL,
-        PRIMARY KEY(kind,id)
-      );
-      CREATE TABLE IF NOT EXISTS pokeroyale_private.pokeroyale_lobby_clock (
-        id INTEGER PRIMARY KEY CHECK (id = 1),
-        revision BIGINT NOT NULL DEFAULT 0
-      );
-      INSERT INTO pokeroyale_private.pokeroyale_lobby_clock (id, revision)
-      VALUES (1, 0) ON CONFLICT (id) DO NOTHING;
-    `);
+    // The private schema and its tables are provisioned by Supabase migrations.
+    // The restricted runtime role must not attempt CREATE SCHEMA/TABLE.
+    await pg.query(
+      "INSERT INTO pokeroyale_private.pokeroyale_lobby_clock (id, revision) VALUES (1, 0) ON CONFLICT (id) DO NOTHING",
+    );
     const lock = await pg.query(
       "select pg_try_advisory_lock(872510426) as acquired",
     );
