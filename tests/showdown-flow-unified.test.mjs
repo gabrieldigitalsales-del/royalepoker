@@ -8,15 +8,17 @@ test('all-in once: hero and opponent appear before prize, no jumps in results',(
  assert.equal(showdownFlow(f,0).cardsVisible,false);
  assert.equal(showdownFlow(f,360).cardsVisible,true);
  assert.equal(showdownFlow(f,539).resultsReady,false);
- assert.equal(showdownFlow(f,540).resultsReady,true);
- assert.ok(showdownFlow(f,540).awardAt>540);
+ assert.equal(showdownFlow(f,650).resultsReady,true);
+ assert.ok(showdownFlow(f,650).awardAt>650);
 });
 for (const count of [2,3]) test(`run ${count} waits until all boards fully revealed to award`,()=>{
  const f={finished:true,board:['As','Kd','2c','4d','9h'],boards:Array.from({length:count},()=>['As','Kd','2c','4d','9h']),runoutFrom:3,runoutDelay:650,runoutStep:530};
- const end=650+(count*2-1)*530;
- assert.equal(showdownFlow(f,end+539).resultsReady,false);
- assert.equal(showdownFlow(f,end+540).resultsReady,true);
- assert.ok(showdownFlow(f,end+540).awardAt>end+540);
+ const lastCard=650+(count*2-1)*530;
+ const end=showdownFlow(f,0).runoutEnd;
+ assert.ok(end>lastCard,'final card must finish landing before winner appears');
+ assert.equal(showdownFlow(f,end+649).resultsReady,false);
+ assert.equal(showdownFlow(f,end+650).resultsReady,true);
+ assert.ok(showdownFlow(f,end+650).awardAt>end+650);
  assert.equal(showdownFlow(f,360).cardsVisible,true);
 });
 test('fold or showdown: visual clock never discloses any card by itself',()=>{
