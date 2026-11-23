@@ -28,6 +28,7 @@ import { cardStyles, setCardStyle, Card, Empty, Field, Modal } from "./ui";
 const lanes = ["Frente", "Meio", "Fundo"];
 import { Board } from "./PortraitBoard";
 import { showdownFlow } from "./showdown-flow.mjs";
+import { ProgressSplash } from "./ProgressSplash";
 import "./portrait.css";
 const pokerWords = {
   "High card": "Carta alta",
@@ -389,6 +390,7 @@ export default function Table() {
     [r, R] = useState<any>(),
     [roomError, setRoomError] = useState<{ id: string; message: string }>(),
     [retry, setRetry] = useState(0),
+    [roomReady, setRoomReady] = useState(false),
     [busy, B] = useState(false),
     [chooseGame, setChooseGame] = useState(false),
     [lookOpen, setLookOpen] = useState(false),
@@ -431,6 +433,9 @@ export default function Table() {
     [vipLoading, setVipLoading] = useState(false),
     [time, T] = useState(Date.now()),
     [chat, C] = useState("");
+  useEffect(() => {
+    setRoomReady(false);
+  }, [id]);
   useEffect(() => {
     let ok = true;
     api("room", { room: id })
@@ -727,7 +732,15 @@ export default function Table() {
         </div>
       </div>
     );
-  if (!r || r.id !== id) return <p role="status">Carregando mesa…</p>;
+  if (!r || r.id !== id || !roomReady)
+    return (
+      <ProgressSplash
+        key={id}
+        ready={!!r && r.id === id}
+        title="ENTRANDO NA MESA"
+        onComplete={() => setRoomReady(true)}
+      />
+    );
   const h = r.live || r.lastHand,
     f = h?.frames.at(-1),
     game = home.catalog.find((g) => g.id === (h?.game || r.game)),
