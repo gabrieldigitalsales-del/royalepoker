@@ -18,7 +18,8 @@ export function showdownFlow(frame, elapsed = Infinity, motionOff = false) {
     (frame.runoutDelay ?? 650) + Math.max(0, boards * cardsPerBoard - 1) * (frame.runoutStep ?? 530);
   const winnerAt = runoutEnd + SHOWDOWN_RESULTS_GAP_MS;
   // The result panel must display the winning hand before the pot moves.
-  const awardAt = winnerAt + SHOWDOWN_WINNER_HOLD_MS + SHOWDOWN_AWARD_GAP_MS;
+  const multiRun = from != null && boards > 1;
+  const awardAt = winnerAt + (multiRun ? SHOWDOWN_WINNER_HOLD_MS : 650) + SHOWDOWN_AWARD_GAP_MS;
   return {
     cardsVisible: motionOff || elapsed >= SHOWDOWN_CARDS_MS,
     resultsReady: motionOff || elapsed >= winnerAt,
