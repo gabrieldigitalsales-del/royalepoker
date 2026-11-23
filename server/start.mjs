@@ -65,14 +65,14 @@ for (const room of Object.values(upgradedRooms.rooms)) {
     upgraded = true;
   }
 }
-if (upgraded) await store.commit(upgradedRooms, "dealer rotation catalog upgrade");
+if (upgraded && store.active) await store.commit(upgradedRooms, "dealer rotation catalog upgrade");
 // Upgrade old Dealer's Choice rooms so newly implemented games are selectable.
 const migrated = structuredClone(store.value);
 let changed = false;
 for (const room of Object.values(migrated.rooms)) {
   if (ensureDealerChoiceModes(room)) changed = true;
 }
-if (changed) await store.commit(migrated, "Dealer’s Choice catalog upgrade");
+if (changed && store.active) await store.commit(migrated, "Dealer’s Choice catalog upgrade");
 const port = Number(process.env.PORT || 4190),
   host = process.env.HOST || "127.0.0.1";
 const cloud =
@@ -1303,7 +1303,7 @@ const server = http.createServer(async (req, res) => {
     return res.end();
   }
   if (req.method === "GET" && req.url === "/health")
-    return send(200, { ok: true, service: "poker-royale" });
+    return send(200, { ok: true, service: "poker-royale", active: store.active });
   if (req.method === "GET" && /^\/avatar\/[a-f0-9-]{36}$/.test(req.url)) {
     const photo = Object.values(store.value.users).find(
       (u) => u.photoId === req.url.slice(8),
@@ -1327,6 +1327,7 @@ const server = http.createServer(async (req, res) => {
         : null,
     });
   if (req.url === "/api" && req.method === "POST") {
+    if (!store.active) return send(503, { error: "Servidor atualizando; tente novamente." });
     try {
       let size = 0;
       const chunks = [];
@@ -1442,6 +1443,7 @@ server.on("upgrade", (req, socket, head) => {
     if (!dev) socket.destroy();
     return;
   }
+  if (!store.active) return socket.destroy();
   wss.handleUpgrade(req, socket, head, (ws) => {
     const timeout = setTimeout(() => ws.close(), 5000);
     ws.once("message", (msg) => {
@@ -1488,7 +1490,7 @@ function autoDealReady(room) {
 }
 let ticking = false;
 setInterval(() => {
-  if (ticking) return;
+  if (ticking || !store.active) return;
   ticking = true;
   locked(async () => {
     const now = Date.now();
