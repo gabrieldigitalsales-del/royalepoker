@@ -615,7 +615,7 @@ export function Board({
       {order.map((p, i) => {
         if (seatIndex(i) < 0) return null;
         const pt = point(i),
-          won = f?.finished && !revealing && f.payouts[i] > 0,
+          won = resultsReady && f.payouts[i] > 0,
           latest =
             f?.by === p.id ? f.label?.split(" · ").slice(1).join(" · ") : "",
           net = won && !f.rows ? f.stacks[i] - h.players[i].stack : 0,
