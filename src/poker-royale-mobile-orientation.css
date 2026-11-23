@@ -128,3 +128,77 @@
 @media (prefers-reduced-motion:reduce) {
   .club-room-groups,.club-family-tabs,.club-filters { scroll-behavior:auto!important; }
 }
+
+/* Mobile stability: anchor the HUD and prevent overscroll/stretch during touch play. */
+@media (max-width:800px) {
+  html:has(.studio),body:has(.studio),#root:has(.studio) {
+    width:100%!important;max-width:100vw!important;height:100%!important;
+    overscroll-behavior:none!important;overscroll-behavior-y:none!important;
+  }
+  .studio,.studio .studio-layout,.studio .table-stage {
+    touch-action:pan-y!important;overscroll-behavior:contain!important;
+    -webkit-overflow-scrolling:auto!important;
+  }
+  .studio .studio-top,.studio .studio-layout>.console,.studio .table-stage>.host-controls {
+    backface-visibility:hidden;
+    -webkit-backface-visibility:hidden;
+    will-change:auto;
+  }
+  .studio button,.studio input,.studio select,.studio .portrait-seat .portrait-avatar {
+    touch-action:manipulation;
+    -webkit-tap-highlight-color:transparent;
+  }
+  .studio .portrait-table .portrait-seat,.studio .portrait-table .empty-chair,
+  .studio .portrait-table .portrait-board,.studio .portrait-table .extra-runout-boards {
+    transition:top .22s ease-out,left .22s ease-out,opacity .15s linear;
+  }
+  .studio .table-stage>.straddle-switch {
+    box-shadow:0 5px 15px #0b0419ae!important;
+  }
+  .studio .studio-layout>.console>.panel.actions {
+    box-shadow:0 7px 22px #000c,inset 0 1px #f6daae33!important;
+    border:1px solid #bd8b5caa!important;
+    backdrop-filter:blur(8px);
+  }
+  .studio .console .betbar>.action-choices>button {
+    transition:filter .18s ease,box-shadow .18s ease!important;
+  }
+  .studio .console .betbar>.action-choices>button:active {
+    filter:brightness(1.2) saturate(1.12)!important;
+    box-shadow:inset 0 3px 7px #0006,0 0 12px #d49b6870!important;
+  }
+}
+@media (max-width:800px) and (orientation:portrait) {
+  .studio .studio-top { position:fixed!important; }
+  .studio .studio-layout>.console { position:fixed!important; }
+  .studio .table-stage>.host-controls { position:fixed!important; }
+  .studio .table-stage>.portrait-table {
+    transform:translateZ(0);
+  }
+  .studio .portrait-table .portrait-seat {
+    filter:drop-shadow(0 3px 3px #0c0513e0)!important;
+  }
+  .studio .portrait-table .table-rail::after {
+    filter:drop-shadow(0 0 7px #e976ffaa);
+  }
+  .studio .portrait-table .portrait-board,.studio .portrait-table .extra-runout-boards {
+    width:max-content!important;
+    max-width:calc(100vw - 32px)!important;
+  }
+  .studio .portrait-table .royale-run-score {
+    max-width:calc(100vw - 26px)!important;
+  }
+}
+@media (max-width:800px) and (orientation:landscape) {
+  .studio .studio-layout>.console { position:fixed!important; }
+  .studio .table-stage>.host-controls { position:fixed!important; }
+  .studio .portrait-table .portrait-board,.studio .portrait-table .extra-runout-boards {
+    max-width:70vw!important;
+  }
+}
+@media (prefers-reduced-motion:reduce) {
+  .studio .portrait-table .portrait-seat,.studio .portrait-table .empty-chair,
+  .studio .portrait-table .portrait-board,.studio .portrait-table .extra-runout-boards {
+    transition:none!important;
+  }
+}
