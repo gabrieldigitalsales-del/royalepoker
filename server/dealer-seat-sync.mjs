@@ -1,5 +1,36 @@
 // Every new hand grants the NEXT active button/dealer a fresh choice.
 // The previous valid mode is a fallback, not a locked orbit.
+export const DEALER_CHOICE_MS = 5000;
+export const DEALER_REVIEW_MS = 9000;
+export const DEALER_PAUSE_MS = 20000;
+
+export function choiceTimeLeft(choice, now = Date.now()) {
+  if (!choice) return 0;
+  // Review runs BEFORE the five-second choice window, not during it.
+  if (now < choice.openedAt) return DEALER_CHOICE_MS;
+  if (choice.heldAt) {
+    const elapsed = Math.min(DEALER_PAUSE_MS, Math.max(0, now - choice.heldAt));
+    return Math.max(0, (choice.remainingMs ?? 0) - Math.max(0, elapsed - DEALER_PAUSE_MS));
+  }
+  return Math.max(0, choice.at - now);
+}
+
+export function holdDealerChoice(choice, now = Date.now()) {
+  if (!choice?.selecting || choice.heldAt || now < choice.openedAt || choice.at <= now) return false;
+  choice.remainingMs = choice.at - now;
+  choice.heldAt = now;
+  choice.holdUntil = now + DEALER_PAUSE_MS;
+  return true;
+}
+
+export function resumeDealerChoice(choice, now = Date.now()) {
+  if (!choice?.heldAt) return false;
+  choice.at = now + Math.max(0, choice.remainingMs ?? 0);
+  delete choice.heldAt;
+  delete choice.holdUntil;
+  delete choice.remainingMs;
+  return true;
+}
 export function nextDealerSeat(room) {
   const eligible = room.seats.filter(s => !s.away && s.stack > 0);
   if (eligible.length < 2) return null;
@@ -17,7 +48,7 @@ export function prepareDealerChoice(room, modeCatalog, now = Date.now(), previou
   if (!chosen) { delete room.nextChoice; return false; }
   room.nextChoice = {
     id: chosen, dealer: next.id, selecting: true,
-    openedAt: now, at: now + 5000,
+    openedAt: now, at: now + DEALER_CHOICE_MS,
   };
   return true;
 }
