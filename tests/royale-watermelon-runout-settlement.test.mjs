@@ -28,7 +28,8 @@ async function playWatermelonRun(count) {
   const h=d.hands[r.last], f=h.frames.at(-1);
   assert.equal(f.finished,true);
   assert.equal(f.boards?.length,count);
-  assert.equal(f.runoutFrom,0,"preflop all-in should reveal from empty board");
+  assert.ok([3,4].includes(f.runoutFrom), "Watermelon must complete mandatory discard phases before voting for multiple runs");
+  assert.equal(f.boards.every(board=>board.length===5),true,"all final boards must have five cards");
   assert.equal(f.stacks.reduce((sum,n)=>sum+n,0)+(f.rake??0),240);
   assert.ok(votes===2,"both players must choose run count");
   assert.ok(f.awards.every(a=>a.winners?.every(w=>w.cards?.length===5 && w.label)));
@@ -43,5 +44,5 @@ async function playWatermelonRun(count) {
     f.stacks[i]-f.payouts[i]);
   return {f,r,h};
 }
-for(const count of [2,3]) test("Watermelon preflop all-in Run It "+count+" delays final credit until all boards are shown",
+for(const count of [2,3]) test("Watermelon all-in após descarte Run It "+count+" delays final credit until all boards are shown",
   async()=>await playWatermelonRun(count));
