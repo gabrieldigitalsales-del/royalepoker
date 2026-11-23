@@ -702,6 +702,13 @@ export default function Table() {
     }
     if (soundFrame.paid > 0) playTurnTone(235, 0.075, "chip");
   }, [soundHand?.id, soundFrame?.sequence]);
+  // React hooks must execute on every render, including before room data loads.
+  // The previous conditional hook mounted only after fetching a room, crashing
+  // the app with "Rendered more hooks than during the previous render".
+  const [revealConfirmation, setRevealConfirmation] = useState("");
+  const currentHandId = r?.live?.id ?? r?.lastHand?.id;
+  useEffect(() => setRevealConfirmation(""), [currentHandId]);
+
   if (roomError?.id === id)
     return (
       <div className="panel">
@@ -736,8 +743,7 @@ export default function Table() {
   const ownIndex = h?.players.findIndex((p) => p.id === me.id) ?? -1;
   const selectedRevealCards: number[] = h?.showCards?.[me.id] ?? [];
   const canSelectReveal = !!h && ownIndex >= 0 && (!!r.live || (!!f?.finished && r.lastHand?.id === h.id && time < (r.reviewUntil ?? 0)));
-  const [revealConfirmation, setRevealConfirmation] = useState("");
-  useEffect(() => setRevealConfirmation(""), [h?.id]);
+
   async function toggleRevealCard(index: number) {
     if (!canSelectReveal || !h || busy) return;
     const next = selectedRevealCards.includes(index)
