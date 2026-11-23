@@ -1,0 +1,116 @@
+/* Poker Royale: rich but sequenced all-in presentation.
+   CSS effects never determine cards, winners or the time of an award. */
+.studio .portrait-table .royale-ceremony-banner {
+  position:absolute;
+  top:12%;
+  left:50%;
+  transform:translateX(-50%);
+  z-index:53;
+  white-space:nowrap;
+  padding:6px 17px;
+  border-radius:100px;
+  border:1px solid #f9d79eb0;
+  background:linear-gradient(110deg,#150f24eb,#4a285be8,#150f24eb);
+  color:#ffe9b8;
+  box-shadow:0 4px 20px #05020baa,0 0 22px #f7c76545;
+  font:900 clamp(10px,1.4vw,16px)/1.2 system-ui,sans-serif;
+  letter-spacing:.09em;
+  text-shadow:0 2px 10px #ffca679c;
+  pointer-events:none;
+  animation:royale-ceremony-enter .43s cubic-bezier(.19,.92,.22,1.18) both,royale-ceremony-breath 1.7s ease-in-out .5s infinite alternate;
+}
+.studio .portrait-table.royale-ceremony-dealing .royale-board-cluster {
+  filter:drop-shadow(0 0 10px #d9a9fc4a);
+}
+.studio .portrait-table.royale-ceremony-dealing .runout-card-visible .card,
+.studio .portrait-table.royale-ceremony-dealing .community-reveal .card {
+  animation:royale-ceremony-card-land .48s cubic-bezier(.2,.8,.3,1.16) both !important;
+  transform-origin:center bottom;
+  will-change:transform,opacity;
+}
+.studio .portrait-table.royale-ceremony-dealing .runout-card-visible,
+.studio .portrait-table.royale-ceremony-dealing .community-reveal {
+  filter:drop-shadow(0 3px 9px #b068e488);
+}
+.studio .portrait-table.royale-ceremony-showdown .winning-card .card,
+.studio .portrait-table.royale-ceremony-showdown .royale-run-score-five .royale-run-score-card {
+  box-shadow:0 0 0 2px #ffc56c,0 0 20px #ffca85b5,0 5px 18px #000b!important;
+  animation:royale-winning-hand-shine 1.15s ease-in-out infinite alternate !important;
+}
+.studio .portrait-table.royale-ceremony-showdown .royale-run-score-item {
+  animation:royale-score-slide .55s cubic-bezier(.16,.9,.3,1.1) both;
+  border-color:#eec577a8!important;
+}
+.studio .portrait-table.royale-ceremony-showdown .royale-run-score-item:nth-child(2) { animation-delay:110ms; }
+.studio .portrait-table.royale-ceremony-showdown .royale-run-score-item:nth-child(3) { animation-delay:220ms; }
+.studio .portrait-table.royale-ceremony-payout .royale-run-score {
+  animation:royale-award-glow 1.05s ease-in-out 2 alternate;
+}
+.studio .portrait-table.royale-ceremony-payout .portrait-seat.winner .portrait-avatar {
+  animation:royale-winner-bounce .7s cubic-bezier(.16,.8,.2,1.1),royale-award-glow 1s ease-in-out .7s 2 alternate;
+  box-shadow:0 0 0 2px #ffdd91,0 0 27px #e4af45ba!important;
+}
+.studio .portrait-table.royale-ceremony-payout .portrait-seat.winner .stackplate {
+  animation:royale-winning-stack .63s cubic-bezier(.2,.88,.2,1.12) both;
+}
+.studio .portrait-table.royale-ceremony-payout .pot-tag {
+  animation:royale-pot-release .75s ease-in-out;
+}
+@keyframes royale-ceremony-enter {
+  from { opacity:0;transform:translate(-50%,-13px) scale(.88);}
+  to {opacity:1;transform:translate(-50%,0) scale(1);}
+}
+@keyframes royale-ceremony-breath {
+  to {filter:brightness(1.18);box-shadow:0 4px 22px #05020baa,0 0 32px #f7c7658c;}
+}
+@keyframes royale-ceremony-card-land {
+  from {opacity:0;transform:translateY(-17px) rotateY(68deg) scale(.78);}
+  65% {opacity:1;transform:translateY(3px) rotateY(-9deg) scale(1.06);}
+  to {opacity:1;transform:translateY(0) rotateY(0) scale(1);}
+}
+@keyframes royale-winning-hand-shine {
+  from {filter:brightness(1);transform:translateY(0) scale(1);}
+  to {filter:brightness(1.22);transform:translateY(-3px) scale(1.035);}
+}
+@keyframes royale-score-slide {
+  from {opacity:0;transform:translateX(18px) scale(.97);}
+  to {opacity:1;transform:none;}
+}
+@keyframes royale-award-glow {
+  to {filter:brightness(1.18) drop-shadow(0 0 15px #ffcb7a9b);}
+}
+@keyframes royale-winner-bounce {
+  from {transform:scale(.89);}
+  60% {transform:scale(1.12);}
+  to {transform:scale(1);}
+}
+@keyframes royale-winning-stack {
+  from {opacity:.25;transform:translateY(9px) scale(.8);}
+  70% {transform:translateY(-3px) scale(1.1);}
+  to {opacity:1;transform:none;}
+}
+@keyframes royale-pot-release {
+  50% {filter:brightness(1.5) drop-shadow(0 0 18px #f7c765);}
+}
+@media(max-width:800px) and (orientation:portrait) {
+  .studio .portrait-table .royale-ceremony-banner {
+    top:30% !important;
+    font-size:10px;
+    padding:5px 10px;
+    max-width:80vw;
+    overflow:hidden;
+    text-overflow:ellipsis;
+  }
+}
+@media(prefers-reduced-motion:reduce) {
+  .studio .portrait-table.royale-ceremony-dealing .runout-card-visible .card,
+  .studio .portrait-table.royale-ceremony-dealing .community-reveal .card,
+  .studio .portrait-table.royale-ceremony-showdown .winning-card .card,
+  .studio .portrait-table.royale-ceremony-showdown .royale-run-score-five .royale-run-score-card,
+  .studio .portrait-table .royale-ceremony-banner,
+  .studio .portrait-table.royale-ceremony-payout .portrait-seat.winner .portrait-avatar,
+  .studio .portrait-table.royale-ceremony-payout .portrait-seat.winner .stackplate,
+  .studio .portrait-table.royale-ceremony-payout .pot-tag {
+    animation:none!important;
+  }
+}
