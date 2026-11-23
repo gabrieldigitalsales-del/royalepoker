@@ -31,6 +31,7 @@ import { api, session, useApp, refresh, fail, backend } from "./api";
 import { Brand, Modal } from "./ui";
 import { LoadingGate } from "./ProgressSplash";
 import { AdminGate } from "./AdminGate";
+import { SystemNotice } from "./SystemNotice";
 import "./style.css";
 import "./mobile-game-redesign.css";
 import "./poker-royale.css";
@@ -153,6 +154,7 @@ function App() {
   ];
   if (home?.me.admin) links.push(["/admin", "Caixa", Shield]);
   return (
+    <>
     <LoadingGate key={token ? "session:" + token : "guest"} ready={!token || !!home} title={token ? "CARREGANDO O PRÉ-JOGO" : "INICIANDO POKER ROYALE"}>
       <>
       {!token ? (
@@ -340,16 +342,10 @@ function App() {
           )}
         </div>
       )}
-      {error && (
-        <div role="alert" className="toast">
-          {error}
-          <button aria-label="Fechar aviso" onClick={() => set({ error: "" })}>
-            <X size={14} />
-          </button>
-        </div>
-      )}
       </>
     </LoadingGate>
+    <SystemNotice />
+    </>
   );
 }
 createRoot(document.getElementById("root")!).render(
