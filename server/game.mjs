@@ -1,3 +1,4 @@
+import { showdownFlow } from "../src/showdown-flow.mjs";
 import { diamondAwards } from "./rewards.mjs";
 import { prepareDealerChoice } from "./dealer-seat-sync.mjs";
 import { takeRake, rakeAdmin, avatarFor } from "./progression.mjs";
@@ -567,10 +568,32 @@ export function roomView(d, r, u, detail = false) {
     ...info
   } = r;
   const slots = seatSlots(r);
+  // Between an all-in showdown and its visual award, keep the public stack
+  // at the post-bet/pre-award amount.  The server has settled the hand once,
+  // but must not visually credit winners before the last board and the
+  // winning five-card combination have been presented.
+  const settlingHand = !hand && r.last ? d.hands[r.last] : null;
+  const settlingFrame = settlingHand?.frames.at(-1);
+  const settlingPresentation = settlingFrame && showdownFlow(
+    settlingFrame, Date.now() - (settlingHand.ended ?? Date.now()),
+  );
+  const pendingAward = !!(
+    settlingHand && settlingFrame?.finished &&
+    settlingFrame.runoutFrom != null &&
+    (settlingFrame.boards?.length ?? 0) > 1 &&
+    !settlingPresentation.awardsReady
+  );
+  const preAwardStacks = new Map();
+  if (pendingAward) settlingHand.players.forEach((player, index) => {
+    const current = r.seats.find(seat => seat.id === player.id);
+    if (current && current.stack === settlingFrame.stacks[index])
+      preAwardStacks.set(player.id, Math.max(0, settlingFrame.stacks[index] - settlingFrame.payouts[index]));
+  });
   const out = {
     ...info,
     seats: r.seats.map(({ funding, initialBuy, ...seat }, i) => ({
       ...seat,
+      stack: preAwardStacks.get(seat.id) ?? seat.stack,
       position: slots[i],
       name: d.users[seat.id].name,
       avatar: avatarFor(d.users[seat.id]),
@@ -607,7 +630,7 @@ export function roomView(d, r, u, detail = false) {
     const results = {};
     const history = [];
     for (const completed of Object.values(d.hands)) {
-      if (completed.room !== r.id) continue;
+      if (completed.room !== r.id || (pendingAward && completed.id === settlingHand.id)) continue;
       const frame = completed.frames.at(-1);
       const best = Math.max(...frame.payouts);
       const ownIndex = completed.players.findIndex(
@@ -709,7 +732,16 @@ export function roomView(d, r, u, detail = false) {
             })()
           : undefined,
       live: hand ? handView(hand.h, u.id) : null,
-      lastHand: !hand && r.last ? handView(d.hands[r.last], u.id) : null,
+      lastHand: !hand && r.last ? (() => {
+        const view = handView(d.hands[r.last], u.id);
+        if (pendingAward && view.frames[0]?.stacks) {
+          view.frames[0].stacks = [...view.frames[0].stacks];
+          settlingHand.players.forEach((player, i) => {
+            if (preAwardStacks.has(player.id)) view.frames[0].stacks[i] = preAwardStacks.get(player.id);
+          });
+        }
+        return view;
+      })() : null,
       deadline: hand?.deadline,
       turnSeconds: hand
         ? r.seconds + (hand.turnExtended ? r.timeBank : 0)
