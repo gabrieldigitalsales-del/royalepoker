@@ -784,7 +784,7 @@ export function Board({
       {publicOpponentHands.map(({player, index, cards, x, y, side}: any) => (
         <div
           key={player.id + ":showdown:" + id}
-          className={"royale-opponent-showdown royale-showdown-fan-" + side + (f?.payouts?.[index] > 0 ? " royale-opponent-showdown-win" : "")}
+          className={"royale-opponent-showdown royale-showdown-fan-" + side + (awardsReady && f?.payouts?.[index] > 0 ? " royale-opponent-showdown-win" : "")}
           style={{left: x + "%", top: y + "%", "--showdown-count": cards.length} as React.CSSProperties}
           aria-label={"Cartas reveladas de " + player.name}
         >
@@ -792,7 +792,7 @@ export function Board({
           <div className="royale-opponent-showdown-cards">
             {cards.map((card: string, j: number) => <span key={j} className={"royale-opponent-showdown-card" + (resultsReady && settledBoards.some((board: any) => board.winners.some((winner: any) => winner.index === index && winner.cards.includes(card))) ? " royale-showdown-best-card" : "")} style={{"--fan-rotation": `${(j - (cards.length - 1) / 2) * 8}deg`, "--fan-lift": `${Math.pow(j - (cards.length - 1) / 2, 2) * 1.4}px`} as React.CSSProperties}><Card c={card}/></span>)}
           </div>
-          {resultsReady && f?.payouts?.[index] > 0 && <span className="royale-showdown-crown" aria-hidden="true">👑</span>}
+          {awardsReady && f?.payouts?.[index] > 0 && <span className="royale-showdown-crown" aria-hidden="true">👑</span>}
         </div>
       ))}
       <div ref={layer} className="flight-layer" aria-hidden />
