@@ -391,7 +391,7 @@ export function Board({
     : [];
   return (
     <div
-      className={"portrait-table" + (game?.id?.endsWith("db") ? " royale-double-mode" : "") + " cloth-" + (me.preferences?.felt || "verde") + (f?.boards?.length > 1 ? " royale-multiple-boards royale-boards-" + Math.min(3, f.boards.length) + (game?.id?.endsWith("db") ? " royale-double-board" : "") : "")}
+      className={"portrait-table" + (game?.id?.endsWith("db") ? " royale-double-mode" : "") + " cloth-" + (me.preferences?.felt || "verde") + (f?.boards?.length > 1 ? " royale-multiple-boards royale-boards-" + Math.min(3, f.boards.length) + (game?.id?.endsWith("db") ? " royale-double-board" : "") : "") + (handBelow && f?.finished && f?.runoutFrom != null && (f?.boards?.length ?? 0) > 1 ? (!resultsReady ? " royale-ceremony-dealing" : !awardsReady ? " royale-ceremony-showdown" : " royale-ceremony-payout") : "")}
       data-capacity={capacity}
       aria-label="Mesa de poker"
     >
@@ -420,6 +420,11 @@ export function Board({
               : "Blinds " + r.blind / 2 + " / " + r.blind}
         </small>
       </div>
+      {handBelow && f?.finished && f?.runoutFrom != null && (f?.boards?.length ?? 0) > 1 && (
+        <div className="royale-ceremony-banner" aria-live="polite" aria-label={awardsReady ? "Prêmio entregue" : resultsReady ? "Mão vencedora revelada" : "Revelação das cartas"}>
+          {awardsReady ? "POTE ENTREGUE" : resultsReady ? "MÃO VENCEDORA" : "REVELANDO OS BORDOS"}
+        </div>
+      )}
       <div className="royale-board-cluster">
       {f && !f.rows && (
         <div className="pot-tag" style={position(pot)}>
