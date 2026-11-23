@@ -25,9 +25,12 @@ export function avatarFor(user) {
     ""
   );
 }
-export function takeRake(frame) {
+export function takeRake(frame, ratePercent = 3) {
+  if (!Number.isInteger(ratePercent) || ratePercent < 0 || ratePercent > 10)
+    throw new Error("Percentual de rake inválido.");
   const total = frame.payouts.reduce((sum, amount) => sum + amount, 0);
-  const fee = Number((BigInt(total) * 3n) / 100n);
+  if (!total || !ratePercent) return 0;
+  const fee = Number((BigInt(total) * BigInt(ratePercent)) / 100n);
   if (!fee) return 0;
   let cumulative = 0n,
     collected = 0;
@@ -54,6 +57,7 @@ export function takeRake(frame) {
   frame.payouts = frame.payouts.map((amount, index) => amount - shares[index]);
   frame.stacks = frame.stacks.map((amount, index) => amount - shares[index]);
   frame.rake = fee;
+  frame.rakePercent = ratePercent;
   frame.grossPot = total;
   return fee;
 }
