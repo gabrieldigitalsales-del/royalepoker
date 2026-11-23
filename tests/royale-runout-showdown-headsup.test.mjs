@@ -25,7 +25,7 @@ async function simulatedShowdown(runCount, playerCount = 2) {
   const h=d.hands[r.last], f=h.frames.at(-1);
   assert.equal(f.finished,true);
   assert.equal(f.boards.length,runCount,'every voted board must be created');
-  assert.equal(f.stacks.reduce((a,b)=>a+b,0),playerCount*200,'engine must conserve chips');
+  assert.equal(f.stacks.reduce((a,b)=>a+b,0) + (f.rake ?? 0),playerCount*200,'the house rake and player stacks must conserve chips');
   assert.deepEqual([...new Set(f.awards.filter(a=>!a.uncontested).map(a=>a.boardIndex))].sort(),Array.from({length:runCount},(_,i)=>i),'the engine must settle EACH contested board');
   assert.ok(f.awards.every(a=>a.uncontested===false),'all-in showdown must not be marked uncontested');
   for (const award of f.awards) {
@@ -40,6 +40,9 @@ async function simulatedShowdown(runCount, playerCount = 2) {
     const flow=showdownFlow(view,Infinity);
     assert.equal(flow.resultsReady,true);
     assert.ok(flow.awardAt>flow.runoutEnd);
+    assert.equal(showdownFlow(view,flow.winnerAt).awardsReady,false,'winning hand displays before chips');
+    assert.equal(showdownFlow(view,flow.awardAt-1).awardsReady,false,'do not award before the winner presentation ends');
+    assert.equal(showdownFlow(view,flow.awardAt).awardsReady,true,'only award once all runs and winner display finish');
   }
   return {room:r,hand:h};
 }
