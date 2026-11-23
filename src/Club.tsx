@@ -449,8 +449,6 @@ export function People() {
 export function Profile() {
   const home = useApp((s) => s.home),
     u = home.me,
-    [purchase, setPurchase] = useState<any>(),
-    [shopBusy, setShopBusy] = useState(false),
     [saved, S] = useState(false);
   return (
     <>
@@ -494,46 +492,6 @@ export function Profile() {
           </button>
         )}
       </section>
-      {purchase && (
-        <Modal
-          title={(purchase.level ? "Resgatar " : "Comprar ") + purchase.name}
-          close={() => setPurchase(undefined)}
-        >
-          <div className="cash-preview">
-            {purchase.symbol || "♦"} · {u.name}
-          </div>
-          {purchase.id === "vip" && (
-            <p>
-              Exemplo fictício de perfil VIP · VPIP 24% · PFR 18%. Após ativar,
-              consulte esses indicadores em Jogadores.
-            </p>
-          )}
-          <p>
-            {num(purchase.price)} diamantes · Saldo após a compra{" "}
-            {u.diamonds >= purchase.price
-              ? num(u.diamonds - purchase.price)
-              : "insuficiente"}
-          </p>
-          <button
-            className="primary"
-            disabled={shopBusy || u.diamonds < purchase.price}
-            onClick={async () => {
-              setShopBusy(true);
-              try {
-                await api("buyShop", { item: purchase.id });
-                setPurchase(undefined);
-                await refresh();
-              } catch (error) {
-                fail(error);
-              } finally {
-                setShopBusy(false);
-              }
-            }}
-          >
-            {purchase.level ? "Resgatar avatar" : "Confirmar compra"}
-          </button>
-        </Modal>
-      )}
       <form
         className="panel narrow"
         onChange={() => S(false)}
