@@ -41,6 +41,7 @@ export function rakeReport(hands) {
         at: h.ended,
         gross: f.grossPot,
         fee: f.rake,
+        percent: f.rakePercent ?? (f.grossPot ? Math.round(f.rake * 10000 / f.grossPot) / 100 : null),
         distributed: f.payouts.reduce((a, b) => a + b, 0),
       };
     });
