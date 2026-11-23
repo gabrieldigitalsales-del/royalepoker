@@ -16,17 +16,18 @@ export function choiceTimeLeft(choice, now = Date.now()) {
 }
 
 export function holdDealerChoice(choice, now = Date.now()) {
-  if (!choice?.selecting || choice.heldAt || now < choice.openedAt || choice.at <= now) return false;
-  choice.remainingMs = choice.at - now;
-  choice.heldAt = now;
-  choice.holdUntil = now + DEALER_PAUSE_MS;
+  if (!choice?.selecting || choice.heldAt || choice.at <= now) return false;
+  const begins = Math.max(now, choice.openedAt);
+  choice.remainingMs = choice.at - begins;
+  choice.heldAt = begins;
+  choice.holdUntil = begins + DEALER_PAUSE_MS;
   return true;
 }
 
 export function resumeDealerChoice(choice, now = Date.now()) {
   if (!choice?.heldAt) return false;
   // The pause can never exceed twenty seconds, even if the worker wakes late.
-  choice.at = Math.min(now, choice.holdUntil ?? (choice.heldAt + DEALER_PAUSE_MS)) + Math.max(0, choice.remainingMs ?? 0);
+  choice.at = Math.max(choice.openedAt, Math.min(now, choice.holdUntil ?? (choice.heldAt + DEALER_PAUSE_MS))) + Math.max(0, choice.remainingMs ?? 0);
   delete choice.heldAt;
   delete choice.holdUntil;
   delete choice.remainingMs;
