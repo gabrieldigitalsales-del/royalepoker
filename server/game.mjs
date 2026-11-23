@@ -1,7 +1,7 @@
 import { showdownFlow } from "../src/showdown-flow.mjs";
 import { diamondAwards } from "./rewards.mjs";
 import { prepareDealerChoice, DEALER_REVIEW_MS } from "./dealer-seat-sync.mjs";
-import { takeRake, rakeAdmin, avatarFor } from "./progression.mjs";
+import { takeRake, rakeAdmin, avatarFor, grossPayoutsFor, publicGrossResult } from "./progression.mjs";
 import { randomBytes, randomUUID, randomInt } from "node:crypto";
 import { step } from "./worker.mjs";
 import { catalog, rotations, dealerGames } from "./catalog.mjs";
@@ -635,12 +635,13 @@ export function roomView(d, r, u, detail = false) {
     for (const completed of Object.values(d.hands)) {
       if (completed.room !== r.id || (pendingAward && completed.id === settlingHand.id)) continue;
       const frame = completed.frames.at(-1);
-      const best = Math.max(...frame.payouts);
+      const grossPayouts = grossPayoutsFor(frame);
+      const best = Math.max(...grossPayouts);
       const ownIndex = completed.players.findIndex(
         (player) => player.id === u.id,
       );
       const payouts = completed.players.flatMap((player, index) => {
-        const amount = frame.payouts[index];
+        const amount = grossPayouts[index];
         const won = frame.rows ? amount === best : amount > 0;
         return won ? [{ name: player.name, amount }] : [];
       });
@@ -651,9 +652,9 @@ export function roomView(d, r, u, detail = false) {
         event.action === "fold" || event.action === "timeoutFold"
       ).map((event) => event.by));
       const participants = completed.players.map((player, index) => {
-        const received = frame.rows ? 0 : (frame.payouts[index] ?? 0);
-        const net = frame.rows ? received : frame.stacks[index] - player.stack;
-        const invested = frame.rows ? 0 : Math.max(0, player.stack + received - frame.stacks[index]);
+        const received = frame.rows ? 0 : (grossPayouts[index] ?? 0);
+        const net = frame.rows ? frame.payouts[index] : publicGrossResult(frame, player, index);
+        const invested = frame.rows ? 0 : Math.max(0, player.stack + (frame.payouts[index] ?? 0) - frame.stacks[index]);
         return {
           id: player.id, name: player.name, avatar: player.avatar,
           won: frame.rows ? frame.payouts[index] === best : received > 0,
