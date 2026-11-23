@@ -24,7 +24,7 @@ import { WebSocketServer } from "ws";
 import { z } from "zod";
 import { createClient } from "@supabase/supabase-js";
 import { catalog } from "./catalog.mjs";
-import { syncDealerChoiceAfterSeatChange, prepareDealerChoice, nextDealerSeat } from "./dealer-seat-sync.mjs";
+import { syncDealerChoiceAfterSeatChange, prepareDealerChoice, nextDealerSeat, holdDealerChoice, resumeDealerChoice, choiceTimeLeft, DEALER_PAUSE_MS, DEALER_CHOICE_MS } from "./dealer-seat-sync.mjs";
 import { upgradeDealerRotation } from "./dealer-rotation.mjs";
 import { ensureDealerChoiceModes } from "./dealer-choice-modes.mjs";
 import { statistics } from "./stats.mjs";
@@ -868,10 +868,7 @@ async function command(d, u, b) {
       check(r.game === "choice" && !r.closed && !r.hand && !r.paused && r.nextChoice?.selecting, "Escolha indisponível.");
       check(r.nextChoice.dealer === u.id, "Somente o dealer pode escolher.");
       if (!r.nextChoice.heldAt) {
-        const now = Date.now();
-        check(r.nextChoice.at > now, "Tempo de escolha encerrado.");
-        r.nextChoice.remainingMs = Math.max(0, r.nextChoice.at - now);
-        r.nextChoice.heldAt = now;
+        check(holdDealerChoice(r.nextChoice), "O tempo de escolha ainda não começou ou terminou.");
       }
       break;
     }
@@ -879,11 +876,7 @@ async function command(d, u, b) {
       authorizeRoom(r, u);
       check(r.game === "choice" && !r.hand && !r.closed, "Escolha indisponível.");
       if (!r.nextChoice?.selecting || r.nextChoice.dealer !== u.id) break;
-      if (r.nextChoice.heldAt) {
-        r.nextChoice.at = Date.now() + r.nextChoice.remainingMs;
-        delete r.nextChoice.heldAt;
-        delete r.nextChoice.remainingMs;
-      }
+      resumeDealerChoice(r.nextChoice);
       break;
     }
     case "chooseNext": {
@@ -897,7 +890,7 @@ async function command(d, u, b) {
       // Every hand grants a choice; selecting a game never restarts the five seconds.
       const now=Date.now();
       const openedAt=r.nextChoice?.openedAt ?? now;
-      const at=r.nextChoice?.at ?? now+5000;
+      const at=r.nextChoice?.at ?? now+DEALER_CHOICE_MS;
       check(r.nextChoice?.heldAt || now < at, "Tempo de escolha encerrado.");
       // Confirming a choice releases the held clock, without losing the previously selected game.
       r.nextChoice={id:b.choice,dealer:u.id,openedAt,at:r.nextChoice?.heldAt ? now + r.nextChoice.remainingMs : at,selecting:true};
@@ -1487,6 +1480,12 @@ setInterval(() => {
     const now = Date.now();
     const due = new Set();
     const pendingCashouts = new Set();
+    const expiredDealerPauses = new Set();
+    for (const room of Object.values(store.value.rooms)) {
+      if (room.game === "choice" && room.nextChoice?.heldAt &&
+          now >= (room.nextChoice.holdUntil ?? room.nextChoice.heldAt + DEALER_PAUSE_MS))
+        expiredDealerPauses.add(room.id);
+    }
     for (const room of Object.values(store.value.rooms)) {
       if (!room.hand && room.seats.some(s => s.leaveAfterHand) &&
           !pendingPrizeHand(store.value, room, now))
@@ -1504,7 +1503,7 @@ setInterval(() => {
       if (room.game === "choice" && room.choiceStarted && !room.hand && !room.paused && !room.closed) {
         // Recover if a seat change or a prior invalid mode cleared the selection.
         if (!room.nextChoice && now >= (room.reviewUntil ?? 0)) due.add(room.id);
-        else if (room.nextChoice && !room.nextChoice.heldAt && room.nextChoice.at <= now) due.add(room.id);
+        else if (room.nextChoice && !room.nextChoice.heldAt && room.nextChoice.at <= now && now >= (room.reviewUntil ?? 0)) due.add(room.id);
         continue;
       }
       if (!autoDealReady(room)) {
@@ -1518,12 +1517,13 @@ setInterval(() => {
         due.add(room.id);
     }
     if (
-      !due.size && !pendingCashouts.size &&
+      !due.size && !pendingCashouts.size && !expiredDealerPauses.size &&
       !Object.values(store.value.rooms).some((r) => r.hand?.deadline < now)
     )
       return;
     const d = structuredClone(store.value);
     for (const r of Object.values(d.rooms)) {
+      if (expiredDealerPauses.has(r.id)) resumeDealerChoice(r.nextChoice, now);
       if (pendingCashouts.has(r.id)) {
         for (const seat of [...r.seats].filter(s => s.leaveAfterHand))
           leave(d, d.users[seat.id], r);
@@ -1554,7 +1554,7 @@ setInterval(() => {
         if (r.game === "choice") {
           // Revalidate selection after sit out, departure or player count changes.
           syncDealerChoiceAfterSeatChange(r, catalog, now);
-          if (r.nextChoice && !r.nextChoice.heldAt && r.nextChoice.at <= now) {
+          if (r.nextChoice && !r.nextChoice.heldAt && r.nextChoice.at <= now && now >= (r.reviewUntil ?? 0)) {
             await deal(d, r, r.nextChoice.id);
           }
         } else await deal(d, r);
