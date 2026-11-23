@@ -615,7 +615,7 @@ export function roomView(d, r, u, detail = false) {
     out.pendingPositions = (pendingEntries ?? []).map(e => e.position);
     if (own || u.admin) {
       out.chipRequests = (chipRequests ?? []).map(e => ({ ...e, name: d.users[e.id]?.name ?? "Jogador" }));
-      out.cashReport = [...(cashLedger ?? []), ...r.seats.map(s => ({id:s.id,name:d.users[s.id]?.name,bought:s.bought ?? r.buy,cashedOut:s.stack,active:true}))];
+      out.cashReport = [...(cashLedger ?? []), ...r.seats.map(s => ({id:s.id,name:d.users[s.id]?.name,bought:s.bought ?? r.buy,cashedOut:preAwardStacks.get(s.id) ?? s.stack,active:true}))];
     }
   }
   if (detail && (own || u.admin))
@@ -727,7 +727,7 @@ export function roomView(d, r, u, detail = false) {
                 initialBuy: seat.initialBuy,
                 funding: (seat.funding ?? []).slice(-30),
                 leaveAfterHand: !!seat.leaveAfterHand,
-                stack: seat.stack,
+                stack: preAwardStacks.get(seat.id) ?? seat.stack,
               };
             })()
           : undefined,
