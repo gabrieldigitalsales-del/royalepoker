@@ -893,7 +893,7 @@ async function command(d, u, b) {
       const at=r.nextChoice?.at ?? now+DEALER_CHOICE_MS;
       check(r.nextChoice?.heldAt || now < at, "Tempo de escolha encerrado.");
       // Confirming a choice releases the held clock, without losing the previously selected game.
-      r.nextChoice={id:b.choice,dealer:u.id,openedAt,at:r.nextChoice?.heldAt ? now + r.nextChoice.remainingMs : at,selecting:true};
+      r.nextChoice.id = b.choice; // Preserve review, hold and remaining seconds.
       break;
     }
     case "move": {
