@@ -1254,6 +1254,21 @@ function broadcast() {
     }
 }
 const rejectedMoves = new Map();
+// Secondary admin unlock is tied to the authenticated session (not the
+// browser's local storage), with a thirty-minute idle-safe expiry.
+const ADMIN_UNLOCK_MS = 30 * 60 * 1000;
+const adminCommands = new Set(["admin","globalRake","setGlobalRake","cashier","moderate","adminFeePreview"]);
+function adminUnlocked(d, raw) {
+  const session = raw && d.sessions[digest(raw)];
+  return !!session && session.adminUntil > Date.now();
+}
+function adminPasswordMatches(value) {
+  const secret = process.env.POKER_ROYALE_ADMIN_CODE;
+  if (typeof secret !== "string" || secret.length < 8 ||
+      typeof value !== "string" || value.length > 128) return false;
+  return timingSafeEqual(createHash("sha256").update(value).digest(),
+    createHash("sha256").update(secret).digest());
+}
 const reads = new Set([
   "home",
   "room",
@@ -1264,6 +1279,7 @@ const reads = new Set([
   "practiceResume",
   "adminFeePreview",
   "globalRake",
+  "adminAuthStatus",
 ]);
 const server = http.createServer(async (req, res) => {
   const send = (status, obj) => {
@@ -1340,6 +1356,20 @@ const server = http.createServer(async (req, res) => {
       const run = async () => {
         const d = reads.has(b.cmd) ? store.value : structuredClone(store.value);
         const actor = session(d, raw);
+        if (b.cmd === "adminAuthStatus") {
+          check(actor?.admin, "Sem permissão.");
+          return { unlocked: adminUnlocked(d, raw) };
+        }
+        if (b.cmd === "adminUnlock") {
+          check(actor?.admin, "Sem permissão.");
+          check(adminPasswordMatches(b.password), "Senha administrativa incorreta.");
+          d.sessions[digest(raw)].adminUntil = Date.now() + ADMIN_UNLOCK_MS;
+          await store.commit(d, "adminUnlock");
+          return { unlocked: true };
+        }
+        if (adminCommands.has(b.cmd)) {
+          check(actor?.admin && adminUnlocked(d, raw), "Desbloqueie o painel administrativo com a senha.");
+        }
         let result;
         try {
           result = await command(d, actor, b);
