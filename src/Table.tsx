@@ -752,6 +752,7 @@ export default function Table() {
     f.runoutFrom != null &&
     !showdownPresentation.resultsReady
   );
+  const awardPending = !!(f?.finished && f.runoutFrom != null && !showdownPresentation.awardsReady);
   const ownIndex = h?.players.findIndex((p) => p.id === me.id) ?? -1;
   const selectedRevealCards: number[] = h?.showCards?.[me.id] ?? [];
   const canSelectReveal = !!h && ownIndex >= 0 && (!!r.live || (!!f?.finished && r.lastHand?.id === h.id && time < (r.reviewUntil ?? 0)));
@@ -822,7 +823,7 @@ export default function Table() {
     <div
       data-table-theme={theme}
       data-visual-effects={visualEffects}
-      className={"studio" + (me.preferences.largeCards ? " large-cards" : "") + (mobileDock ? " mobile-game-dock" : "") + (f?.runoutCount >= 2 && f?.boards?.length >= 2 && f?.runoutFrom != null ? " royale-triple-run-active" : "") + (revealing ? " royale-runout-settling" : "")}
+      className={"studio" + (me.preferences.largeCards ? " large-cards" : "") + (mobileDock ? " mobile-game-dock" : "") + (f?.runoutCount >= 2 && f?.boards?.length >= 2 && f?.runoutFrom != null ? " royale-triple-run-active" : "") + (awardPending ? " royale-runout-settling" : "")}
     >
       {grant && (
         <Grant
@@ -1065,7 +1066,7 @@ export default function Table() {
                     onClick={() => toggleRevealCard(j)}
                     style={{ "--reveal-delay": j * 85 + "ms" } as React.CSSProperties}
                   >
-                    <span className={f.awards?.some((pot) => pot.winners.some((winner) => winner.index === ownIndex && winner.cards.includes(c))) ? "winning-card" : undefined}>
+                    <span className={showdownPresentation.resultsReady && f.awards?.some((pot) => pot.winners.some((winner) => winner.index === ownIndex && winner.cards.includes(c))) ? "winning-card" : undefined}>
                       <Card c={c} />
                     </span>
                     {selectedRevealCards.includes(j) && <span className="royale-card-reveal-check" aria-hidden="true">✓</span>}
@@ -1279,12 +1280,12 @@ export default function Table() {
                 .join(" · ")}
             </p>
           )}
-          {!revealing && showdownPresentation.resultsReady && f?.finished && f.diamonds?.[ownIndex] > 0 && (
+          {showdownPresentation.awardsReady && f?.finished && f.diamonds?.[ownIndex] > 0 && (
             <span key={h.id} className="diamond-prize">
               ◆ +{num(f.diamonds[ownIndex])} diamantes
             </span>
           )}
-          {!revealing && showdownPresentation.resultsReady && <Result {...{ h, f }} />}
+          {showdownPresentation.awardsReady && <Result {...{ h, f }} />}
           {!accepted && !r.closed && !r.tour && (
             <button disabled={busy} onClick={() => run("waitlist")}>
               {r.queuePosition ? "Sair da fila" : "Entrar na fila de espera"}
