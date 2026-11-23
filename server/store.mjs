@@ -9,6 +9,7 @@ const groups = [
   "hands",
   "events",
   "cashier",
+  "walletRequests",
   "tours",
   "reports",
 ];
