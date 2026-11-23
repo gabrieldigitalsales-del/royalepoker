@@ -1,0 +1,60 @@
+/* Poker Royale game surface: feedback without changing the server action timing. */
+.royale-game-shell .action-choices{
+  display:grid!important;grid-template-columns:repeat(4,minmax(0,1fr));gap:clamp(5px,.75vw,11px);
+  width:100%;min-width:0;
+}
+.royale-game-shell .action-choices button{
+  position:relative;isolation:isolate;overflow:hidden;
+  min-width:0;min-height:49px;border-radius:12px!important;
+  font-weight:900!important;letter-spacing:.025em;
+  touch-action:manipulation;-webkit-tap-highlight-color:transparent;
+  box-shadow:inset 0 2px 0 #ffffff48,inset 0 -5px 0 #06030c55,0 5px 12px #0008;
+  transition:transform .1s cubic-bezier(.2,.7,.2,1),filter .16s ease,box-shadow .16s ease;
+}
+.royale-game-shell .action-choices .danger{
+  background:linear-gradient(180deg,#e34a57,#9b162f)!important;
+  border-color:#f39aa1!important;color:#fff8f6!important;
+}
+.royale-game-shell .action-choices .royale-check,
+.royale-game-shell .action-choices .royale-call{
+  background:linear-gradient(180deg,#ffdb75,#c28523)!important;
+  border-color:#fff0b3!important;color:#271b20!important;
+}
+.royale-game-shell .action-choices .primary{
+  background:linear-gradient(180deg,#4fe4a0,#148454)!important;
+  border-color:#adffd7!important;color:#0a211c!important;
+}
+.royale-game-shell .action-choices button:not(:disabled):active{
+  transform:translateY(3px) scale(.965)!important;
+  box-shadow:inset 0 3px 7px #0005,0 2px 4px #0008!important;
+}
+.royale-game-shell .action-choices button:not(:disabled):hover{
+  filter:brightness(1.13);box-shadow:inset 0 2px 0 #ffffff48,0 0 16px #f2d19a5e,0 5px 12px #0008;
+}
+.royale-game-shell .action-choices button:not(:disabled):focus-visible{
+  outline:3px solid #fff1ac!important;outline-offset:2px;
+}
+.royale-game-shell .action-choices button:disabled{opacity:.38;filter:grayscale(.7);cursor:not-allowed;}
+.royale-game-shell .action-choices button:before{
+  content:"";position:absolute;inset:-150% 75% -150% -75%;z-index:-1;
+  transform:rotate(27deg);background:linear-gradient(90deg,transparent,#ffffff3b,transparent);
+  pointer-events:none;transition:inset .3s ease;
+}
+.royale-game-shell .action-choices button:not(:disabled):hover:before{inset:-150% -75% -150% 75%;}
+.royale-game-shell .action-choices button:not(:disabled):active:before{transition:none;}
+.royale-game-shell .bet-confirm{
+  border:1px solid #8ff4bd;border-radius:12px;font-weight:900;
+  background:linear-gradient(165deg,#46d69b,#16834f);
+  box-shadow:inset 0 2px 0 #ffffff38,0 4px 16px #07bd6a43;
+}
+.royale-game-shell .preaction-buttons button{
+  transition:transform .11s ease,box-shadow .14s ease;touch-action:manipulation;
+}
+.royale-game-shell .preaction-buttons button:active{transform:scale(.96);}
+@media(max-width:680px){
+  .royale-game-shell .action-choices{gap:5px!important;}
+  .royale-game-shell .action-choices button{min-height:45px;font-size:clamp(10px,2.8vw,14px);padding:5px 2px!important;}
+}
+@media(prefers-reduced-motion:reduce){
+  .royale-game-shell .action-choices button,.royale-game-shell .preaction-buttons button{transition:none!important;}
+}
