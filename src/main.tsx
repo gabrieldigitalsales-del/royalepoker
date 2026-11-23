@@ -382,3 +382,4 @@ import "./royale-ui-system.css";
 import "./poker-royale-board-system.css";
 import "./poker-royale-photo-fix.css";
 import "./poker-royale-mobile-orientation.css";
+import "./royale-loading-screen.css";
