@@ -1,20 +1,30 @@
-// One presentation clock for a finished hand. Money and privacy are authoritative on the server.
+// Server determines payouts immediately; the UI presents them only after the
+// complete board reveal, winning-hand identification and winner announcement.
 export const SHOWDOWN_CARDS_MS = 360;
 export const SHOWDOWN_RESULTS_GAP_MS = 540;
-export const SHOWDOWN_AWARD_GAP_MS = 250;
+export const SHOWDOWN_WINNER_HOLD_MS = 1900;
+export const SHOWDOWN_AWARD_GAP_MS = 350;
 export const REVIEW_HOLD_MS = 4400;
+
 export function showdownFlow(frame, elapsed = Infinity, motionOff = false) {
-  if (!frame?.finished) return { cardsVisible: false, resultsReady: false, awardAt: Infinity, runoutEnd: 0 };
+  if (!frame?.finished) return {
+    cardsVisible: false, resultsReady: false, awardsReady: false,
+    awardAt: Infinity, runoutEnd: 0, winnerAt: Infinity,
+  };
   const from = frame.runoutFrom;
   const boards = Math.max(1, frame.boards?.length ?? 1);
   const cardsPerBoard = Math.max(0, (frame.board?.length ?? 0) - (from ?? (frame.board?.length ?? 0)));
   const runoutEnd = from == null || motionOff ? 0 :
     (frame.runoutDelay ?? 650) + Math.max(0, boards * cardsPerBoard - 1) * (frame.runoutStep ?? 530);
-  const resultAt = runoutEnd + SHOWDOWN_RESULTS_GAP_MS;
+  const winnerAt = runoutEnd + SHOWDOWN_RESULTS_GAP_MS;
+  // The result panel must display the winning hand before the pot moves.
+  const awardAt = winnerAt + SHOWDOWN_WINNER_HOLD_MS + SHOWDOWN_AWARD_GAP_MS;
   return {
     cardsVisible: motionOff || elapsed >= SHOWDOWN_CARDS_MS,
-    resultsReady: motionOff || elapsed >= resultAt,
-    awardAt: resultAt + SHOWDOWN_AWARD_GAP_MS,
+    resultsReady: motionOff || elapsed >= winnerAt,
+    awardsReady: motionOff || elapsed >= awardAt,
+    awardAt,
+    winnerAt,
     runoutEnd,
   };
 }
