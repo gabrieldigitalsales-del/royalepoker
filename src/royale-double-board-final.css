@@ -1,0 +1,89 @@
+/* Final table layout authority: a Double Board is two centered rows, not a
+   second absolutely-positioned strip underneath the player's private cards. */
+.studio .portrait-table.royale-double-board .royale-board-cluster {
+  position: absolute !important;
+  top: 44% !important;
+  left: 50% !important;
+  transform: translate(-50%, -50%) !important;
+  width: min(51%, 490px) !important;
+  max-width: calc(100% - 40px) !important;
+  max-height: 44% !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: clamp(11px, 1.7vh, 19px) !important;
+  z-index: 32 !important;
+  overflow: visible !important;
+  pointer-events: none !important;
+}
+.studio .portrait-table.royale-double-board .royale-board-cluster > .pot-tag,
+.studio .portrait-table.royale-double-board .royale-board-cluster > .portrait-board,
+.studio .portrait-table.royale-double-board .royale-board-cluster > .extra-runout-boards {
+  /* Clear legacy top:42.8%/59.6% and portrait top:50%/57% overrides. */
+  position: relative !important;
+  inset: auto !important;
+  top: auto !important;
+  bottom: auto !important;
+  left: auto !important;
+  right: auto !important;
+  transform: none !important;
+  margin: 0 !important;
+  height: auto !important;
+  width: max-content !important;
+  max-width: 100% !important;
+}
+.studio .portrait-table.royale-double-board .royale-board-cluster > .extra-runout-boards {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 0 !important;
+}
+.studio .portrait-table.royale-double-board .royale-board-cluster .extra-board {
+  position: relative !important;
+  inset: auto !important;
+  top: auto !important;
+  transform: none !important;
+  margin: 0 !important;
+}
+.studio .portrait-table.royale-double-board .royale-board-cluster .extra-board-cards,
+.studio .portrait-table.royale-double-board .royale-board-cluster > .portrait-board {
+  flex-wrap: nowrap !important;
+  justify-content: center !important;
+  align-items: center !important;
+  max-width: 100% !important;
+}
+.studio .portrait-table.royale-double-board .royale-board-game-name {
+  top: 26% !important;
+}
+@media(max-width:800px) and (orientation:portrait) {
+  .studio .portrait-table.royale-double-board .royale-board-cluster {
+    width: min(85vw, 345px) !important;
+    top: 45% !important;
+    max-height: 35% !important;
+    gap: clamp(10px, 1.5dvh, 17px) !important;
+    --royale-community-w: clamp(20px, 5.5vw, 29px);
+    --royale-community-h: clamp(29px, 8vw, 41px);
+    --royale-community-gap: clamp(2px, .75vw, 5px);
+  }
+  .studio .portrait-table.royale-double-board .royale-board-game-name {
+    top: 32% !important;
+  }
+  .studio .portrait-table.royale-double-board .royale-board-cluster > .portrait-board,
+  .studio .portrait-table.royale-double-board .royale-board-cluster > .extra-runout-boards {
+    width: max-content !important;
+    max-width: 100% !important;
+    top: auto !important;
+  }
+}
+@media(max-width:800px) and (orientation:landscape), (max-height:580px) {
+  .studio .portrait-table.royale-double-board .royale-board-cluster {
+    width: min(47%, 385px) !important;
+    top: 46% !important;
+    gap: 7px !important;
+    --royale-community-w: clamp(16px, 3vw, 27px);
+    --royale-community-h: clamp(23px, 4.2vw, 36px);
+    --royale-community-gap: 3px;
+  }
+}
