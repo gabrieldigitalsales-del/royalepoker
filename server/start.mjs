@@ -145,9 +145,13 @@ const publicUser = (u) => ({
 });
 function session(d, raw) {
   const sess = raw && d.sessions[digest(raw)];
-  return sess && sess.until > Date.now() && !d.users[sess.user]?.banned
-    ? d.users[sess.user]
-    : null;
+  const user = sess && d.users[sess.user];
+  if (!user || sess.until <= Date.now() || user.banned) return null;
+  // An existing account can be promoted by a private Render-only setting.
+  // Never expose or accept ADMIN_EMAIL from the browser.
+  if (process.env.ADMIN_EMAIL && user.email?.toLowerCase() === process.env.ADMIN_EMAIL.trim().toLowerCase())
+    user.admin = true;
+  return user;
 }
 function authorizeRoom(r, u) {
   check(r && (!r.private || r.allowed.includes(u.id)), "Mesa indisponível.");
