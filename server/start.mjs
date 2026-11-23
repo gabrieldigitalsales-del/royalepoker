@@ -41,6 +41,7 @@ import {
   leave,
   notify,
   roomView,
+  pendingPrizeHand,
   handView,
   uid,
   token,
@@ -221,6 +222,8 @@ function playerProgress(d, u) {
   );
 }
 function dashboard(d, u) {
+  const pendingHistory = new Set(Object.values(d.rooms)
+    .map(room => pendingPrizeHand(d, room)?.id).filter(Boolean));
   return {
     me: publicUser(u),
     practiceAvailable: !!u.practice,
@@ -234,7 +237,7 @@ function dashboard(d, u) {
       .filter((r) => !r.closed && (!r.private || r.allowed.includes(u.id)))
       .map((r) => roomView(d, r, u)),
     history: Object.values(d.hands)
-      .filter((h) => h.players.some((p) => p.id === u.id))
+      .filter((h) => h.players.some((p) => p.id === u.id) && !pendingHistory.has(h.id))
       .reverse()
       .map((h) => summary(h, u.id)),
     tours: Object.values(d.tours),
@@ -255,7 +258,7 @@ function dashboard(d, u) {
           Object.values(d.rooms)
             .filter((r) => !r.tour)
             .reduce(
-              (n, r) => n + (r.seats.find((s) => s.id === x.id)?.stack || 0),
+              (n, r) => n + (roomView(d, r, u).seats.find((s) => s.id === x.id)?.stack || 0),
               0,
             ),
       })),
@@ -762,6 +765,7 @@ async function command(d, u, b) {
     case "close":
       authorizeRoom(r, u);
       check(r.owner === u.id && !r.hand && !r.tour, "Fechamento indisponível.");
+      check(!pendingPrizeHand(d, r), "Aguarde a premiação final antes de fechar a mesa.");
       // Snapshot before returning seated stacks to wallets; previous departures
       // already appear in cashLedger. Keep a durable summary on the closed room.
       r.closingSummary = closingSummary(r, d.users, avatarFor);
@@ -1482,6 +1486,12 @@ setInterval(() => {
   locked(async () => {
     const now = Date.now();
     const due = new Set();
+    const pendingCashouts = new Set();
+    for (const room of Object.values(store.value.rooms)) {
+      if (!room.hand && room.seats.some(s => s.leaveAfterHand) &&
+          !pendingPrizeHand(store.value, room, now))
+        pendingCashouts.add(room.id);
+    }
     for (const room of Object.values(store.value.rooms)) {
       if (room.preStraddle && !room.hand && !room.paused && !room.closed) {
         if (room.preStraddle.resolved || room.preStraddle.expiresAt <= now) due.add(room.id);
@@ -1508,12 +1518,18 @@ setInterval(() => {
         due.add(room.id);
     }
     if (
-      !due.size &&
+      !due.size && !pendingCashouts.size &&
       !Object.values(store.value.rooms).some((r) => r.hand?.deadline < now)
     )
       return;
     const d = structuredClone(store.value);
     for (const r of Object.values(d.rooms)) {
+      if (pendingCashouts.has(r.id)) {
+        for (const seat of [...r.seats].filter(s => s.leaveAfterHand))
+          leave(d, d.users[seat.id], r);
+        readySince.delete(r.id);
+        continue;
+      }
       if (due.has(r.id)) {
         // If seating changed (leave/sit out/reconnect), discard a stale gate.
         if (r.preStraddle && !r.preStraddle.resolved &&
