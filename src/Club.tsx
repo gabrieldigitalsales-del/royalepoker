@@ -470,54 +470,27 @@ export function Profile() {
           Próximo nível em {home.progress.next - home.progress.hands} mãos de
           cash game
         </small>
-        <h2>Loja de diamantes</h2><small>Cada 100.000 fichas da sua parte de um pote rendem 1 diamante.</small>
+        <h2>Loja de diamantes</h2>
+        <small>Itens especiais e recompensas do clube. Os resgates estarão disponíveis em breve.</small>
         <p className="diamond-prize">◆ {num(u.diamonds)} diamantes</p>
-        <div className="shop-grid">
-          {home.shop.avatars.map((item) => {
-            const owned = u.ownedAvatars.includes(item.id);
-            return (
-              <button
-                key={item.id}
-                disabled={
-                  shopBusy ||
-                  u.shopAvatar === item.id ||
-                  (item.level && item.level > home.progress.level)
-                }
-                onClick={() =>
-                  owned
-                    ? change("equipAvatar", { item: item.id })
-                    : setPurchase(item)
-                }
-              >
-                <span>{item.symbol}</span>
-                <strong>{item.name}</strong>
-                <small>
-                  {u.shopAvatar === item.id
-                    ? "Equipado"
-                    : owned
-                      ? "Equipar"
-                      : item.level
-                        ? "Recompensa · nível " + item.level
-                        : num(item.price) + " ◆"}
-                </small>
-              </button>
-            );
-          })}
-          <button
-            disabled={shopBusy || u.vip}
-            onClick={() =>
-              setPurchase({ id: "vip", name: "VIP", price: home.shop.vipPrice })
-            }
-          >
-            <span>♦</span>
+        <div className="shop-grid royale-coming-soon-shop" aria-label="Loja de diamantes — em breve">
+          {home.shop.avatars.map((item) => (
+            <div key={item.id} className="royale-locked-shop-item" aria-disabled="true">
+              <span className="royale-locked-shop-symbol">{item.symbol}</span>
+              <strong>{item.name}</strong>
+              <span className="royale-coming-soon-mark" aria-label="Em breve">EM BREVE</span>
+            </div>
+          ))}
+          <div className="royale-locked-shop-item" aria-disabled="true">
+            <span className="royale-locked-shop-symbol">♦</span>
             <strong>VIP</strong>
-            <small>{u.vip ? "Ativo" : num(home.shop.vipPrice) + " ◆"}</small>
-          </button>
+            <span className="royale-coming-soon-mark" aria-label="Em breve">EM BREVE</span>
+          </div>
         </div>
-        <small>VIP libera estatísticas agregadas no menu Jogadores.</small>
+        <small>Os diamantes continuam sendo acumulados; os itens permanecem indisponíveis até o lançamento da loja.</small>
         {u.shopAvatar && (
-          <button onClick={() => change("equipAvatar", { item: "" })}>
-            Usar meu avatar pessoal
+          <button type="button" onClick={() => change("equipAvatar", { item: "" })}>
+            Voltar ao avatar pessoal
           </button>
         )}
       </section>
