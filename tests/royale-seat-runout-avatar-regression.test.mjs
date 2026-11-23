@@ -16,9 +16,10 @@ test("three runouts reveal every board before announcing winners", () => {
     runoutDelay: 650, runoutStep: 530,
   };
   const end = showdownFlow(frame, 0, false).runoutEnd;
+  const lastCardAt = showdownFlow(frame, 0).lastCardAt;
   assert.ok(end > 0);
-  assert.equal(revealAt({ runIndex: 2, cardIndex: 4, from: 3, elapsed: end - 1, delay: 650, step: 530 }), false);
-  assert.equal(revealAt({ runIndex: 2, cardIndex: 4, from: 3, elapsed: end, delay: 650, step: 530 }), true);
+  assert.equal(revealAt({ runIndex: 2, cardIndex: 4, from: 3, elapsed: lastCardAt - 1, delay: 650, step: 530 }), false);
+  assert.equal(revealAt({ runIndex: 2, cardIndex: 4, from: 3, elapsed: lastCardAt, delay: 650, step: 530 }), true);
   assert.equal(showdownFlow(frame, end + SHOWDOWN_RESULTS_GAP_MS - 1, false).resultsReady, false);
   assert.equal(showdownFlow(frame, end + SHOWDOWN_RESULTS_GAP_MS, false).resultsReady, true);
 });
