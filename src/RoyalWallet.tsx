@@ -11,6 +11,8 @@ const formatter=(value:number)=>num(value??0);
 export default function RoyalWallet() {
   const home=useApp(s=>s.home);
   const [data,setData]=useState<any>();
+  const [loadError,setLoadError]=useState("");
+  const [loading,setLoading]=useState(true);
   const [busy,setBusy]=useState(false);
   const [amount,setAmount]=useState("100");
   const [message,setMessage]=useState("");
@@ -18,12 +20,23 @@ export default function RoyalWallet() {
   const [entries,setEntries]=useState<any[]>([]);
   const [requestId,setRequestId]=useState<string>();
   async function load() {
-    const [wallet,history]=await Promise.all([api("royalWallet"),api("walletHistory")]);
-    setData(wallet);setEntries(history.entries??[]);
+    setLoading(true);setLoadError("");
+    try {
+      const [wallet,history]=await Promise.all([api("royalWallet"),api("walletHistory")]);
+      setData(wallet);setEntries(history.entries??[]);
+    } catch(error:any) {
+      setLoadError(error?.message||"Não foi possível consultar sua carteira.");
+      throw error;
+    } finally { setLoading(false); }
   }
-  useEffect(()=>{let active=true;Promise.all([api("royalWallet"),api("walletHistory")])
-    .then(([wallet,history])=>{if(active){setData(wallet);setEntries(history.entries??[]);}})
-    .catch(fail);return()=>{active=false};},[home?.me?.wallet,home?.me?.walletReserved]);
+  useEffect(()=>{
+    let active=true;setLoading(true);setLoadError("");
+    Promise.all([api("royalWallet"),api("walletHistory")])
+      .then(([wallet,history])=>{if(active){setData(wallet);setEntries(history.entries??[]);}})
+      .catch((error:any)=>{if(active)setLoadError(error?.message||"Falha ao carregar a carteira.");})
+      .finally(()=>{if(active)setLoading(false)});
+    return()=>{active=false};
+  },[home?.me?.wallet,home?.me?.walletReserved]);
   async function submit(event:React.FormEvent) {
     event.preventDefault();if(busy)return;
     const value=Number(amount);
@@ -47,6 +60,11 @@ export default function RoyalWallet() {
         <p>Organize suas fichas, reservas e movimentações com registro de cada solicitação.</p></div>
       <WalletCards size={38}/>
     </header>
+    {loadError && <div className="royal-wallet-feedback" role="alert">
+      <strong>Não foi possível carregar a carteira.</strong>
+      <p>{loadError}</p>
+      <button type="button" onClick={()=>load().catch(()=>{})}>Tentar novamente</button>
+    </div>}
     <div className="royal-wallet-metrics" role="group" aria-label="Saldos de fichas">
       <div><span>Disponíveis</span><strong>{formatter(data?.available??home?.me?.wallet)}</strong><small>Para mesas e torneios</small></div>
       <div><span>Reservadas</span><strong>{formatter(data?.reserved??0)}</strong><small>Solicitações em análise</small></div>
@@ -67,7 +85,7 @@ export default function RoyalWallet() {
           <input id="royal-wallet-amount" type="number" inputMode="numeric" min={1} step={1}
             max={tab==="withdraw"?(data?.available??home?.me?.wallet):1000000}
             value={amount} onChange={e=>{setAmount(e.target.value);setRequestId(undefined);}} required/>
-          <button type="submit" disabled={busy}>{busy?"Registrando…":
+          <button type="submit" disabled={busy || loading || !!loadError}>{busy?"Registrando…":
             tab==="withdraw"?"Reservar e solicitar":"Registrar interesse no depósito"}</button>
           {message&&<p role="status" className="royal-wallet-feedback">{message}</p>}
         </form>
@@ -75,7 +93,7 @@ export default function RoyalWallet() {
       </section>
       <section className="royal-wallet-panel">
         <div className="royal-wallet-section-head"><h2>Solicitações</h2><button type="button" onClick={()=>load().catch(fail)} aria-label="Atualizar"><RefreshCcw size={17}/></button></div>
-        {!data?<p>Carregando carteira…</p>:!data.requests?.length?<p>Nenhuma solicitação até agora.</p>:
+        {!data?<p>{loading?"Carregando carteira…":"Não foi possível consultar as solicitações. Use Tentar novamente acima."}</p>:!data.requests?.length?<p>Nenhuma solicitação até agora.</p>:
           <div className="royal-wallet-requests">{data.requests.map((request:any)=>
             <div className="royal-wallet-request" key={request.id}>
               <span>{request.kind==="withdrawal"?"Reserva":"Depósito futuro"}<small>{date(request.createdAt)}</small></span>
