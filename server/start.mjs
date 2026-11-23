@@ -1450,7 +1450,7 @@ const server = http.createServer(async (req, res) => {
       }[extname(path)] || "application/octet-stream",
     );
     if (pathname === "/" || path.endsWith("index.html")) res.setHeader("Cache-Control", "no-store");
-    else if (/\\/assets\\/[^/]+-[a-zA-Z0-9_-]{8,}\\.(?:js|css)$/.test(pathname))
+    else if (/\/assets\/[^/]+-[a-zA-Z0-9_-]{8,}\.(?:js|css)$/.test(pathname))
       res.setHeader("Cache-Control", "public, max-age=31536000, immutable");
     res.end(readFileSync(path));
   } catch {
