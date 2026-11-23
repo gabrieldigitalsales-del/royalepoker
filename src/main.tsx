@@ -30,6 +30,7 @@ import { History, Tours, People, Profile, Admin, RakeControl } from "./Club";
 import { api, session, useApp, refresh, fail, backend } from "./api";
 import { Brand, Modal } from "./ui";
 import { LoadingGate } from "./ProgressSplash";
+import { AdminGate } from "./AdminGate";
 import "./style.css";
 import "./mobile-game-redesign.css";
 import "./poker-royale.css";
@@ -271,8 +272,8 @@ function App() {
                 <Route path="/historico" element={<History />} />
                 <Route path="/jogadores" element={<People />} />
                 <Route path="/perfil" element={<Profile />} />
-                <Route path="/admin" element={<Admin />} />
-                <Route path="/admin/rake" element={<RakeControl />} />
+                <Route path="/admin" element={<AdminGate><Admin /></AdminGate>} />
+                <Route path="/admin/rake" element={<AdminGate><RakeControl /></AdminGate>} />
                 <Route path="*" element={<Lobby />} />
               </Routes>
             </motion.div>
