@@ -1,5 +1,4 @@
 import { diamondAwards } from "./rewards.mjs";
-import { previewFee } from "./rake-prototype.mjs";
 import { prepareDealerChoice } from "./dealer-seat-sync.mjs";
 import { takeRake, rakeAdmin, avatarFor } from "./progression.mjs";
 import { randomBytes, randomUUID, randomInt } from "node:crypto";
@@ -42,7 +41,7 @@ export function makeRoom(u, b) {
     blind: b.blind,
     buy: b.buy,
     created: Date.now(),
-    rakeEnabled: !!b.rakeEnabled,
+    rakeEnabled: true, // Global house rake applies to every cash table.
     capacity: b.capacity,
     private: !!b.private,
     code: token().slice(0, 12),
@@ -300,6 +299,7 @@ export async function deal(d, r, choice) {
     cucurucho,
     cucuruchoAnte,
     tour: r.tour || null,
+    rakePercent: Number.isInteger(d.cashier?.globalRakePercent) ? d.cashier.globalRakePercent : 3,
     players: seated.map((s) => ({
       id: s.id,
       name: d.users[s.id].name,
@@ -337,14 +337,15 @@ function finish(d, r) {
       u.diamonds = (u.diamonds ?? 0) + f.diamonds[i];
     });
   }
-  // Simulation only. Existing rooms may have rakeEnabled=true from older versions;
-  // never debit their pots or credit an administrator in this prototype.
+  // House rake is global, never assigned to an agent or room owner.
+  // The percentage is captured when the hand is dealt, so a configuration
+  // change cannot alter a hand already in progress.
   if (!r.tour && !r.practice && !f.rows) {
-    const grossPot = f.payouts.reduce((sum, value) => sum + value, 0);
-    (r.adminFeePreview ??= []).push({
-      handId: h.id, at: Date.now(),
-      ...previewFee(grossPot, h.id),
-    });
+    const rake = takeRake(f, h.rakePercent ?? 3);
+    if (rake > 0) {
+      d.cashier.rakeCollected = (d.cashier.rakeCollected ?? 0) + rake;
+      d.cashier.rakeHands = (d.cashier.rakeHands ?? 0) + 1;
+    }
   }
   for (const [i, p] of h.players.entries()) {
     let s = r.seats.find((s) => s.id === p.id);
