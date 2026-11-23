@@ -1,6 +1,7 @@
 import {closingSummary} from "./closing-summary.mjs";
 import { findChipTransactionReplay, recordChipTransaction } from "./chip-transaction-replay.mjs";
 import {tableBalances} from "./table-balances.mjs";
+import { royalWalletView, requestRoyalWithdrawal, createDepositIntent, decideRoyalWithdrawal, royalWalletAdminView } from "./royal-wallet.mjs";
 import { prototypeLedger } from "./rake-prototype.mjs";
 import { training } from "./training.mjs";
 import { rakeReport } from "./cash-updates.mjs";
@@ -337,6 +338,33 @@ async function command(d, u, b) {
       return training(u, b);
     case "walletHistory":
       return { entries: (u.walletLog ?? []).slice(-200).reverse() };
+    case "royalWallet":
+      return royalWalletView(d, u);
+    case "royalWithdrawalRequest": {
+      const amount = z.number().int().positive().max(1000000).parse(b.amount);
+      const reference = z.string().uuid().parse(b.reference);
+      const item = requestRoyalWithdrawal(d, u, amount, reference);
+      return { id:item.id, status:item.status, reserved:item.amount };
+    }
+    case "royalDepositIntent": {
+      const amount = z.number().int().positive().max(1000000).parse(b.amount);
+      const reference = z.string().uuid().parse(b.reference);
+      const item = createDepositIntent(d,u,amount,reference);
+      return {id:item.id,status:item.status,providerConnected:false};
+    }
+    case "royalWalletAdmin":
+      check(u.admin, "Acesso administrativo restrito.");
+      return { requests: royalWalletAdminView(d) };
+    case "royalWalletDecision": {
+      check(u.admin, "Acesso administrativo restrito.");
+      const action = z.enum(["approve","reject","complete"]).parse(b.action);
+      const id = z.string().uuid().parse(b.id);
+      const item = decideRoyalWithdrawal(d,u,id,action);
+      const evId=uid();
+      d.events[evId]={id:evId,by:u.name,action:"royalWallet:"+action,
+        target:item.userId,amount:item.amount,at:Date.now()};
+      return {id:item.id,status:item.status};
+    }
     case "feedback": {
       const text = z.string().trim().min(5).max(400).parse(b.text);
       const id = uid();
@@ -1261,7 +1289,7 @@ const rejectedMoves = new Map();
 // Secondary admin unlock is tied to the authenticated session (not the
 // browser's local storage), with a thirty-minute idle-safe expiry.
 const ADMIN_UNLOCK_MS = 30 * 60 * 1000;
-const adminCommands = new Set(["admin","globalRake","setGlobalRake","cashier","moderate","adminFeePreview"]);
+const adminCommands = new Set(["admin","globalRake","setGlobalRake","cashier","moderate","adminFeePreview","royalWalletAdmin","royalWalletDecision"]);
 function adminUnlocked(d, raw) {
   const session = raw && d.sessions[digest(raw)];
   return !!session && session.adminUntil > Date.now();
@@ -1280,6 +1308,8 @@ const reads = new Set([
   "admin",
   "stats",
   "walletHistory",
+  "royalWallet",
+  "royalWalletAdmin",
   "practiceResume",
   "adminFeePreview",
   "globalRake",
