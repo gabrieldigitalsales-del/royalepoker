@@ -157,7 +157,7 @@ function signed(d, u) {
   for (const [k, s] of Object.entries(d.sessions))
     if (s.user === u.id || s.until < Date.now()) delete d.sessions[k];
   const raw = token();
-  d.sessions[digest(raw)] = { user: u.id, until: Date.now() + 7 * 86400000 };
+  d.sessions[digest(raw)] = { user: u.id, until: Date.now() + 30 * 86400000 };
   u.last = Date.now();
   return { token: raw };
 }
