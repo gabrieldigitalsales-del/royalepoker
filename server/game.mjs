@@ -477,8 +477,13 @@ export async function move(d, r, id, b, expired = false) {
       });
   h.frames.push({
     ...result.frame,
-    ...(result.frame.finished && result.frame.board.length > f.board.length
+    ...(result.frame.finished &&
+    result.frame.board.length > f.board.length &&
+    (result.frame.boards?.length ?? 0) > 1 &&
+    result.frame.awards?.some((pot) => !pot.uncontested)
       ? {
+          // A forced all-in runout and Double Board showdown must follow
+          // the same reveal → winning hand → payout sequence.
           runoutFrom: f.board.length,
           runoutDelay: 650,
           runoutStep: 530,
