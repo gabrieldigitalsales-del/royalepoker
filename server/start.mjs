@@ -1282,6 +1282,17 @@ const reads = new Set([
   "adminAuthStatus",
 ]);
 const server = http.createServer(async (req, res) => {
+  // NEXOR baseline: protection applies to SPA routes and API alike.
+  res.setHeader("X-Content-Type-Options", "nosniff");
+  res.setHeader("X-Frame-Options", "DENY");
+  res.setHeader("Referrer-Policy", "strict-origin-when-cross-origin");
+  res.setHeader("Permissions-Policy", "camera=(), microphone=(), geolocation=(), payment=()");
+  res.setHeader("Content-Security-Policy", "frame-ancestors 'none'; object-src 'none'; base-uri 'self'; form-action 'self'");
+  if (req.socket.encrypted || req.headers["x-forwarded-proto"] === "https")
+    res.setHeader("Strict-Transport-Security", "max-age=31536000");
+  const requestPath = new URL(req.url ?? "/", "http://localhost").pathname;
+  if (/^\\/(?:admin|mesa|perfil|historico|jogadores|torneios|convite|api|avatar)(?:\\/|$)/.test(requestPath))
+    res.setHeader("X-Robots-Tag", "noindex, nofollow, noarchive");
   const send = (status, obj) => {
     res.writeHead(status, {
       "content-type": "application/json",
@@ -1438,6 +1449,9 @@ const server = http.createServer(async (req, res) => {
         ".html": "text/html; charset=utf-8",
       }[extname(path)] || "application/octet-stream",
     );
+    if (pathname === "/" || path.endsWith("index.html")) res.setHeader("Cache-Control", "no-store");
+    else if (/\\/assets\\/[^/]+-[a-zA-Z0-9_-]{8,}\\.(?:js|css)$/.test(pathname))
+      res.setHeader("Cache-Control", "public, max-age=31536000, immutable");
     res.end(readFileSync(path));
   } catch {
     res.writeHead(404);
