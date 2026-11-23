@@ -15,7 +15,7 @@ const groups = [
 export async function storage() {
   const path = process.env.DATA_FILE || "data/mesa.sqlite";
   const remote = !!process.env.DATABASE_URL;
-  let db, pg;
+  let db, pg, ownsLock = true;
   if (remote) {
     const { Client } = await import("pg");
     pg = new Client({ connectionString: process.env.DATABASE_URL });
@@ -25,11 +25,14 @@ export async function storage() {
     await pg.query(
       "INSERT INTO pokeroyale_private.pokeroyale_lobby_clock (id, revision) VALUES (1, 0) ON CONFLICT (id) DO NOTHING",
     );
+    // During a zero-downtime deploy the old instance legitimately holds
+    // the session advisory lock. Start the replacement in standby mode;
+    // Render can health-check it and drain the old instance, then the new
+    // instance acquires the lock and reloads the authoritative state.
     const lock = await pg.query(
       "select pg_try_advisory_lock(872510426) as acquired",
     );
-    if (!lock.rows[0].acquired)
-      throw Error("Outro servidor já controla este clube.");
+    ownsLock = !!lock.rows[0].acquired;
   } else {
     mkdirSync(dirname(path), { recursive: true });
     db = new DatabaseSync(path);
@@ -37,18 +40,48 @@ export async function storage() {
       "PRAGMA journal_mode=WAL;CREATE TABLE IF NOT EXISTS records(kind TEXT,id TEXT,body TEXT NOT NULL,PRIMARY KEY(kind,id))",
     );
   }
-  const rows = remote
-    ? (await pg.query("select kind,id,body from pokeroyale_private.pokeroyale_records")).rows
-    : db.prepare("select * from records").all();
-  let data = Object.fromEntries(groups.map((g) => [g, {}]));
-  for (const r of rows)
-    data[r.kind][r.id] =
-      typeof r.body === "string" ? JSON.parse(r.body) : r.body;
+  async function loadData() {
+    const rows = remote
+      ? (await pg.query("select kind,id,body from pokeroyale_private.pokeroyale_records")).rows
+      : db.prepare("select * from records").all();
+    const result = Object.fromEntries(groups.map((g) => [g, {}]));
+    for (const r of rows)
+      result[r.kind][r.id] =
+        typeof r.body === "string" ? JSON.parse(r.body) : r.body;
+    return result;
+  }
+  let data = await loadData();
+  if (remote && !ownsLock) {
+    let checking = false;
+    const poll = setInterval(async () => {
+      if (ownsLock || checking) return;
+      checking = true;
+      try {
+        const lock = await pg.query("select pg_try_advisory_lock(872510426) as acquired");
+        if (lock.rows[0].acquired) {
+          data = await loadData();
+          ownsLock = true;
+          clearInterval(poll);
+          console.log("Poker Royale assumiu a instância ativa com dados atualizados.");
+        }
+      } catch (error) {
+        console.error("Aguardando bloqueio exclusivo:", error.message);
+      } finally {
+        checking = false;
+      }
+    }, 1000);
+    poll.unref();
+    console.log("Poker Royale em standby; aguardando saída da instância anterior.");
+  }
   return {
+    get active() {
+      return ownsLock;
+    },
     get value() {
       return data;
     },
     async commit(next, reason) {
+      if (!ownsLock) throw Error("Servidor em atualização; tente novamente.");
       recordWallets(data, next, reason);
       const changes = [];
       for (const k of groups)
