@@ -344,6 +344,7 @@ function finish(d, r) {
   if (!r.tour && !r.practice && !f.rows) {
     const rake = takeRake(f, h.rakePercent ?? 3);
     if (rake > 0) {
+      d.cashier ??= {};
       d.cashier.rakeCollected = (d.cashier.rakeCollected ?? 0) + rake;
       d.cashier.rakeHands = (d.cashier.rakeHands ?? 0) + 1;
     }
