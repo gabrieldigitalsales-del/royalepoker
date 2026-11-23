@@ -29,6 +29,7 @@ import Table from "./Table";
 import { History, Tours, People, Profile, Admin, RakeControl } from "./Club";
 import { api, session, useApp, refresh, fail, backend } from "./api";
 import { Brand, Modal } from "./ui";
+import { LoadingGate } from "./ProgressSplash";
 import "./style.css";
 import "./mobile-game-redesign.css";
 import "./poker-royale.css";
@@ -151,7 +152,8 @@ function App() {
   ];
   if (home?.me.admin) links.push(["/admin", "Caixa", Shield]);
   return (
-    <>
+    <LoadingGate key={token ? "session:" + token : "guest"} ready={!token || !!home} title={token ? "CARREGANDO O PRÉ-JOGO" : "INICIANDO POKER ROYALE"}>
+      <>
       {!token ? (
         <Auth />
       ) : !home ? (
@@ -345,7 +347,8 @@ function App() {
           </button>
         </div>
       )}
-    </>
+      </>
+    </LoadingGate>
   );
 }
 createRoot(document.getElementById("root")!).render(
