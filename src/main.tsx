@@ -393,3 +393,5 @@ import "./royale-vector-card-face.css";
 import "./royale-showdown-card-clarity.css";
 import "./royale-visual-clarity.css";
 import "./royale-signature-deck.css";
+
+import "./royale-dealer-choice-minimal.css";
