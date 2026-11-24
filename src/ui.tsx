@@ -7,6 +7,7 @@ export function Brand() {
   </span>;
 }
 export const cardStyles = [
+  ["royale", "Royal Premium · branco e quatro naipes"],
   ["vivid", "Quatro cores intensas"],
   ["ivory", "Marfim · quatro naipes"],
   ["classic", "Tradicional · vermelho e preto"],
@@ -17,7 +18,7 @@ export function setCardStyle(style: string) {
   localStorage.setItem("mesa-card-style", style);
 }
 document.documentElement.dataset.cardStyle =
-  localStorage.getItem("mesa-card-style") ?? "vivid";
+  localStorage.getItem("mesa-card-style") ?? "royale";
 
 export function Card({ c, selected = false, onClick }: any) {
   const suits = { s: "♠", h: "♥", d: "♦", c: "♣" };
@@ -27,6 +28,8 @@ export function Card({ c, selected = false, onClick }: any) {
     <Component
       type={onClick ? "button" : undefined}
       data-suit={c?.[1]}
+      data-rank={value || undefined}
+      data-royale-card={c ? "face" : "back"}
       aria-label={
         c
           ? ({ A: "Ás", K: "Rei", Q: "Dama", J: "Valete" }[c[0]] ?? value) +
@@ -51,7 +54,7 @@ export function Card({ c, selected = false, onClick }: any) {
           </span>
         </>
       ) : (
-        <Spade size={12} />
+        <span className="royale-card-back-symbol" aria-hidden="true"><Spade size={12} /></span>
       )}
     </Component>
   );
