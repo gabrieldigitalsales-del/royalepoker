@@ -58,3 +58,19 @@ test("Portrait, Double Board and 3-run cards keep readable ranks and single suit
   assert.match(boards,/royale-multiple-boards/);
   assert.ok(main.lastIndexOf("royale-adaptive-fans.css") > main.lastIndexOf("royale-premium-cards.css"));
 });
+
+test("Avatar-adjacent fan cards keep normal-size rank and one visible suit, not giant letters",()=>{
+ const css=read("../src/royale-adaptive-fans.css");
+ const block=css.slice(css.indexOf("/* FIX: screenshot regression"));
+ assert.ok(block.length>1000, "explicit avatar card correction exists");
+ for(const name of [".pocket.faceup",".royale-triple-hero-card",".royale-opponent-showdown-card"])
+   assert.ok(block.includes(name),name+" must use the same card treatment");
+ assert.match(block,/font-size:14px!important/);
+ assert.match(block,/font-size:13px!important/);
+ assert.match(block,/inset:23px auto auto 4px!important/);
+ assert.match(block,/background:linear-gradient\(145deg,#ffffff/);
+ assert.doesNotMatch(block,/font-size:clamp\([^)]*em/);
+ const ui=read("../src/ui.tsx");
+ const face=ui.slice(ui.indexOf("{c ? ("),ui.indexOf(") : (",ui.indexOf("{c ? (")));
+ assert.equal((face.match(/className="card-emblem"/g)||[]).length,1);
+});
