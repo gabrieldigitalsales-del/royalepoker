@@ -48,18 +48,6 @@ html body .card[data-royale-card="face"] > strong {
   color:var(--royale-ink)!important;
   text-shadow:none!important;
 }
-html body .card[data-royale-card="face"] > i {
-  z-index:2;
-  position:relative;
-  display:block;
-  color:var(--royale-ink)!important;
-  font-size:clamp(8px,.67em,25px)!important;
-  font-style:normal!important;
-  line-height:1;
-  align-self:flex-start;
-  margin-top:1px;
-  text-shadow:none!important;
-}
 html body .card[data-royale-card="face"] .card-emblem {
   position:absolute!important;
   display:grid!important;
@@ -127,13 +115,19 @@ html body .royale-showdown-besthand .card[data-royale-card="face"] {
 .studio[data-visual-effects="high"] .royale-ceremony-showdown .winning-card > .card[data-royale-card="face"] {
   filter:drop-shadow(0 0 10px #f6cf76);
 }
-/* Some game modes use very small cards: keep ranks clear without
-   forcing the emblem over the printed value. */
+/* A single suit remains visible even in compact Run It Three / Double Board
+   cards: rank at upper left, one suit mark at lower right. */
 .studio.royale-triple-run-active .portrait-table .card[data-royale-card="face"] .card-emblem,
 .studio .royale-triple-hero-card .card[data-royale-card="face"] .card-emblem,
 .studio .royale-opponent-showdown-card .card[data-royale-card="face"] .card-emblem,
-.mini .card[data-royale-card="face"] .card-emblem {
-  display:none!important;
+.mini .card[data-royale-card="face"] .card-emblem,
+.studio .portrait-table.royale-multiple-boards .card[data-royale-card="face"] .card-emblem {
+  display:block!important;
+  inset:auto 5% 6% auto!important;
+  width:auto!important;
+  height:auto!important;
+  font-size:clamp(9px, .9em, 18px)!important;
+  line-height:1!important;
 }
 .studio.royale-triple-run-active .portrait-table .card[data-royale-card="face"] > strong,
 .studio .royale-opponent-showdown-card .card[data-royale-card="face"] > strong {
@@ -151,16 +145,15 @@ html body .royale-showdown-besthand .card[data-royale-card="face"] {
   .studio .portrait-table .card[data-royale-card="face"] > strong{
     font-size:clamp(10px,1em,19px)!important;
   }
-  .studio .portrait-table .card[data-royale-card="face"] > i{
-    font-size:clamp(8px,.7em,14px)!important;
-  }
   .studio .portrait-table .card[data-royale-card="face"] .card-emblem{
     font-size:clamp(13px,1.5em,25px)!important;
   }
 }
 @media(max-width:420px){
   .studio .portrait-table.royale-multiple-boards .card[data-royale-card="face"] .card-emblem{
-    display:none!important;
+    display:block!important;
+    inset:auto 3% 4% auto!important;
+    font-size:clamp(9px,.75em,14px)!important;
   }
 }
 /* Honor disabled animations but never change game clock or visibility. */
