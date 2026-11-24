@@ -918,6 +918,20 @@ async function command(d, u, b) {
       }
       break;
     }
+    case "choiceExtend": {
+      authorizeRoom(r, u);
+      check(r.game === "choice" && !r.closed && !r.hand && !r.paused && r.nextChoice?.selecting, "Escolha indisponível.");
+      check(r.nextChoice.dealer === u.id, "Somente o dealer pode pedir tempo.");
+      check(!r.nextChoice.extraTimeUsed, "Tempo extra já utilizado nesta escolha.");
+      const now = Date.now();
+      check((r.nextChoice.heldAt && now < (r.nextChoice.holdUntil ?? 0)) ||
+        (!r.nextChoice.heldAt && now < r.nextChoice.at && now >= r.nextChoice.openedAt),
+        "Tempo de escolha encerrado.");
+      if (r.nextChoice.heldAt) r.nextChoice.holdUntil += 10000;
+      else r.nextChoice.at += 10000;
+      r.nextChoice.extraTimeUsed = true;
+      break;
+    }
     case "choiceResume": {
       authorizeRoom(r, u);
       check(r.game === "choice" && !r.hand && !r.closed, "Escolha indisponível.");
@@ -940,6 +954,7 @@ async function command(d, u, b) {
       check(r.nextChoice?.heldAt || now < at, "Tempo de escolha encerrado.");
       // Confirming a choice releases the held clock, without losing the previously selected game.
       r.nextChoice.id = b.choice; // Preserve review, hold and remaining seconds.
+      r.nextChoice.confirmed = true; // Visible announcement only for an explicit choice.
       break;
     }
     case "move": {
