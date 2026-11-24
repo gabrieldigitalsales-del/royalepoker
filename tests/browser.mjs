@@ -68,6 +68,7 @@ async function openRoom(token, viewport, label, roomId) {
   for(const card of cardInfo) {
     assert.match(card.rank,/^(?:[2-9]|10|[AJQK])$/,JSON.stringify(card));
     assert.match(card.suit,/^[♠♥♦♣]$/,JSON.stringify(card));
+    assert.ok(card.width >= 28 && card.height >= 38,label+" card must not collapse: "+JSON.stringify(card));
     assert.equal(card.display,"block",label+" SVG face displayed");
     assert.ok(card.rankInside,label+" rank not clipped: "+JSON.stringify(card));
     assert.ok(card.suitInside,label+" suit not clipped: "+JSON.stringify(card));
