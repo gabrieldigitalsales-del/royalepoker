@@ -36,7 +36,7 @@ async function ready() {
   }
   throw Error("Local Poker Royale server not ready: "+stderr);
 }
-async function openRoom(token, viewport, label, roomId) {
+async function openRoom(token, viewport, label, roomId, expectedCards=2) {
   const context=await browser.newContext({viewport, deviceScaleFactor:1,locale:"pt-BR"});
   await context.addInitScript(value=>localStorage.setItem("mesaToken",value),token);
   const page=await context.newPage();
@@ -46,7 +46,7 @@ async function openRoom(token, viewport, label, roomId) {
   await page.locator(".player-hand .card[data-royale-card='face']").first().waitFor({timeout:15000});
   await page.waitForTimeout(450);
   const cards=await page.locator(".player-hand .card[data-royale-card='face']").count();
-  assert.equal(cards,2,label+" has two Hold'em hole cards");
+  assert.equal(cards,expectedCards,label+" must show "+expectedCards+" cards");
   const cardInfo=await page.locator(".player-hand .card[data-royale-card='face']").evaluateAll(elements=>
     elements.map(card=>{
       const rank=card.querySelector("svg .royale-card-vector-rank");
@@ -95,6 +95,15 @@ try {
     ["mobile-390",b.token,{width:390,height:844}],
     ["desktop-1366",a.token,{width:1366,height:768}],
   ]) views.push(await openRoom(token,viewport,label,room.id));
+  // Real game screens for the variants prone to hidden symbols on phones.
+  for (const [game,expectedCards] of [["watermelon",4],["om5db",5],["om7",7]]) {
+    const fresh=await request("create",a.token,{name:"Browser "+game,
+      game,blind:10,buy:100,capacity:2,seconds:30});
+    await request("sit",b.token,{room:fresh.id,position:1,amount:150});
+    await request("deal",a.token,{room:fresh.id});
+    views.push(await openRoom(a.token,{width:360,height:740},
+      game+"-mobile-360",fresh.id,expectedCards));
+  }
   assert.deepEqual(errors,[],"No browser uncaught errors");
   console.log("REAL BROWSER VISUAL AUDIT PASS",views.map((v,i)=>({
     viewport:["360x740","390x844","1366x768"][i],cards:v.cards,face:v.cardInfo,
