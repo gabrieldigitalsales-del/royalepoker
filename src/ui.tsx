@@ -51,6 +51,19 @@ export function Card({ c, selected = false, onClick }: any) {
           <span className="card-emblem" aria-hidden="true">
             {suits[c[1]]}
           </span>
+          {/* Fixed vector coordinates decouple rank/suit from inherited font rules.
+              The legacy text remains as no-JS/CSS fallback and is hidden by
+              royale-vector-card-face.css when the vector artwork is active. */}
+          <svg
+            className="royale-card-face-art"
+            viewBox="0 0 64 90"
+            preserveAspectRatio="xMidYMid meet"
+            aria-hidden="true"
+            focusable="false"
+          >
+            <text className="royale-card-vector-rank" x="8" y="31">{value}</text>
+            <text className="royale-card-vector-suit" x="9" y="57">{suits[c[1]]}</text>
+          </svg>
         </>
       ) : (
         <span className="royale-card-back-symbol" aria-hidden="true"><Spade size={12} /></span>
