@@ -74,3 +74,19 @@ test("Avatar-adjacent fan cards keep normal-size rank and one visible suit, not 
  const face=ui.slice(ui.indexOf("{c ? ("),ui.indexOf(") : (",ui.indexOf("{c ? (")));
  assert.equal((face.match(/className="card-emblem"/g)||[]).length,1);
 });
+
+test("Ranks and single suit use scaled SVG, immune to nested CSS font-size collisions", () => {
+ const ui=read("../src/ui.tsx");
+ const css=read("../src/royale-vector-card-face.css");
+ const main=read("../src/main.tsx");
+ assert.match(ui,/className="royale-card-face-art"/);
+ assert.match(ui,/viewBox="0 0 64 90"/);
+ assert.match(ui,/className="royale-card-vector-rank"/);
+ assert.match(ui,/className="royale-card-vector-suit"/);
+ assert.equal((ui.match(/className="royale-card-vector-suit"/g)||[]).length,1);
+ assert.match(css,/\.card\[data-royale-card="face"\] > svg\.royale-card-face-art/);
+ assert.match(css,/font-size:25px!important/);
+ assert.match(css,/font-size:22px!important/);
+ assert.match(css,/\.royale-card-face-art\) > \.card-emblem/);
+ assert.ok(main.lastIndexOf("royale-vector-card-face.css") > main.lastIndexOf("royale-adaptive-fans.css"));
+});
