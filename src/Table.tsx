@@ -404,7 +404,7 @@ export default function Table() {
       () =>
         me.appearance?.cards ??
         localStorage.getItem("mesa-card-style") ??
-        "vivid",
+        "royale",
     ),
     [entry, setEntry] = useState<{ position: number; amount: number }>(),
     [tableOptions, setTableOptions] = useState(false),
@@ -1650,7 +1650,7 @@ export default function Table() {
             <Modal title="Visual da mesa" close={() => setLookOpen(false)}>
               <div className="royale-look-presets" role="group" aria-label="Três experiências de mesa e baralho">
                 {[
-                  { theme: "wood", cards: "vivid", name: "Arena Royale", detail: "Mesa dourada · quatro cores" },
+                  { theme: "wood", cards: "royale", name: "Arena Royale", detail: "Mesa dourada · Royal Premium" },
                   { theme: "blue", cards: "night", name: "Noite Imperial", detail: "Azul · cartas noturnas" },
                   { theme: "ruby", cards: "classic", name: "Salão Rubi", detail: "Vinho · baralho clássico" },
                 ].map((preset) => (
