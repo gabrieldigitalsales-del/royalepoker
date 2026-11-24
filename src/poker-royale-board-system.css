@@ -476,12 +476,15 @@
 .studio.royale-triple-run-active .portrait-table .extra-board-cards .card strong{
   position:absolute!important;left:4px!important;top:2px!important;font-size:inherit!important;line-height:1!important;
 }
-.studio.royale-triple-run-active .portrait-table .portrait-board > .community-reveal .card i,
-.studio.royale-triple-run-active .portrait-table .extra-board-cards .card i{
-  position:absolute!important;right:4px!important;bottom:2px!important;font-size:.98em!important;line-height:1!important;
-}
+/* One suit mark only — the large central pip is repositioned on compact cards. */
 .studio.royale-triple-run-active .portrait-table .portrait-board > .community-reveal .card .card-emblem,
-.studio.royale-triple-run-active .portrait-table .extra-board-cards .card .card-emblem{display:none!important;}
+.studio.royale-triple-run-active .portrait-table .extra-board-cards .card .card-emblem{
+  display:block!important;
+  position:absolute!important;
+  inset:auto 3px 2px auto!important;
+  font-size:clamp(9px,.88em,14px)!important;
+  line-height:1!important;
+}
 .studio.royale-triple-run-active .portrait-table .portrait-board > .double-board-first-label,
 .studio.royale-triple-run-active .portrait-table .extra-board > small{
   font-size:clamp(8px,.72vw,10px)!important;
