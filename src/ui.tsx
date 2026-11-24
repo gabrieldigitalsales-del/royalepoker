@@ -62,7 +62,7 @@ export function Card({ c, selected = false, onClick }: any) {
             focusable="false"
           >
             <text className="royale-card-vector-rank" x="8" y="31">{value}</text>
-            <svg className="royale-card-vector-suit" x="7" y="38" width="28" height="28" viewBox="0 0 24 24" overflow="visible">
+            <svg className="royale-card-vector-suit" x="9" y="37" width="43" height="43" viewBox="0 0 24 24" overflow="visible">
               {c[1] === "h" ? (
                 <path d="M12 21.1 3.6 12.5C-1 7.5 3.5 1.7 8.4 3.4c1.6.5 2.8 1.7 3.6 3.1.8-1.4 2-2.6 3.6-3.1 4.9-1.7 9.4 4.1 4.8 9.1Z" />
               ) : c[1] === "d" ? (
