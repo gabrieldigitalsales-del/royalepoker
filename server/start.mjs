@@ -541,6 +541,12 @@ async function command(d, u, b) {
         h?.players.some((p) => p.id === u.id),
         "Histórico privado.",
       );
+      // A replay is a private endpoint too: a finished 2/3-board frame
+      // exists on the server before its last river and award animation.
+      // Do not leak the future board/results through the replay API.
+      const originalRoom = d.rooms[h.room];
+      check(!originalRoom || pendingPrizeHand(d, originalRoom)?.id !== h.id,
+        "Aguarde a última carta e a premiação antes de rever a mão.");
       return handView(h, u.id, true);
     }
     case "logout":
