@@ -62,6 +62,20 @@ function Illustration({ mode }: { mode: Mode }) {
   );
 }
 
+export function DealerModeAnnouncement({ mode }: { mode?: Mode }) {
+  if (!mode) return null;
+  return (
+    <div className="royale-choice-announcement" role="status" aria-live="polite">
+      <div className="royale-choice-announcement-card">
+        <span className="royale-choice-announcement-crest" aria-hidden="true">♛</span>
+        <strong>{mode.name}</strong>
+        <small>{mode.family} · {mode.limit}</small>
+        <p>{mode.rule}</p>
+      </div>
+    </div>
+  );
+}
+
 export function DealerChoice({
   modes,
   active,
@@ -69,6 +83,8 @@ export function DealerChoice({
   busy,
   close,
   confirm,
+  extraUsed = false,
+  extend,
 }: {
   modes: Mode[];
   active: number;
@@ -76,6 +92,8 @@ export function DealerChoice({
   busy: boolean;
   close: () => void;
   confirm: (id: string) => void;
+  extraUsed?: boolean;
+  extend?: () => void;
 }) {
   const track = useRef<HTMLDivElement>(null);
   const drag = useRef({ active: false, x: 0, left: 0, moved: false, pointer: -1 });
@@ -171,7 +189,12 @@ export function DealerChoice({
             </button>
           ))}
         </div>
-        <small>Contagem pausada enquanto você escolhe. Toque em um jogo para confirmar; fechar mantém o anterior.</small>
+        <div className="dealer-gallery-footer">
+          <small>Toque na modalidade para confirmar. A seleção permanece sincronizada com a mesa.</small>
+          {extend && <button type="button" className="dealer-extra-time" disabled={busy || extraUsed} onClick={extend}>
+            {extraUsed ? "✓ Tempo extra utilizado" : "✋ +10 segundos"}
+          </button>}
+        </div>
       </div>
     </Modal>
   );
