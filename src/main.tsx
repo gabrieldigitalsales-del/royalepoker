@@ -392,3 +392,4 @@ import "./royale-adaptive-fans.css";
 import "./royale-vector-card-face.css";
 import "./royale-showdown-card-clarity.css";
 import "./royale-visual-clarity.css";
+import "./royale-signature-deck.css";
