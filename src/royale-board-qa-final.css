@@ -1,0 +1,138 @@
+/* Poker Royale — QA audit: consistent Run It Twice/Three board geometry.
+ * Last imported board authority. Presentation only; no wager, deal, or reveal logic changes.
+ * Do not scale the card container or SVG via CSS transforms: fractional raster
+ * scaling in previous rules made the SVG rank and suits appear soft.
+ */
+html body .studio .portrait-table.royale-multiple-boards {
+  --royale-community-w:clamp(28px,3.15vw,43px);
+  --royale-community-h:clamp(41px,4.5vw,62px);
+  --royale-community-gap:clamp(3px,.43vw,6px);
+}
+html body .studio .portrait-table.royale-boards-3 {
+  --royale-community-w:clamp(27px,2.9vw,40px);
+  --royale-community-h:clamp(39px,4.2vw,58px);
+}
+html body .studio .portrait-table.royale-multiple-boards .royale-board-cluster,
+html body .studio.royale-triple-run-active .portrait-table.royale-multiple-boards .royale-board-cluster {
+  position:absolute!important;
+  left:50%!important;
+  top:44%!important;
+  right:auto!important;
+  transform:translate(-50%,-50%)!important;
+  width:max-content!important;
+  max-width:min(65vw,440px)!important;
+  max-height:72%!important;
+  height:auto!important;
+  display:flex!important;
+  flex-direction:column!important;
+  justify-content:center!important;
+  align-items:center!important;
+  gap:19px!important;
+  overflow:visible!important;
+  filter:none!important;
+}
+html body .studio .portrait-table.royale-multiple-boards .royale-board-cluster > .extra-runout-boards {
+  display:flex!important;
+  flex-direction:column!important;
+  gap:19px!important;
+  width:max-content!important;
+  max-width:100%!important;
+  overflow:visible!important;
+}
+html body .studio .portrait-table.royale-multiple-boards .royale-board-cluster > .portrait-board,
+html body .studio .portrait-table.royale-multiple-boards .royale-board-cluster .extra-board,
+html body .studio .portrait-table.royale-multiple-boards .royale-board-cluster .extra-board-cards {
+  display:flex!important;
+  flex-wrap:nowrap!important;
+  align-items:center!important;
+  justify-content:center!important;
+  position:relative!important;
+  width:max-content!important;
+  height:var(--royale-community-h)!important;
+  min-height:var(--royale-community-h)!important;
+  max-height:var(--royale-community-h)!important;
+  gap:var(--royale-community-gap)!important;
+  margin:0!important;
+  padding:0!important;
+  transform:none!important;
+}
+html body .studio .portrait-table.royale-multiple-boards .royale-board-cluster :is(.community-reveal,.mini-board-card,.board-slot,.card[data-royale-card="face"]) {
+  box-sizing:border-box!important;
+  width:var(--royale-community-w)!important;
+  min-width:var(--royale-community-w)!important;
+  max-width:var(--royale-community-w)!important;
+  height:var(--royale-community-h)!important;
+  min-height:var(--royale-community-h)!important;
+  max-height:var(--royale-community-h)!important;
+  flex:0 0 var(--royale-community-w)!important;
+  transform:none!important;
+  scale:1!important;
+}
+html body .studio .portrait-table.royale-multiple-boards .royale-board-cluster .card[data-royale-card="face"] {
+  background:#fffefa!important;
+  background-image:linear-gradient(160deg,#fffefa,#f7f2e9)!important;
+  border:1px solid #cbb99b!important;
+  border-radius:5px!important;
+  box-shadow:0 2px 5px #0d05187d!important;
+  filter:none!important;
+  opacity:1!important;
+}
+html body .studio .portrait-table.royale-multiple-boards .royale-board-cluster .card[data-royale-card="face"] > svg.royale-card-face-art {
+  width:100%!important;
+  height:100%!important;
+  opacity:1!important;
+  filter:none!important;
+  text-rendering:geometricPrecision;
+  shape-rendering:geometricPrecision;
+}
+html body .studio .portrait-table.royale-multiple-boards .royale-board-cluster .portrait-board > .double-board-first-label,
+html body .studio .portrait-table.royale-multiple-boards .royale-board-cluster .extra-board > small {
+  position:absolute!important;
+  left:50%!important;
+  top:-18px!important;
+  transform:translateX(-50%)!important;
+  z-index:10!important;
+  padding:2px 7px!important;
+  font:900 10px/1.1 system-ui,sans-serif!important;
+  white-space:nowrap!important;
+  background:#24112ff0!important;
+  border:1px solid #d7aa68!important;
+  border-radius:9px!important;
+  color:#ffeac0!important;
+}
+html body .studio .portrait-table.royale-multiple-boards .royale-board-cluster .winning-card > .card[data-royale-card="face"] {
+  border:2px solid #e6b854!important;
+  box-shadow:0 0 0 1px #fff1be,0 3px 6px #0d051889!important;
+}
+@media(max-width:800px){
+  html body .studio .portrait-table.royale-multiple-boards {
+    --royale-community-w:clamp(21px,5.4vw,31px);
+    --royale-community-h:clamp(30px,7.8vw,45px);
+    --royale-community-gap:3px;
+  }
+  html body .studio .portrait-table.royale-multiple-boards .royale-board-cluster {
+    max-width:calc(100vw - 32px)!important;
+    gap:16px!important;
+  }
+  html body .studio .portrait-table.royale-multiple-boards .royale-board-cluster > .extra-runout-boards {gap:16px!important;}
+  html body .studio .portrait-table.royale-multiple-boards .royale-board-cluster .portrait-board > .double-board-first-label,
+  html body .studio .portrait-table.royale-multiple-boards .royale-board-cluster .extra-board > small {
+    top:-15px!important;
+    padding:1px 5px!important;
+    font-size:9px!important;
+  }
+}
+@media(max-height:580px) and (orientation:landscape) {
+  html body .studio .portrait-table.royale-boards-3 {
+    --royale-community-w:clamp(18px,5vh,28px);
+    --royale-community-h:clamp(26px,7.2vh,40px);
+  }
+  html body .studio .portrait-table.royale-multiple-boards .royale-board-cluster {
+    gap:13px!important;
+    max-height:68%!important;
+  }
+  html body .studio .portrait-table.royale-multiple-boards .royale-board-cluster > .extra-runout-boards {gap:13px!important;}
+}
+@media(prefers-reduced-motion:reduce) {
+  html body .studio .portrait-table.royale-multiple-boards .royale-board-cluster .card {transition:none!important;}
+}
