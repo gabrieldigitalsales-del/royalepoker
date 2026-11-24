@@ -64,7 +64,16 @@ test("33 opções no servidor: mão completa, autorização, revisão e replay f
       if (g.id === "choice") {
         await assert.rejects(call("chooseNext", b, { room, choice: "texas" }));
         await call("chooseNext", a, { room, choice: "texas" });
-        assert.equal((await call("room", a, { room })).live.game, "texas");
+        const waiting = await call("room", a, { room });
+        assert.equal(waiting.nextChoice.id,"texas","dealer records selection without bypassing server countdown");
+        assert.equal(waiting.live,null,"choice cannot start a hand before five seconds");
+        let liveRoom;
+        for(let attempts=0;attempts<85;attempts++) {
+          liveRoom = await call("room", a, { room });
+          if(liveRoom.live)break;
+          await new Promise(resolve=>setTimeout(resolve,75));
+        }
+        assert.equal(liveRoom.live?.game,"texas","server starts chosen game when countdown expires");
       }
       let r = await call("room", a, { room }),
         turns = 0;
