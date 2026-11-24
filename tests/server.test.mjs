@@ -316,10 +316,27 @@ test("API, WebSocket, carteiras, torneio, recuperação, privacidade e reinício
       rev: cash.rev,
       action: { type: "pass" },
     });
+    // Do not assume two betting actions finish every Hold'em pot. Drive the
+    // actual legal street/runout sequence before asserting settlement.
+    let completedCash;
+    for (let guard=0;guard<55;guard++) {
+      completedCash = await call("room", c.token, { room: cashRoom });
+      if (!completedCash.live) break;
+      const actor = completedCash.live.players[completedCash.live.frames[0].actor].id;
+      const token = actor === bravoId ? b.token : c.token;
+      const own = await call("room", token, { room: cashRoom });
+      const legal = own.live.frames[0].legal;
+      const action = Array.isArray(legal.runout)
+        ? {type:"runout",count:1}
+        : legal.max != null ? {type:"raise",amount:legal.max}
+        : "call" in legal ? {type:"pass"} : {type:"fold"};
+      await call("move", token, {room:cashRoom,rev:own.rev,action});
+    }
+    assert.ok(completedCash?.lastHand && !completedCash.live,
+      "cash game must fully settle before results and cashier checks");
     cash = await call("room", b.token, { room: cashRoom });
-    // After leave-after-hand, departed players have no spectator access to
-    // restricted private frames. The still-seated opponent can inspect them.
-    const completedCash = await call("room", c.token, { room: cashRoom });
+    // A departed player has no access to private table frames. The active
+    // player can still inspect the settled hand.
     const finalCash = completedCash.lastHand.frames[0];
     assert.equal(finalCash.rake, 6);
     assert.equal(finalCash.grossPot, 200);
