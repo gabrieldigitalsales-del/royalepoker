@@ -143,7 +143,7 @@ function App() {
     document.documentElement.dataset.cardStyle =
       home?.me.appearance?.cards ??
       localStorage.getItem("mesa-card-style") ??
-      "vivid";
+      "royale";
   }, [home?.me.id, home?.me.appearance?.cards]);
   const links: any[] = [
     ["/", "Lobby", LayoutGrid],
@@ -387,3 +387,4 @@ import "./royale-showdown-ceremony.css";
 import "./nexor-interface.css";
 import "./royale-app-layout.css";
 import "./royale-action-buttons.css";
+import "./royale-premium-cards.css";
