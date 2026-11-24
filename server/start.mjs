@@ -955,6 +955,8 @@ async function command(d, u, b) {
       // Confirming a choice releases the held clock, without losing the previously selected game.
       r.nextChoice.id = b.choice; // Preserve review, hold and remaining seconds.
       r.nextChoice.confirmed = true; // Visible announcement only for an explicit choice.
+      // A confirmed choice closes the selection pause immediately, retaining only the remaining five-second clock.
+      if (r.nextChoice.heldAt) resumeDealerChoice(r.nextChoice, now);
       break;
     }
     case "move": {
