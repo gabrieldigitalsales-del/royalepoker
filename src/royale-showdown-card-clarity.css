@@ -1,0 +1,103 @@
+/* Poker Royale · legibilidade do fold/showdown — acabamento de cartas.
+ * Escopo visual apenas: não muda carta, vencedor, regra, relógio ou privacidade.
+ * Importar depois de royale-vector-card-face.css. */
+
+/* Sit out NÃO deve tornar o baralho nem o nome ilegíveis. */
+html body .studio .portrait-table .portrait-seat.seat-sitout {
+  opacity:1!important;
+}
+html body .studio .portrait-table .portrait-seat.seat-sitout .portrait-avatar {
+  opacity:.42!important;
+  filter:grayscale(.55) saturate(.55) brightness(.8)!important;
+}
+html body .studio .portrait-table .portrait-seat.seat-sitout .pocket,
+html body .studio .portrait-table .portrait-seat.seat-sitout .nameplate,
+html body .studio .portrait-table .portrait-seat.seat-sitout .stackplate,
+html body .studio .portrait-table .portrait-seat.seat-sitout .dealer-marker {
+  opacity:1!important;
+  filter:none!important;
+}
+/* Fold afeta a foto, não os números/naipes que continuam visíveis
+ * ao próprio jogador ou em uma revelação autorizada. */
+html body .studio .portrait-table .portrait-seat.folded .pocket {
+  opacity:1!important;
+  filter:none!important;
+}
+
+/* Baralho de alto contraste, inclusive sob luzes roxas e trilhos neon. */
+html body .studio .card[data-royale-card="face"] {
+  background:#fffdfa!important;
+  background-image:linear-gradient(155deg,#fff 0%,#fffefa 67%,#f4eade 100%)!important;
+  opacity:1!important;
+  color:var(--royale-ink)!important;
+  border:1.5px solid #d5b675!important;
+  box-shadow:inset 0 0 0 1px #fff,0 2px 0 #8d6947,0 5px 10px #0e0617ad!important;
+  isolation:isolate;
+}
+html body .studio .card[data-royale-card="face"] > svg.royale-card-face-art {
+  opacity:1!important;
+  filter:none!important;
+  z-index:5!important;
+}
+html body .studio .card[data-royale-card="face"] > svg.royale-card-face-art text {
+  opacity:1!important;
+  fill:var(--royale-ink)!important;
+  stroke:none!important;
+}
+html body .studio .card[data-royale-card="face"][data-suit="s"] {--royale-ink:#201a31;}
+html body .studio .card[data-royale-card="face"][data-suit="h"] {--royale-ink:#c41e3e;}
+html body .studio .card[data-royale-card="face"][data-suit="d"] {--royale-ink:#185fba;}
+html body .studio .card[data-royale-card="face"][data-suit="c"] {--royale-ink:#087d50;}
+
+/* A imagem do assento permanece atrás das cartas; sem recorte do leque. */
+html body .studio .portrait-table .portrait-seat .pocket.faceup {
+  z-index:12!important;
+  overflow:visible!important;
+}
+html body .studio .portrait-table .portrait-seat .pocket.faceup > span {
+  z-index:calc(1 + var(--j))!important;
+  overflow:visible!important;
+}
+html body .studio .portrait-table .portrait-seat .pocket.faceup .card[data-royale-card="face"] {
+  width:clamp(33px,4.2vw,48px)!important;
+  height:clamp(47px,6vw,68px)!important;
+  filter:none!important;
+}
+
+/* Cartas expostas do oponente no showdown: contorno e separação. */
+html body .studio .portrait-table .royale-opponent-showdown {
+  z-index:18!important;
+  isolation:isolate;
+}
+html body .studio .portrait-table .royale-opponent-showdown-cards {
+  isolation:isolate;
+  filter:drop-shadow(0 5px 8px #10061cbd);
+}
+html body .studio .portrait-table .royale-opponent-showdown-card .card[data-royale-card="face"] {
+  opacity:1!important;
+  filter:none!important;
+  border-color:#e6c98f!important;
+  box-shadow:0 0 0 1px #725036,0 4px 9px #000a!important;
+}
+html body .studio .portrait-table .royale-opponent-showdown-card.royale-showdown-best-card .card[data-royale-card="face"],
+html body .studio .portrait-table .winning-card > .card[data-royale-card="face"] {
+  border-color:#ffe4a4!important;
+  box-shadow:0 0 0 2px #ffc85d,0 0 18px #ffd672cc,0 5px 12px #000a!important;
+}
+
+/* Não usamos opacidade no conjunto: mantém faces e legendas nítidas. */
+@media(max-width:700px) {
+  html body .studio .portrait-table .portrait-seat .pocket.faceup .card[data-royale-card="face"] {
+    width:clamp(29px,7vw,38px)!important;
+    height:clamp(42px,10vw,53px)!important;
+  }
+  html body .studio .portrait-table .royale-opponent-showdown-card .card[data-royale-card="face"] {
+    width:clamp(27px,6.6vw,33px)!important;
+    height:clamp(39px,9.6vw,48px)!important;
+  }
+}
+@media(prefers-reduced-motion:reduce) {
+  html body .studio .portrait-table .royale-opponent-showdown-card .card[data-royale-card="face"] {
+    transition:none!important;
+  }
+}
