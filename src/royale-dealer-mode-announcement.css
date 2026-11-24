@@ -1,0 +1,102 @@
+/* Poker Royale: server-confirmed variation announcement */
+.studio .table-stage .dealer-choice-spot.royale-dealer-pot-anchored:has(.royale-choice-announcement) {
+  top:43%!important;
+  padding:0!important;
+  width:min(360px,calc(100vw - 24px))!important;
+  max-width:calc(100vw - 24px)!important;
+  border:0!important;
+  background:transparent!important;
+  box-shadow:none!important;
+  z-index:40!important;
+  pointer-events:none!important;
+}
+.studio .table-stage .dealer-choice-spot.royale-dealer-pot-anchored:has(.royale-choice-announcement)::before{display:none!important}
+.studio .royale-choice-announcement{
+  width:100%;
+  display:flex;
+  justify-content:center;
+  pointer-events:none;
+}
+.studio .royale-choice-announcement-card {
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:5px;
+  width:min(300px,100%);
+  padding:14px 15px 12px;
+  border:2px solid #dcaf58;
+  border-radius:15px;
+  background:linear-gradient(165deg,#fff9ee 0%,#f2e4c9 100%);
+  box-shadow:0 7px 0 #623b24,0 13px 30px #100519b8,inset 0 0 0 2px #fffef4;
+  color:#2b1735;
+  text-align:center;
+  animation:royale-mode-reveal .35s cubic-bezier(.2,.8,.3,1.2) both;
+}
+.studio .royale-choice-announcement-crest{
+  display:grid;
+  place-items:center;
+  width:44px;
+  height:44px;
+  border-radius:12px;
+  background:linear-gradient(#371344,#1c0e2f);
+  border:2px solid #e5b85c;
+  color:#ffdc83;
+  font-size:30px;
+  line-height:1;
+}
+.studio .royale-choice-announcement-card strong{
+  font-weight:900;
+  font-size:clamp(16px,2vw,23px);
+  line-height:1.2;
+  color:#2a1537;
+}
+.studio .royale-choice-announcement-card small{
+  font-weight:850;
+  font-size:11px;
+  color:#905a20;
+}
+.studio .royale-choice-announcement-card p{
+  margin:3px 0 0;
+  max-width:28ch;
+  font-size:12px;
+  line-height:1.35;
+  color:#4b3e4d;
+}
+.studio .dealer-gallery-footer{
+  display:flex;
+  flex-wrap:wrap;
+  align-items:center;
+  justify-content:space-between;
+  gap:8px;
+  margin-top:6px;
+}
+.studio .dealer-gallery-footer small{flex:1 1 200px;color:#cfc4d3}
+.studio .dealer-gallery-footer .dealer-extra-time{
+  flex:0 0 auto;
+  min-height:40px;
+  padding:8px 14px;
+  border:1px solid #dfbb73;
+  border-radius:10px;
+  color:#fff1c8;
+  background:linear-gradient(160deg,#4d2c64,#241535);
+  font-weight:850;
+  white-space:nowrap;
+}
+.studio .dealer-gallery-footer .dealer-extra-time:disabled{opacity:.55;cursor:not-allowed}
+@keyframes royale-mode-reveal{
+  from{opacity:0;transform:translateY(12px) scale(.9)}
+  to{opacity:1;transform:translateY(0) scale(1)}
+}
+@media(max-width:650px){
+  .studio .table-stage .dealer-choice-spot.royale-dealer-pot-anchored:has(.royale-choice-announcement){
+    top:38%!important;
+    width:min(240px,calc(100vw - 20px))!important;
+  }
+  .studio .royale-choice-announcement-card{padding:9px 11px;gap:3px}
+  .studio .royale-choice-announcement-crest{width:34px;height:34px;font-size:24px}
+  .studio .royale-choice-announcement-card strong{font-size:16px}
+  .studio .royale-choice-announcement-card p{font-size:10px}
+}
+@media(prefers-reduced-motion:reduce){
+  .studio .royale-choice-announcement-card{animation:none}
+}
