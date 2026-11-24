@@ -83,3 +83,59 @@ html body .studio button.card:focus-visible {
     animation:none!important;
   }
 }
+
+/* Seat card clarity v2: screenshot fix.
+   The seat's face-up pocket must not inherit purple stage overlays,
+   semi-transparent effects or the avatar's state. */
+html body .studio .portrait-table .portrait-seat .pocket.faceup {
+  opacity:1!important;
+  filter:none!important;
+  mix-blend-mode:normal!important;
+  isolation:isolate!important;
+  z-index:24!important;
+  visibility:visible!important;
+}
+html body .studio .portrait-table .portrait-seat .pocket.faceup > span {
+  opacity:1!important;
+  filter:none!important;
+  mix-blend-mode:normal!important;
+  backface-visibility:visible!important;
+}
+html body .studio .portrait-table .portrait-seat .pocket.faceup .card[data-royale-card="face"] {
+  opacity:1!important;
+  filter:none!important;
+  mix-blend-mode:normal!important;
+  background:#fffdf9!important;
+  background-image:none!important;
+  border:1px solid #d5c6a7!important;
+  box-shadow:0 1px 0 #ffffff,0 3px 8px #0b07179e!important;
+  color:var(--royale-ink)!important;
+}
+html body .studio .portrait-table .portrait-seat .pocket.faceup .card[data-royale-card="face"] > svg.royale-card-face-art {
+  opacity:1!important;
+  mix-blend-mode:normal!important;
+  filter:none!important;
+}
+/* Keep suit-size consistent with board and hero cards; rank remains visible. */
+html body .studio .portrait-table .portrait-seat .pocket.faceup .card[data-royale-card="face"] > svg.royale-card-face-art .royale-card-vector-suit {
+  opacity:1!important;
+  fill:var(--royale-ink)!important;
+}
+/* Sit out is expressed on the avatar alone, never across cards. */
+html body .studio .portrait-table .portrait-seat.seat-sitout .pocket.faceup,
+html body .studio .portrait-table .portrait-seat.folded .pocket.faceup {
+  opacity:1!important;
+  filter:none!important;
+}
+/* A modest gap between the cards and avatar visually separates the hand. */
+html body .studio .portrait-table .portrait-seat .pocket.faceup {
+  top:-23%!important;
+  transform:translateX(-50%) scale(.79)!important;
+  transform-origin:center bottom!important;
+}
+@media(max-width:700px) {
+  html body .studio .portrait-table .portrait-seat .pocket.faceup {
+    top:-25%!important;
+    transform:translateX(-50%) scale(.72)!important;
+  }
+}
