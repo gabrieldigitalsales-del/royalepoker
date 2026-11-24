@@ -389,3 +389,4 @@ import "./royale-app-layout.css";
 import "./royale-action-buttons.css";
 import "./royale-premium-cards.css";
 import "./royale-adaptive-fans.css";
+import "./royale-vector-card-face.css";
