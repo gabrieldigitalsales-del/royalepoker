@@ -13,6 +13,15 @@ test("Poker Royale card face has clear rank, four suits and accessible card labe
  assert.match(css,/data-royale-card="face"/);
  assert.match(css,/card-emblem/);
 });
+test("Every visible card has exactly one suit marker, including compact mobile boards",()=>{
+ const ui=read("../src/ui.tsx");
+ const css=read("../src/royale-premium-cards.css");
+ const face=ui.slice(ui.indexOf('{c ? ('),ui.indexOf(') : (',ui.indexOf('{c ? (')));
+ assert.match(face,/<span className="card-emblem"/);
+ assert.doesNotMatch(face,/<i>\{suits\[c\[1\]\]\}<\/i>/);
+ assert.match(css,/royale-multiple-boards[\s\S]*?\.card-emblem/);
+ assert.doesNotMatch(css,/\.card\[data-royale-card="face"\] \.card-emblem\s*\{\s*display:none!important/);
+});
 test("Unified card design shares existing table dimensions, includes history, winner and flip effects",()=>{
  const css=read("../src/royale-premium-cards.css");
  const board=read("../src/royale-double-board-final.css");
