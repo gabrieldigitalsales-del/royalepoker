@@ -60,10 +60,10 @@ export function Create({
   const games = h.catalog;
   const g = games.find((v) => v.id === id) || games[0];
   const custom = ["custom", "choice"].includes(id);
-  const max =
+  const max = Math.min(9,
     id === "custom"
-      ? Math.min(g.max, ...rot.map((k) => games.find((v) => v.id === k).max))
-      : g.max;
+      ? Math.min(g.max, ...rot.map((k) => games.find((v) => v.id === k)?.max ?? 9))
+      : g.max);
   async function send(e) {
     e.preventDefault();
     const b: any = Object.fromEntries(new FormData(e.target));
@@ -76,6 +76,7 @@ export function Create({
     b.private = b.private === "on" || !!b.password;
     if (custom && rot.length === 0) { fail(new Error("Selecione pelo menos uma modalidade.")); return; }
     b.rotation = custom ? rot : [];
+    b.capacity = Math.min(9, b.capacity);
     if (tour) b.blindMinutes = Number(b.blindMinutes);
     b.start = b.time ? new Date(b.time).getTime() : Date.now();
     B(true);
@@ -665,7 +666,7 @@ export default function Lobby() {
             aria-label="Número de assentos"
             placeholder="Assentos"
             min="2"
-            max="10"
+            max="9"
             value={seats}
             onChange={(e) => E(e.target.value)}
           />
