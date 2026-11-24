@@ -36,6 +36,8 @@ import {
   deal,
   move,
   makeRoom,
+  MAX_TABLE_PLAYERS,
+  availableSeats,
   automatic,
   sit,
   seatSlots,
@@ -93,7 +95,7 @@ const nameSchema = z.string().trim().min(2).max(32);
 const options = z.object({
   name: nameSchema,
   game: z.string().max(24),
-  capacity: z.number().int().min(2).max(10),
+  capacity: z.number().int().min(2).max(9),
   blind: z
     .number()
     .int()
@@ -696,7 +698,8 @@ async function command(d, u, b) {
     case "queueEntry": {
       authorizeRoom(r, u);
       check(!r.closed && !r.tour && !r.seats.some(s => s.id === u.id), "Entrada indisponível.");
-      const position = z.number().int().min(0).max(r.capacity - 1).parse(b.position);
+      check(availableSeats(r) > 0, "Mesa cheia (máximo de 9 jogadores).");
+      const position = z.number().int().min(0).max(Math.min(r.capacity, MAX_TABLE_PLAYERS) - 1).parse(b.position);
       const amount = z.number().int().min(r.buy).max(100000000).parse(b.amount);
       check(u.wallet >= amount, "Saldo insuficiente para o buy-in.");
       check(!r.waitlist?.length || r.waitlist[0] === u.id, "Aguarde sua vez na fila.");
@@ -768,7 +771,7 @@ async function command(d, u, b) {
         .number()
         .int()
         .min(0)
-        .max(r.capacity - 1)
+        .max(Math.min(r.capacity, MAX_TABLE_PLAYERS) - 1)
         .parse(b.position);
       const slots = seatSlots(r);
       check(mine >= 0, "Sente-se primeiro.");
