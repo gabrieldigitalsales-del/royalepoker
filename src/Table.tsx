@@ -1020,26 +1020,16 @@ export default function Table() {
                     ? r.nextChoice.remainingMs
                     : r.nextChoice.at - serverNow) / 5000 * 100))}%`
                   : "100%"} as React.CSSProperties}>
-                {r.nextChoice && serverNow < r.nextChoice.openedAt ? (
-                  <span role="status">Analisando a última mão · {Math.ceil((r.nextChoice.openedAt-serverNow)/1000)}s
-                    {r.nextChoice.dealer === me.id && r.lastHand &&
-                      <button type="button" onClick={openDealerReview}>Analisar mão</button>}
-                  </span>
+                {r.nextChoice?.selecting && r.nextChoice.dealer === me.id ? (
+                  <button type="button" className="royale-choice-only-button" disabled={busy} onClick={openDealerChoice}>Escolher jogo</button>
+                ) : r.nextChoice && serverNow < r.nextChoice.openedAt ? (
+                  <span role="status" className="royale-choice-minimal-label">Próxima mão</span>
                 ) : r.nextChoice ? (
-                  <span role="status">
-                    {r.nextChoice.heldAt && serverNow < (r.nextChoice.holdUntil ?? 0)
-                      ? `Dealer analisando a mão · pausa até ${Math.ceil(((r.nextChoice.holdUntil ?? 0)-serverNow)/1000)}s`
-                      : `${home.catalog.find((game) => game.id === r.nextChoice.id)?.name ?? "Modalidade"} · ${Math.max(0, Math.ceil((r.nextChoice.heldAt ? r.nextChoice.remainingMs : r.nextChoice.at-serverNow)/1000))}s`}
-                    {r.nextChoice.selecting && r.nextChoice.dealer === me.id &&
-                      <>
-                        <button type="button" onClick={openDealerChoice}>Escolher jogo</button>
-                        {r.lastHand && <button type="button" onClick={openDealerReview}>Analisar mão</button>}
-                      </>}
+                  <span role="status" className="royale-choice-minimal-label">
+                    {home.catalog.find((game) => game.id === r.nextChoice.id)?.name ?? "Próximo jogo"}
                   </span>
-                ) : next?.id === me.id ? (
-                  <span>Preparando a escolha do próximo dealer…</span>
                 ) : (
-                  <span>{next?.name ?? "Próximo dealer"} vai escolher o jogo</span>
+                  <span className="royale-choice-minimal-label">Próximo jogo</span>
                 )}
               </div>
             )}
