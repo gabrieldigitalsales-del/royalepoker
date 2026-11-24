@@ -403,3 +403,5 @@ import "./royale-board-qa-final.css";
 import "./royale-clean-premium.css";
 
 import "./royale-crisp-seat-cards.css";
+
+import "./royale-deck-v4.css";
