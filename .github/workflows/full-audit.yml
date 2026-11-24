@@ -1,0 +1,50 @@
+name: Full Poker Royale Audit
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+jobs:
+  complete-regression:
+    name: All engine, API, security, wallet and UI contract tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: npm ci
+      - name: Compile all client/server code
+        run: npm run build
+      - name: Run EVERY *.test.mjs regression (not only the prior CI subset)
+        run: npm test
+  real-browser:
+    name: Playwright mobile and desktop real page screenshots
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: npm ci
+      - run: npm run build
+      - name: Install isolated Chromium for Playwright
+        run: npx playwright install --with-deps chromium
+      - name: Browser smoke on 360px, 390px and 1366px
+        run: npm run test:browser
+      - name: Save browser screenshots for visual inspection
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: poker-royale-visual-360-390-1366
+          path: artifacts/*.png
+          if-no-files-found: ignore
