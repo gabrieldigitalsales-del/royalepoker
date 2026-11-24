@@ -17,6 +17,7 @@ test("API, WebSocket, carteiras, torneio, recuperação, privacidade e reinício
         PORT: port,
         HOST: "127.0.0.1",
         ADMIN_EMAIL: "admin@example.net",
+        POKER_ROYALE_ADMIN_CODE: "test-audit-admin-unlock-secret",
         DATA_FILE: join(dir, "game.db"),
       },
       stdio: ["ignore", "pipe", "inherit"],
@@ -55,6 +56,9 @@ test("API, WebSocket, carteiras, torneio, recuperação, privacidade e reinício
         email: "bravo@example.net",
         password: "abcdefgh123",
       });
+    await assert.rejects(call("admin", a.token), /Desbloqueie/);
+    await call("adminUnlock", a.token, { password: "test-audit-admin-unlock-secret" });
+    assert.equal((await call("adminAuthStatus", a.token)).unlocked, true);
     ws = new WebSocket(url.replace("http", "ws") + "/live");
     await new Promise((ok, no) => {
       ws.once("open", () => ws.send(a.token));
