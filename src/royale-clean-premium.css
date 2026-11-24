@@ -1,0 +1,218 @@
+/* Poker Royale | Royal Clean Premium 1.0
+ * Consolidated FINAL visual layer. Does not change betting, game state,
+ * card reveal, cash flow, room dimensions, modal behavior, or server data.
+ * Design principle: cards first; quiet surroundings.
+ */
+html body .studio {
+  --rc-ink:#efe9f4;
+  --rc-gold:#d5b77e;
+  background:
+    radial-gradient(ellipse 92% 73% at 50% 49%,#491e58 0%,#33163e 55%,#1d112c 79%,#120e1c 100%)!important;
+  background-image:radial-gradient(ellipse 92% 73% at 50% 49%,#491e58 0%,#33163e 55%,#1d112c 79%,#120e1c 100%)!important;
+  color:var(--rc-ink)!important;
+}
+html body .studio::before {
+  background:linear-gradient(180deg,#0c0a18a0 0%,transparent 18%,transparent 82%,#09091088 100%)!important;
+}
+html body .studio .portrait-table .table-rail {
+  display:block!important;
+  position:absolute!important;
+  inset:19% 4% 12%!important;
+  border:3px solid #a7885b!important;
+  border-radius:50% / 46%!important;
+  background:radial-gradient(ellipse at 49% 44%,#572664 0%,#401b50 64%,#291633 100%)!important;
+  box-shadow:inset 0 0 0 3px #1f182bcc,inset 0 0 0 7px #b9985d32,0 6px 24px #070412a6!important;
+  opacity:1!important;
+  pointer-events:none!important;
+  z-index:0!important;
+}
+html body .studio .portrait-table .table-rail::before,
+html body .studio .portrait-table .table-rail::after {
+  box-shadow:none!important;
+  filter:none!important;
+  opacity:.18!important;
+}
+html body .studio .portrait-table .table-wordmark {
+  opacity:.035!important;
+  pointer-events:none!important;
+}
+/* Low-profile top HUD, without removing any controls. */
+html body .studio .studio-top {
+  height:clamp(42px,6vh,58px)!important;
+  gap:clamp(3px,.5vw,9px)!important;
+  padding:4px clamp(7px,1vw,18px)!important;
+  background:linear-gradient(180deg,#171122ed,#171122c5 76%,transparent)!important;
+  border-bottom:1px solid #d4b67b30!important;
+  box-shadow:none!important;
+}
+html body .studio .studio-top .studio-nav {
+  gap:4px!important;
+}
+html body .studio .studio-top button {
+  min-height:32px!important;
+  padding:5px 9px!important;
+  border-radius:9px!important;
+  box-shadow:none!important;
+  text-shadow:none!important;
+  border:1px solid #a88b654f!important;
+  background:#32213de8!important;
+  font-size:clamp(10px,.84vw,13px)!important;
+}
+html body .studio .studio-title>div:first-child {
+  padding:4px 10px!important;
+  border-radius:10px!important;
+  border:1px solid #c4a57f38!important;
+  background:#24172bbd!important;
+  box-shadow:none!important;
+}
+html body .studio .studio-title h1 {font-size:clamp(11px,1vw,16px)!important;}
+html body .studio .studio-title p {color:#dfd0e6!important;font-size:clamp(9px,.72vw,12px)!important;}
+/* Seats: portrait stays valuable; name + stack should read as one soft capsule. */
+html body .studio .portrait-table .portrait-seat {
+  filter:none!important;
+  opacity:1!important;
+}
+html body .studio .portrait-table .portrait-seat .portrait-avatar {
+  border:2px solid #b89b6c!important;
+  box-shadow:0 3px 10px #05030d9c!important;
+  background:#342139!important;
+}
+html body .studio .portrait-table .portrait-seat.acting .portrait-avatar {
+  border-color:#ebc77e!important;
+  box-shadow:0 0 0 2px #f4dc9566,0 3px 10px #05030d9c!important;
+}
+html body .studio .portrait-table .portrait-seat.winner .portrait-avatar {
+  border-color:#f5d58e!important;
+  box-shadow:0 0 0 2px #f5d58e88,0 3px 11px #090514!important;
+}
+html body .studio .portrait-table .portrait-seat .nameplate,
+html body .studio .portrait-table .portrait-seat .stackplate {
+  background:#21182bec!important;
+  border:1px solid #947d8760!important;
+  text-shadow:none!important;
+  box-shadow:none!important;
+  color:#f8f5fa!important;
+}
+html body .studio .portrait-table .portrait-seat .nameplate {
+  font-weight:750!important;
+  padding:5px 6px 2px!important;
+  border-radius:9px 9px 0 0!important;
+}
+html body .studio .portrait-table .portrait-seat .stackplate {
+  border-top:0!important;
+  border-radius:0 0 9px 9px!important;
+  color:#a7e9ec!important;
+  padding:1px 5px 4px!important;
+}
+html body .studio .portrait-table .portrait-seat .seat-badge,
+html body .studio .portrait-table .portrait-seat .sitout-badge {
+  border-radius:6px!important;
+  box-shadow:none!important;
+  font-size:clamp(8px,.7vw,11px)!important;
+}
+html body .studio .portrait-table .portrait-seat.seat-sitout .portrait-avatar {
+  opacity:.45!important;filter:grayscale(.6)!important;
+}
+/* Quiet pot: the number is readable without becoming a billboard. */
+html body .studio .pot-tag > span,
+html body .studio .pot-tag .royale-pot-value-bubble {
+  min-width:0!important;
+  padding:5px 14px!important;
+  border:1px solid #ceb078!important;
+  border-radius:14px!important;
+  background:#24162eeb!important;
+  box-shadow:0 3px 10px #07041285!important;
+  color:#ffe8b1!important;
+}
+html body .studio .portrait-table .pot-parts button {
+  border-color:#ab92606b!important;
+  background:#21162be6!important;
+  box-shadow:none!important;
+  font-size:clamp(9px,.7vw,12px)!important;
+}
+/* Board labels live in the gap ABOVE each row, not on card faces. */
+html body .studio .portrait-table.royale-multiple-boards .royale-board-cluster {
+  gap:clamp(17px,2.7vh,25px)!important;
+}
+html body .studio .portrait-table.royale-multiple-boards .royale-board-cluster > .extra-runout-boards {
+  gap:clamp(17px,2.7vh,25px)!important;
+}
+html body .studio .portrait-table.royale-multiple-boards .royale-board-cluster .portrait-board > .double-board-first-label,
+html body .studio .portrait-table.royale-multiple-boards .royale-board-cluster .extra-board > small {
+  top:-17px!important;
+  background:#281a33!important;
+  border:1px solid #c8a86c6b!important;
+  color:#ebdbb7!important;
+  box-shadow:none!important;
+  padding:2px 7px!important;
+  font:750 9px/1.1 system-ui,sans-serif!important;
+  letter-spacing:.025em!important;
+}
+html body .studio .portrait-table .board-slot {
+  background:#25192d88!important;
+  border:1px solid #b99f7145!important;
+  box-shadow:none!important;
+}
+html body .studio .portrait-table .card[data-royale-card="face"] {
+  box-shadow:0 2px 6px #06040e88!important;
+  filter:none!important;
+}
+html body .studio .portrait-table :is(.winning-card,.royale-showdown-best-card) .card[data-royale-card="face"] {
+  box-shadow:0 0 0 1.5px #f0cb73,0 3px 8px #0804148e!important;
+}
+/* An action deck is visible, but secondary to the community board. */
+html body .studio .console .panel.actions {
+  background:#1e1528d9!important;
+  border:1px solid #ad956d4f!important;
+  border-radius:13px!important;
+  box-shadow:0 6px 20px #06030e7a!important;
+  padding:6px!important;
+  min-height:0!important;
+}
+html body .studio .console .betbar>.action-choices {gap:7px!important;}
+html body .studio .console .betbar>.action-choices button {
+  min-height:clamp(42px,6.4vh,64px)!important;
+  border-radius:10px!important;
+  border-width:1px!important;
+  box-shadow:0 2px 4px #05030f77!important;
+  text-shadow:none!important;
+  font-size:clamp(11px,1.15vw,18px)!important;
+  letter-spacing:0!important;
+}
+html body .studio .console .betbar>.action-choices button:nth-child(1) {background:#9c3449!important;border-color:#d7818b!important;}
+html body .studio .console .betbar>.action-choices button:nth-child(2) {background:#583477!important;border-color:#976cae!important;}
+html body .studio .console .betbar>.action-choices button:nth-child(3) {background:#bc9350!important;border-color:#e1c383!important;color:#1b1322!important;}
+html body .studio .console .betbar>.action-choices button:nth-child(4) {background:#62377b!important;border-color:#a875bd!important;}
+html body .studio .royale-showdown-results.royale-run-score {
+  border:1px solid #b89f7355!important;
+  background:#1e142be8!important;
+  box-shadow:0 5px 18px #07020f88!important;
+}
+html body .studio .portrait-table .royale-runout-announcement {
+  filter:none!important;box-shadow:none!important;
+}
+/* Dealer Choice stays compact and nearby, but OUTSIDE community card faces. */
+html body .studio .table-stage .dealer-choice-spot.royale-dealer-pot-anchored:has(> .royale-choice-only-button) {
+  top:36%!important;
+  box-shadow:0 2px 8px #05030e8e!important;
+}
+html body .studio .table-stage .dealer-choice-spot.royale-dealer-pot-anchored:has(.royale-choice-announcement) {
+  top:39%!important;
+}
+@media(max-width:800px) {
+  html body .studio .portrait-table .table-rail {inset:19% 2% 13%!important;}
+  html body .studio .studio-top{padding:3px 5px!important;}
+  html body .studio .studio-top button{padding:4px 6px!important;min-height:30px!important;}
+  html body .studio .portrait-table.royale-multiple-boards .royale-board-cluster,
+  html body .studio .portrait-table.royale-multiple-boards .royale-board-cluster > .extra-runout-boards{gap:17px!important;}
+  html body .studio .table-stage .dealer-choice-spot.royale-dealer-pot-anchored:has(> .royale-choice-only-button){top:36%!important;}
+}
+@media(max-height:560px) and (orientation:landscape) {
+  html body .studio .portrait-table .table-rail{inset:18% 2.5% 15%!important;}
+  html body .studio .portrait-table.royale-multiple-boards .royale-board-cluster,
+  html body .studio .portrait-table.royale-multiple-boards .royale-board-cluster > .extra-runout-boards{gap:14px!important;}
+  html body .studio .studio-top{height:39px!important;}
+}
+@media(prefers-reduced-motion:reduce){
+ html body .studio .portrait-table .card {transition:none!important;}
+}
