@@ -1,0 +1,159 @@
+/* Adaptive fan layout — single authority loaded AFTER older board styles.
+   Every front card keeps its rank and only one suit in the uncovered strip.
+   Purely visual: does not modify bets, card order, showdown logic or payout. */
+.studio .portrait-table .royale-opponent-showdown-cards,
+.studio .portrait-table .royale-triple-hero-cards {
+  display:flex!important;
+  align-items:flex-end!important;
+  justify-content:flex-start!important;
+  width:max-content!important;
+  min-width:0!important;
+  overflow:visible!important;
+  padding-inline:8px!important;
+  box-sizing:content-box!important;
+}
+.studio .portrait-table .royale-opponent-showdown-card {
+  position:relative!important;
+  flex:0 0 auto!important;
+  min-width:0!important;
+  margin-left:calc(-1 * var(--fan-overlap, 4px))!important;
+  transform:translateY(var(--fan-lift,0px)) rotate(var(--fan-rotation,0deg))!important;
+  transform-origin:50% 95%!important;
+  isolation:isolate;
+}
+.studio .portrait-table .royale-opponent-showdown-card:first-child,
+.studio .portrait-table .royale-triple-hero-card:first-child {
+  margin-left:0!important;
+}
+.studio .portrait-table .royale-triple-hero-card {
+  position:relative!important;
+  flex:0 0 auto!important;
+  min-width:0!important;
+  margin-left:calc(-1 * var(--fan-overlap, 3px))!important;
+  transform:rotate(var(--fan-angle,0deg))!important;
+  transform-origin:50% 95%!important;
+  isolation:isolate;
+}
+.studio .portrait-table .royale-opponent-showdown-card.royale-showdown-best-card {
+  z-index:2!important;
+  transform:translateY(calc(var(--fan-lift,0px) - 8px)) rotate(var(--fan-rotation,0deg))!important;
+  filter:drop-shadow(0 0 9px #ffcf6b)!important;
+}
+.studio .portrait-table .royale-opponent-showdown-card .card[data-royale-card="face"] {
+  width:clamp(28px,3vw,43px)!important;
+  height:clamp(42px,4.45vw,64px)!important;
+  font-size:clamp(13px,1.35vw,20px)!important;
+}
+.studio .portrait-table .royale-triple-hero-card .card[data-royale-card="face"] {
+  width:clamp(26px,2.75vw,40px)!important;
+  height:clamp(38px,4vw,57px)!important;
+  font-size:clamp(13px,1.2vw,19px)!important;
+}
+/* In a face-up pocket, separate each column by the width of an exposed
+   rank+suit strip. The old fixed value hid the suit at 5–7 cards. */
+.studio .portrait-table .pocket.faceup > span {
+  left:calc((var(--j) - (var(--count) - 1)/2) * var(--fan-step,15px))!important;
+}
+.studio .portrait-table .pocket.faceup .card[data-royale-card="face"] > strong,
+.studio .portrait-table .royale-opponent-showdown-card .card[data-royale-card="face"] > strong,
+.studio .portrait-table .royale-triple-hero-card .card[data-royale-card="face"] > strong {
+  position:absolute!important;
+  inset:5% auto auto 7%!important;
+  font-size:clamp(10px,.94em,19px)!important;
+  line-height:1!important;
+}
+.studio .portrait-table .pocket.faceup .card[data-royale-card="face"] .card-emblem,
+.studio .portrait-table .royale-opponent-showdown-card .card[data-royale-card="face"] .card-emblem,
+.studio .portrait-table .royale-triple-hero-card .card[data-royale-card="face"] .card-emblem {
+  display:block!important;
+  position:absolute!important;
+  inset:35% auto auto 7%!important;
+  width:auto!important;
+  height:auto!important;
+  font-size:clamp(10px,.84em,17px)!important;
+  transform:none!important;
+  opacity:1!important;
+  pointer-events:none!important;
+}
+/* The winner's true five-card combination stays gold during the score
+   presentation; unrelated hole cards retain their normal visual state. */
+.studio .portrait-table.royale-ceremony-showdown .royale-opponent-showdown-card.royale-showdown-best-card .card,
+.studio .portrait-table.royale-ceremony-payout .royale-opponent-showdown-card.royale-showdown-best-card .card {
+  border-color:#f9d483!important;
+  box-shadow:0 0 0 2px #e9b85c,0 0 18px #ffe28fc4,0 4px 12px #0009!important;
+}
+.studio .console .player-hand {
+  display:flex!important;
+  width:min(100%,620px);
+  max-width:100%;
+  margin-inline:auto;
+  gap:clamp(2px,.65vw,7px)!important;
+  justify-content:center!important;
+  align-items:flex-end;
+  flex-wrap:nowrap!important;
+  min-width:0;
+}
+.studio .console .player-hand > .royale-own-card {
+  flex:0 1 auto!important;
+  min-width:0;
+  max-width:clamp(28px,8vw,59px);
+  padding:0!important;
+}
+.studio .console .player-hand > .royale-own-card .card[data-royale-card="face"] {
+  display:block!important;
+  width:100%!important;
+  max-width:59px!important;
+  aspect-ratio:0.72;
+  height:auto!important;
+  min-height:0!important;
+  font-size:clamp(14px,2.5vw,27px)!important;
+}
+/* Public community rows are centered and never acquire overlapping-card
+   positioning. All five board ranks and suits remain visible. */
+.studio .portrait-table.royale-multiple-boards .royale-board-cluster .card[data-royale-card="face"] {
+  transform-origin:50% 50%;
+  overflow:hidden!important;
+}
+@media(max-width:700px){
+  .studio .portrait-table .royale-opponent-showdown-card .card[data-royale-card="face"] {
+    width:clamp(23px,5.9vw,29px)!important;
+    height:clamp(34px,8.7vw,42px)!important;
+    font-size:clamp(11px,2.4vw,15px)!important;
+  }
+  .studio .portrait-table .royale-triple-hero-card .card[data-royale-card="face"] {
+    width:clamp(23px,5.8vw,29px)!important;
+    height:clamp(34px,8.5vw,42px)!important;
+    font-size:clamp(11px,2.4vw,15px)!important;
+  }
+  .studio .portrait-table .royale-opponent-showdown-cards {
+    padding:7px 5px 5px!important;
+  }
+  .studio .portrait-table .royale-triple-hero-cards {
+    max-width:40%!important;
+    padding:0!important;
+  }
+  .studio .console .player-hand > .royale-own-card {
+    max-width:clamp(28px,10vw,44px);
+  }
+}
+@media(max-width:390px) {
+  .studio .portrait-table .royale-opponent-showdown-card .card[data-royale-card="face"],
+  .studio .portrait-table .royale-triple-hero-card .card[data-royale-card="face"] {
+    width:24px!important;
+    height:35px!important;
+  }
+  .studio .portrait-table .royale-opponent-showdown-card .card[data-royale-card="face"] > strong,
+  .studio .portrait-table .royale-triple-hero-card .card[data-royale-card="face"] > strong {
+    font-size:11px!important;
+  }
+  .studio .portrait-table .royale-opponent-showdown-card .card[data-royale-card="face"] .card-emblem,
+  .studio .portrait-table .royale-triple-hero-card .card[data-royale-card="face"] .card-emblem {
+    top:36%!important;
+    font-size:10px!important;
+  }
+}
+/* Cosmetic effects only; reduced motion never reveals winners early. */
+@media(prefers-reduced-motion:reduce){
+  .studio .portrait-table .royale-opponent-showdown-card,
+  .studio .portrait-table .royale-triple-hero-card{transition:none!important;}
+}
