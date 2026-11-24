@@ -160,3 +160,79 @@ html body .royale-showdown-besthand .card[data-royale-card="face"] {
 @media(prefers-reduced-motion:reduce){
   html body .card[data-royale-card]{transition:none!important;}
 }
+
+
+/* Royale deck v2: richer physical card feel without changing hitboxes,
+   dimensions, dealing transforms, or the single suit per card. */
+html body .card[data-royale-card="face"] {
+  --royale-card-gold:#d5b879;
+  border-color:#ded6c7!important;
+  border-width:1.5px!important;
+  background:linear-gradient(154deg,#fffdfa 0%,#fff 42%,#f7f3e9 100%)!important;
+  box-shadow:inset 0 1px 0 #fff,inset 0 -1px 0 #dbc89e55,0 3px 7px #03010a80!important;
+  letter-spacing:-.025em;
+  -webkit-font-smoothing:antialiased;
+}
+html body .card[data-royale-card="face"]::before {
+  inset:2px!important;
+  opacity:.9!important;
+  border-color:#c5a76a5c!important;
+  border-width:1px!important;
+  pointer-events:none;
+}
+html body .card[data-royale-card="face"] > strong {
+  color:var(--royale-ink)!important;
+  font-family:"Arial Narrow","Roboto Condensed",ui-sans-serif,system-ui,sans-serif!important;
+  font-stretch:condensed;
+  font-weight:950!important;
+  font-size:clamp(11px,1.1em,32px)!important;
+  letter-spacing:-.07em!important;
+  line-height:1!important;
+  font-feature-settings:"tnum" 1;
+  z-index:3!important;
+}
+html body .card[data-royale-card="face"] .card-emblem {
+  text-shadow:0 1px 0 #fff7,0 2px 2px #00000010!important;
+  filter:drop-shadow(0 1px 0 #00000012);
+  font-family:Georgia,"Times New Roman",serif;
+  font-weight:800;
+  z-index:2!important;
+  line-height:1!important;
+}
+html body .card[data-royale-card="face"][data-rank="10"] > strong {
+  letter-spacing:-.12em!important;
+  font-size:clamp(10px,1em,29px)!important;
+}
+/* Compact hand panels: readable rank and one distinct suit without overflow */
+.studio .portrait-table.royale-multiple-boards .card[data-royale-card="face"] > strong,
+.studio.royale-triple-run-active .portrait-table .card[data-royale-card="face"] > strong {
+  font-size:clamp(10px,.91em,17px)!important;
+  left:2px!important;
+  top:1px!important;
+}
+.studio .portrait-table.royale-multiple-boards .card[data-royale-card="face"] .card-emblem,
+.studio.royale-triple-run-active .portrait-table .card[data-royale-card="face"] .card-emblem {
+  display:block!important;
+  position:absolute!important;
+  inset:auto 3px 3px auto!important;
+  font-size:clamp(10px,.92em,17px)!important;
+}
+html body .card[data-royale-card="back"] {
+  border:2px solid #f0cc8a!important;
+  box-shadow:inset 0 0 0 1px #ffffff75,0 3px 8px #0008,0 0 10px #c28d4522!important;
+}
+@media(max-width:520px){
+  html body .card[data-royale-card="face"] {
+    padding:2px!important;
+    border-width:1px!important;
+    border-radius:5px!important;
+  }
+  .studio .portrait-table.royale-multiple-boards .card[data-royale-card="face"] > strong {
+    font-size:clamp(10px,.87em,15px)!important;
+  }
+  .studio .portrait-table.royale-multiple-boards .card[data-royale-card="face"] .card-emblem {
+    font-size:clamp(10px,.84em,14px)!important;
+    right:2px!important;
+    bottom:2px!important;
+  }
+}
