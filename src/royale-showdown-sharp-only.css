@@ -1,0 +1,79 @@
+/* Poker Royale — showdown-only sharp card rendering.
+ * Keep all normal table / hero / community card styles unchanged.
+ * A filter on the whole showdown fan rasterizes its SVG descendants as
+ * a flattened texture; percent translations + rotations soften rank/suits.
+ * Shadows belong to individual cards, not to the SVG-containing parent.
+ */
+html body .studio .portrait-table .royale-opponent-showdown {
+  filter:none!important;
+  backdrop-filter:none!important;
+  opacity:1!important;
+  mix-blend-mode:normal!important;
+  isolation:isolate!important;
+}
+html body .studio .portrait-table .royale-opponent-showdown-cards {
+  filter:none!important;
+  backdrop-filter:none!important;
+  opacity:1!important;
+  mix-blend-mode:normal!important;
+  overflow:visible!important;
+}
+html body .studio .portrait-table .royale-opponent-showdown-card,
+html body .studio .portrait-table .royale-opponent-showdown-card.royale-showdown-best-card {
+  filter:none!important;
+  backdrop-filter:none!important;
+  transform:none!important;
+  rotate:0deg!important;
+  scale:1!important;
+  opacity:1!important;
+  isolation:auto!important;
+  will-change:auto!important;
+}
+html body .studio .portrait-table .royale-opponent-showdown-card .card[data-royale-card="face"] {
+  filter:none!important;
+  backdrop-filter:none!important;
+  transform:none!important;
+  rotate:0deg!important;
+  scale:1!important;
+  opacity:1!important;
+  background:#fffefa!important;
+  background-image:none!important;
+  box-shadow:0 2px 5px #07040d88!important;
+  will-change:auto!important;
+}
+html body .studio .portrait-table .royale-opponent-showdown-card .card[data-royale-card="face"] > svg.royale-card-face-art {
+  transform:none!important;
+  filter:none!important;
+  opacity:1!important;
+  shape-rendering:geometricPrecision;
+  text-rendering:geometricPrecision;
+}
+html body .studio .portrait-table .royale-opponent-showdown-card.royale-showdown-best-card .card[data-royale-card="face"] {
+  border-color:#e7bc66!important;
+  box-shadow:0 0 0 2px #ecc77c,0 3px 6px #07040db0!important;
+}
+/* Selectable cards shown during three-run showdown use the same crisp
+ * flat geometry, but no ordinary hand/board rules are touched. */
+html body .studio .portrait-table .royale-triple-hero-cards,
+html body .studio .portrait-table .royale-triple-hero-card {
+  filter:none!important;
+  backdrop-filter:none!important;
+}
+html body .studio .portrait-table .royale-triple-hero-card {
+  transform:none!important;
+  rotate:0deg!important;
+  scale:1!important;
+  will-change:auto!important;
+}
+html body .studio .portrait-table .royale-triple-hero-card .card[data-royale-card="face"] {
+  filter:none!important;
+  transform:none!important;
+  rotate:0deg!important;
+  scale:1!important;
+  opacity:1!important;
+  background:#fffefa!important;
+}
+@media(prefers-reduced-motion:reduce){
+  html body .studio .portrait-table .royale-opponent-showdown-card,
+  html body .studio .portrait-table .royale-triple-hero-card {animation:none!important;}
+}
