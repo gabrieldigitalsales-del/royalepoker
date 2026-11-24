@@ -5,7 +5,7 @@ import { Grant } from "./PlayerIdentity";
 import { betPresets } from "./bet-presets.mjs";
 import { PrivateNote, downloadText } from "./PrivateNote";
 import { ChipAmount, ChipReceipt } from "./ChipMotion";
-import { DealerChoice } from "./DealerChoice";
+import { DealerChoice, DealerModeAnnouncement } from "./DealerChoice";
 import React, { useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import {
@@ -1024,10 +1024,10 @@ export default function Table() {
                   <button type="button" className="royale-choice-only-button" disabled={busy} onClick={openDealerChoice}>Escolher jogo</button>
                 ) : r.nextChoice && serverNow < r.nextChoice.openedAt ? (
                   <span role="status" className="royale-choice-minimal-label">Próxima mão</span>
+                ) : r.nextChoice?.confirmed ? (
+                  <DealerModeAnnouncement mode={home.catalog.find((game) => game.id === r.nextChoice.id)} />
                 ) : r.nextChoice ? (
-                  <span role="status" className="royale-choice-minimal-label">
-                    {home.catalog.find((game) => game.id === r.nextChoice.id)?.name ?? "Próximo jogo"}
-                  </span>
+                  <span role="status" className="royale-choice-minimal-label">Próximo jogo</span>
                 ) : (
                   <span className="royale-choice-minimal-label">Próximo jogo</span>
                 )}
@@ -1725,6 +1725,8 @@ export default function Table() {
               close={closeDealerChoice}
               current={r.nextChoice?.id}
               confirm={(choice) => run("chooseNext", { choice })}
+              extraUsed={!!r.nextChoice?.extraTimeUsed}
+              extend={() => run("choiceExtend")}
             />
           )}
           {chipsOpen && (
