@@ -856,7 +856,7 @@ async function command(d, u, b) {
       check(hand && hand.players.some((p) => p.id === u.id), "A seleção de cartas só está disponível durante a mão ou sua revisão.");
       check(b.handId === hand.id, "Esta seleção pertence a outra mão.");
       const index = hand.players.findIndex((p) => p.id === u.id);
-      const count = hand.frames.at(-1).hole[index]?.length ?? 0;
+      const count = Math.max(0, ...hand.frames.map(frame => frame.hole?.[index]?.length ?? 0));
       check(Array.isArray(b.indices) && b.indices.every((i) => Number.isInteger(i) && i >= 0 && i < count), "Seleção de cartas inválida.");
       (hand.showCards ??= {})[u.id] = [...new Set(b.indices)];
       break;
