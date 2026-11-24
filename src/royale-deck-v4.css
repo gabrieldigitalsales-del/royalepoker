@@ -1,0 +1,118 @@
+/* Royal Deck V4 — clean, native vector geometry, last paint authority.
+ * The old art used a 43x43 suit inside a 64px card, overlapping rank.
+ * This version uses the unified paths in ui.tsx.
+ * No inherited font shadows, blur, pseudo-elements or duplicate symbols.
+ */
+html body .studio .card[data-royale-card="face"] {
+  position:relative!important;
+  overflow:hidden!important;
+  isolation:isolate!important;
+  padding:0!important;
+  border:1px solid #d9c7ab!important;
+  border-radius:7px!important;
+  background:#fffefa!important;
+  background-image:none!important;
+  box-shadow:0 2px 5px #0c07187a!important;
+  opacity:1!important;
+  filter:none!important;
+  text-shadow:none!important;
+  mix-blend-mode:normal!important;
+}
+html body .studio .card[data-royale-card="face"]::before,
+html body .studio .card[data-royale-card="face"]::after {content:none!important;display:none!important;}
+html body .studio .card[data-royale-card="face"] > strong,
+html body .studio .card[data-royale-card="face"] > .card-emblem {
+  display:none!important;
+}
+html body .studio .card[data-royale-card="face"] > svg.royale-card-face-art {
+  display:block!important;
+  position:absolute!important;
+  inset:0!important;
+  width:100%!important;
+  height:100%!important;
+  max-width:100%!important;
+  max-height:100%!important;
+  opacity:1!important;
+  visibility:visible!important;
+  overflow:hidden!important;
+  padding:0!important;
+  margin:0!important;
+  transform:none!important;
+  scale:1!important;
+  filter:none!important;
+  text-shadow:none!important;
+  shape-rendering:geometricPrecision;
+  text-rendering:geometricPrecision;
+  pointer-events:none!important;
+}
+html body .studio .card[data-royale-card="face"] > svg.royale-card-face-art .royale-card-vector-rank {
+  display:block!important;
+  fill:var(--royale-ink)!important;
+  stroke:none!important;
+  paint-order:normal!important;
+  font-family:Arial,Helvetica,sans-serif!important;
+  font-size:28px!important;
+  font-weight:900!important;
+  letter-spacing:-1.2px!important;
+  text-shadow:none!important;
+  filter:none!important;
+  opacity:1!important;
+}
+html body .studio .card[data-royale-card="face"][data-rank="10"] > svg.royale-card-face-art .royale-card-vector-rank {
+  font-size:24px!important;
+  letter-spacing:-2.5px!important;
+}
+html body .studio .card[data-royale-card="face"] > svg.royale-card-face-art .royale-card-vector-suit {
+  display:inline!important;
+  fill:var(--royale-ink)!important;
+  stroke:none!important;
+  opacity:1!important;
+  filter:none!important;
+  transform-box:view-box;
+}
+html body .studio .card[data-royale-card="face"] > svg.royale-card-face-art .royale-card-vector-suit :is(path,circle) {
+  fill:var(--royale-ink)!important;
+  stroke:none!important;
+}
+html body .studio .card[data-royale-card="face"] > svg.royale-card-face-art .royale-card-crest {
+  opacity:.09!important;
+  fill:#9f854a!important;
+  stroke:none!important;
+}
+html body .studio .card[data-royale-card="face"] > svg.royale-card-face-art .royale-card-crest path {
+  fill:#9f854a!important;
+  stroke:none!important;
+}
+html body .studio .card[data-royale-card="face"][data-suit="s"]{--royale-ink:#23182f;}
+html body .studio .card[data-royale-card="face"][data-suit="h"]{--royale-ink:#d42852;}
+html body .studio .card[data-royale-card="face"][data-suit="d"]{--royale-ink:#1466c7;}
+html body .studio .card[data-royale-card="face"][data-suit="c"]{--royale-ink:#087957;}
+html body .studio .portrait-table .pocket:has(.card[data-royale-card="face"]) {
+  filter:none!important;
+  mix-blend-mode:normal!important;
+}
+html body .studio .portrait-table .pocket:not(.royale-pocket-in-flight):has(.card[data-royale-card="face"]) > span {
+  opacity:1!important;
+  filter:none!important;
+  rotate:0deg!important;
+  scale:1!important;
+}
+html body .studio .portrait-table .royale-opponent-showdown-card,
+html body .studio .portrait-table .royale-triple-hero-card {
+  rotate:0deg!important;
+  filter:none!important;
+  scale:1!important;
+  transform:none!important;
+}
+html body .studio .portrait-table :is(.winning-card,.royale-showdown-best-card) > .card[data-royale-card="face"],
+html body .studio .portrait-table .royale-opponent-showdown-card.royale-showdown-best-card > .card[data-royale-card="face"]{
+  border:2px solid #dcae52!important;
+  box-shadow:0 0 0 1px #fae6b5,0 3px 7px #0905128c!important;
+}
+html body .studio button.card[data-royale-card="face"][aria-pressed="true"] {
+  outline:2px solid #a56dd0!important;
+  outline-offset:1px!important;
+}
+@media(max-width:700px){
+  html body .studio .card[data-royale-card="face"]{border-radius:5px!important;}
+}
