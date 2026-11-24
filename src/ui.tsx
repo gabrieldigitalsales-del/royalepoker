@@ -62,7 +62,17 @@ export function Card({ c, selected = false, onClick }: any) {
             focusable="false"
           >
             <text className="royale-card-vector-rank" x="8" y="31">{value}</text>
-            <text className="royale-card-vector-suit" x="9" y="57">{suits[c[1]]}</text>
+            <svg className="royale-card-vector-suit" x="7" y="38" width="28" height="28" viewBox="0 0 24 24" overflow="visible">
+              {c[1] === "h" ? (
+                <path d="M12 21.1 3.6 12.5C-1 7.5 3.5 1.7 8.4 3.4c1.6.5 2.8 1.7 3.6 3.1.8-1.4 2-2.6 3.6-3.1 4.9-1.7 9.4 4.1 4.8 9.1Z" />
+              ) : c[1] === "d" ? (
+                <path d="M12 1.1 21 12 12 22.9 3 12Z" />
+              ) : c[1] === "c" ? (
+                <g><circle cx="12" cy="7.4" r="5.1"/><circle cx="7.2" cy="13.4" r="5.1"/><circle cx="16.8" cy="13.4" r="5.1"/><path d="M10.2 13h3.6l-.4 6h3.2v2.3H7.4V19h3.2Z"/></g>
+              ) : (
+                <path d="M12 1.4C9.7 5.5 3 9.7 2.3 14.3c-.5 3.3 1.7 5.7 4.6 5.7 2 0 3.5-1.2 4.2-2.7l-.4 2.7H7.8v2h8.4v-2h-2.9l-.4-2.7c.7 1.5 2.2 2.7 4.2 2.7 2.9 0 5.1-2.4 4.6-5.7C21 9.7 14.3 5.5 12 1.4Z" />
+              )}
+            </svg>
           </svg>
         </>
       ) : (
