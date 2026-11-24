@@ -1,7 +1,9 @@
-import test from "node:test";
+import test, { after } from "node:test";
 import assert from "node:assert/strict";
 import { makeRoom, sit, MAX_TABLE_PLAYERS, availableSeats } from "../server/game.mjs";
 import { catalog } from "../server/catalog.mjs";
+import { stop } from "../server/worker.mjs";
+after(stop);
 import { readFileSync } from "node:fs";
 
 const read=(path)=>readFileSync(new URL(path,import.meta.url),"utf8");
