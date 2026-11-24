@@ -1020,12 +1020,12 @@ export default function Table() {
                     ? r.nextChoice.remainingMs
                     : r.nextChoice.at - serverNow) / 5000 * 100))}%`
                   : "100%"} as React.CSSProperties}>
-                {r.nextChoice?.selecting && r.nextChoice.dealer === me.id ? (
+                {r.nextChoice?.confirmed ? (
+                  <DealerModeAnnouncement mode={home.catalog.find((game) => game.id === r.nextChoice.id)} />
+                ) : r.nextChoice?.selecting && r.nextChoice.dealer === me.id ? (
                   <button type="button" className="royale-choice-only-button" disabled={busy} onClick={openDealerChoice}>Escolher jogo</button>
                 ) : r.nextChoice && serverNow < r.nextChoice.openedAt ? (
                   <span role="status" className="royale-choice-minimal-label">Próxima mão</span>
-                ) : r.nextChoice?.confirmed ? (
-                  <DealerModeAnnouncement mode={home.catalog.find((game) => game.id === r.nextChoice.id)} />
                 ) : r.nextChoice ? (
                   <span role="status" className="royale-choice-minimal-label">Próximo jogo</span>
                 ) : (
