@@ -61,6 +61,11 @@ export function Card({ c, selected = false, onClick }: any) {
             aria-hidden="true"
             focusable="false"
           >
+            <svg className="royale-card-crest" x="35" y="70" width="23" height="16" viewBox="290 0 240 230" preserveAspectRatio="xMidYMid meet">
+              <path d="M303 102 340 32 391 77 410 14 429 77 480 32 517 102 500 144 320 144Z" />
+              <path d="M410 89 C376 62 350 101 376 125 L410 156 444 125 C470 101 444 62 410 89Z" />
+              <path d="M303 133 410 165 517 133 506 181 410 217 314 181Z" />
+            </svg>
             <text className="royale-card-vector-rank" x="8" y="31">{value}</text>
             <svg className="royale-card-vector-suit" x="9" y="37" width="43" height="43" viewBox="0 0 24 24" overflow="visible">
               {c[1] === "h" ? (
