@@ -317,14 +317,18 @@ test("API, WebSocket, carteiras, torneio, recuperação, privacidade e reinício
       action: { type: "pass" },
     });
     cash = await call("room", b.token, { room: cashRoom });
-    const finalCash = cash.lastHand.frames[0];
+    // After leave-after-hand, departed players have no spectator access to
+    // restricted private frames. The still-seated opponent can inspect them.
+    const completedCash = await call("room", c.token, { room: cashRoom });
+    const finalCash = completedCash.lastHand.frames[0];
     assert.equal(finalCash.rake, 6);
     assert.equal(finalCash.grossPot, 200);
     assert.equal(
       finalCash.stacks.reduce((total, amount) => total + amount, 0),
       194,
     );
-    assert.equal(await wallet(a.token), adminBeforeRake + 6);
+    // Rake belongs to the central club ledger, never the admin's personal wallet.
+    assert.equal(await wallet(a.token), adminBeforeRake);
     assert.equal(
       await wallet(b.token),
       guestWallet -
@@ -336,11 +340,13 @@ test("API, WebSocket, carteiras, torneio, recuperação, privacidade e reinício
     assert.equal(cash.joined, false);
     const adminCash = await call("admin", a.token);
     assert.equal(adminCash.clubChips, 350);
-    assert.equal(adminCash.rakeEarned, 6);
+    assert.equal(adminCash.rakeEarned, 0);
+    const globalRake = await call("globalRake", a.token);
+    assert.ok(globalRake.collected >= 6, "central rake ledger records settlement");
     assert.equal(adminCash.rakeHands[0].distributed, 194);
     const ledger = await call("walletHistory", a.token);
-    assert.equal(ledger.entries[0].amount, 6);
-    assert.equal(ledger.entries[0].balance, adminBeforeRake + 6);
+    assert.ok(!ledger.entries.some(entry => entry.action === "Rake do agente"),
+      "rake must not create a personal payout to the admin");
     await assert.rejects(call("buyShop", b.token, { item: "phoenix" }));
     await call("feedback", b.token, { text: "Teste do suporte do clube" });
     assert.ok(
