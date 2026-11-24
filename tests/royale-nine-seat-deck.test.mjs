@@ -53,7 +53,7 @@ test("Royal deck keeps one suit and enhanced readable typography",()=>{
  const face=cards.slice(cards.indexOf('{c ? ('),cards.indexOf(') : (',cards.indexOf('{c ? (')));
  assert.equal((face.match(/card-emblem/g)||[]).length,1);
  assert.doesNotMatch(face,/<i>\{suits\[c\[1\]\]\}<\/i>/);
- assert.match(css,/Royal deck v2/);
+ assert.match(css,/Royale deck v2/);
  assert.match(css,/data-rank="10"/);
  assert.match(css,/royale-multiple-boards/);
 });
