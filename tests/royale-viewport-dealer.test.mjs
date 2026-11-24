@@ -9,7 +9,9 @@ test('dealer receives an authoritative clock hold and a resume action',()=>{
  assert.match(server,/case "choiceHold"/);
  assert.match(server,/case "choiceResume"/);
  assert.match(server,/!room\.nextChoice\.heldAt && room\.nextChoice\.at <= now/);
- assert.match(server,/r\.nextChoice\?\.heldAt \? now \+ r\.nextChoice\.remainingMs : at/);
+ assert.match(server,/holdDealerChoice\(r\.nextChoice\)/);
+ assert.match(server,/resumeDealerChoice\(r\.nextChoice/);
+ assert.match(server,/r\.nextChoice\.id = b\.choice/);
 });
 test('the UI pauses on opening and keeps the previous selection when closed',()=>{
  assert.match(ui,/await api\("choiceHold"/);
