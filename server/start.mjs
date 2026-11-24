@@ -307,6 +307,10 @@ async function command(d, u, b) {
         "Código inválido.",
       );
       account.hash = hashed(z.string().min(8).max(128).parse(b.password));
+      // Password recovery must revoke *all* old sessions. Otherwise a
+      // stolen token still controls the wallet after the password is reset.
+      for (const [key, session] of Object.entries(d.sessions))
+        if (session.user === account.id) delete d.sessions[key];
       const recovery = token();
       account.recovery = digest(recovery);
       return { ...signed(d, account), recovery };
