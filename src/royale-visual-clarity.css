@@ -139,3 +139,65 @@ html body .studio .portrait-table .portrait-seat .pocket.faceup {
     transform:translateX(-50%) scale(.72)!important;
   }
 }
+
+/* Revealed opponents' cards and own cards share an opaque rendering path.
+   Previously only .pocket.faceup received the fix, while revealed opponent
+   pockets retained the small back-card presentation. :has() tests DOM cards
+   already rendered by the game; it cannot reveal concealed server cards. */
+html body .studio .portrait-table .portrait-seat .pocket:has(.card[data-royale-card="face"]) {
+  opacity:1!important;
+  visibility:visible!important;
+  filter:none!important;
+  mix-blend-mode:normal!important;
+  isolation:isolate!important;
+  z-index:25!important;
+}
+html body .studio .portrait-table .portrait-seat .pocket:has(.card[data-royale-card="face"]) > span,
+html body .studio .portrait-table .portrait-seat .pocket:has(.card[data-royale-card="face"]) .card[data-royale-card="face"] {
+  opacity:1!important;
+  visibility:visible!important;
+  filter:none!important;
+  mix-blend-mode:normal!important;
+  backface-visibility:visible!important;
+}
+html body .studio .portrait-table .portrait-seat .pocket:has(.card[data-royale-card="face"]) .card[data-royale-card="face"] {
+  width:clamp(31px,4.1vw,45px)!important;
+  height:clamp(45px,5.8vw,65px)!important;
+  background:#fffefa!important;
+  background-image:none!important;
+  border:1px solid #e0d5c1!important;
+  box-shadow:0 2px 0 #c6bca5,0 4px 9px #0704109e!important;
+}
+html body .studio .portrait-table .portrait-seat .pocket:has(.card[data-royale-card="face"]) .card[data-royale-card="face"] > svg.royale-card-face-art {
+  opacity:1!important;
+  visibility:visible!important;
+  filter:none!important;
+}
+/* Make sure revealed opponents have usable room above avatar; concealed
+   back-of-card fans keep their existing miniature placement. */
+html body .studio .portrait-table .portrait-seat .pocket:not(.faceup):has(.card[data-royale-card="face"]) {
+  top:-23%!important;
+  bottom:auto!important;
+  left:50%!important;
+  right:auto!important;
+  transform:translateX(-50%) scale(.78)!important;
+  transform-origin:center bottom!important;
+}
+html body .studio .portrait-table .portrait-seat .pocket:not(.faceup):has(.card[data-royale-card="face"]) > span {
+  left:calc((var(--j) - (var(--count) - 1)/2) * var(--fan-step,15px))!important;
+}
+@media(max-width:700px) {
+  html body .studio .portrait-table .portrait-seat .pocket:has(.card[data-royale-card="face"]) .card[data-royale-card="face"] {
+    width:clamp(28px,7vw,36px)!important;
+    height:clamp(41px,10vw,52px)!important;
+  }
+  html body .studio .portrait-table .portrait-seat .pocket:not(.faceup):has(.card[data-royale-card="face"]) {
+    top:-26%!important;
+    transform:translateX(-50%) scale(.73)!important;
+  }
+}
+/* During pre-deal all-in, the source pocket intentionally dims while
+   its cards animate centrally. Do not force it visible prematurely. */
+html body .studio .portrait-table .portrait-seat .pocket.royale-pocket-in-flight {
+  opacity:.08!important;
+}
