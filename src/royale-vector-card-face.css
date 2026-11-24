@@ -100,3 +100,39 @@ html body .card[data-royale-card="face"][data-rank="10"] > svg.royale-card-face-
   border-color:#f5cf83!important;
   box-shadow:0 0 0 2px #e8ba64,0 0 14px #f5ca87ba!important;
 }
+
+/* Royal Deck v3 — exact SVG geometry instead of OS-dependent suit fonts.
+   One bold symbol per card; fixed ratio on small and large screens. */
+html body .card[data-royale-card="face"] > svg.royale-card-face-art .royale-card-vector-suit {
+  display:block!important;
+  fill:var(--royale-ink)!important;
+  stroke:none!important;
+  opacity:1!important;
+  filter:none!important;
+  overflow:visible!important;
+}
+html body .card[data-royale-card="face"] > svg.royale-card-face-art .royale-card-vector-suit :is(path,circle) {
+  fill:var(--royale-ink)!important;
+  stroke:none!important;
+}
+html body .card[data-royale-card="face"] > svg.royale-card-face-art .royale-card-vector-rank {
+  font-family:Arial,Helvetica,sans-serif!important;
+  font-weight:900!important;
+  font-size:27px!important;
+  letter-spacing:-1.5px!important;
+}
+html body .card[data-royale-card="face"][data-rank="10"] > svg.royale-card-face-art .royale-card-vector-rank {
+  font-size:21px!important;
+  letter-spacing:-2px!important;
+}
+/* Card state is semantic: only actual winning combinations receive gold.
+   Never recolor entire unselected board based on proximity. */
+html body .studio .portrait-table :is(.winning-card,.royale-showdown-best-card,.royale-opponent-showdown-win) .card[data-royale-card="face"] {
+  border-color:#f6c35e!important;
+  box-shadow:0 0 0 2px #e9a930,0 0 16px #ffd67ba8,0 5px 12px #0009!important;
+}
+@media(prefers-reduced-motion:reduce) {
+  html body .studio .portrait-table :is(.winning-card,.royale-showdown-best-card) .card[data-royale-card="face"] {
+    animation:none!important;
+  }
+}
