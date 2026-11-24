@@ -56,7 +56,7 @@ async function openRoom(token, viewport, label, roomId, expectedCards=2) {
       const rankBox=rank?.getBoundingClientRect();
       const suitBox=suit?.getBoundingClientRect();
       const display=svg && getComputedStyle(svg).display;
-      return {rank:rank?.textContent,suit:suit?.textContent,
+      return {rank:rank?.textContent,suit:card.getAttribute("data-suit"),suitVector:!!suit?.querySelector("path,circle"),
         width:cardBox.width,height:cardBox.height,display,
         rankInside:!!rankBox&&rankBox.width>0&&rankBox.left>=cardBox.left-2&&rankBox.right<=cardBox.right+2
           &&rankBox.top>=cardBox.top-2&&rankBox.bottom<=cardBox.bottom+2,
@@ -67,7 +67,8 @@ async function openRoom(token, viewport, label, roomId, expectedCards=2) {
     }));
   for(const card of cardInfo) {
     assert.match(card.rank,/^(?:[2-9]|10|[AJQK])$/,JSON.stringify(card));
-    assert.match(card.suit,/^[♠♥♦♣]$/,JSON.stringify(card));
+    assert.match(card.suit,/^[shdc]$/,JSON.stringify(card));
+    assert.ok(card.suitVector,label+" SVG suit has no visible vector geometry: "+JSON.stringify(card));
     assert.ok(card.width >= 28 && card.height >= 38,label+" card must not collapse: "+JSON.stringify(card));
     assert.equal(card.display,"block",label+" SVG face displayed");
     assert.ok(card.rankInside,label+" rank not clipped: "+JSON.stringify(card));
