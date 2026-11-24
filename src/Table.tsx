@@ -972,11 +972,13 @@ export default function Table() {
             <div className="host-controls" aria-label="Controles do dono">
               {r.paused || (!r.count && !r.choiceStarted) ? (
                 <button
-                  disabled={busy || !!r.live || eligible.length < 2}
+                  disabled={busy || !!r.live || eligible.length < 2 || serverNow < (r.reviewUntil ?? 0)}
                   onClick={() => run("deal")}
                 >
                   <Play size={16} />{" "}
-                  {r.paused ? "Retomar mesa" : "Iniciar mesa"}
+                  {serverNow < (r.reviewUntil ?? 0)
+                    ? `Analisando mão · ${Math.ceil(((r.reviewUntil ?? 0) - serverNow)/1000)}s`
+                    : r.paused ? "Retomar mesa" : "Iniciar mesa"}
                 </button>
               ) : (
                 <button disabled={busy} onClick={() => run("pauseTable")}>
