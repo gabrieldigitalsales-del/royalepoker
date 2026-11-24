@@ -6,7 +6,15 @@ const source = readFileSync(new URL('../src/PortraitBoard.tsx', import.meta.url)
 const css = readFileSync(new URL('../src/poker-royale-board-system.css', import.meta.url), 'utf8');
 
 test('one authoritative multiple board stylesheet loaded last', () => {
-  assert.match(main,/import "\.\/poker-royale-board-system\.css";\s*import "\.\/poker-royale-photo-fix\.css";\s*$/);
+  // Older layout contract assumed two imports were last. The current
+  // layout authority is the final multi-board stylesheet; subsequent imports
+  // own card artwork, not community-board coordinates.
+  const boardAuthority = main.indexOf('import "./royale-double-board-final.css";');
+  assert.ok(boardAuthority > main.indexOf('import "./poker-royale-board-system.css";'));
+  assert.ok(boardAuthority > main.indexOf('import "./poker-royale-mobile-orientation.css";'));
+  const finalLayout = readFileSync(new URL('../src/royale-double-board-final.css',import.meta.url),'utf8');
+  assert.match(finalLayout,/SINGLE LAYOUT AUTHORITY/);
+  assert.match(finalLayout,/royale-multiple-boards/);
   for (const obsolete of ['multi-board-layout', 'centered-boards', 'visible-boards', 'runout-final', 'board-fixes']) {
     assert.doesNotMatch(main, new RegExp('import.*poker-royale-' + obsolete + '\\.css'));
   }
