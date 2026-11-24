@@ -401,3 +401,5 @@ import "./royale-dealer-mode-announcement.css";
 import "./royale-board-qa-final.css";
 
 import "./royale-clean-premium.css";
+
+import "./royale-crisp-seat-cards.css";
