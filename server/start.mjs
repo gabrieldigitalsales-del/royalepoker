@@ -452,6 +452,7 @@ async function command(d, u, b) {
       const onTable =
         seat &&
         !r.hand &&
+        !pendingPrizeHand(d, r) &&
         !r.closed &&
         !r.tour &&
         catalog[r.game].family !== "Chinês";
@@ -640,7 +641,7 @@ async function command(d, u, b) {
       );
       if (b.cmd === "autoRefill") seat.autoRefill = seat.autoRefill ? 0 : r.buy;
       else {
-        check(!r.hand, "Aguarde o intervalo.");
+        check(!r.hand && !pendingPrizeHand(d, r), "Aguarde a premiação antes de repor as fichas.");
         check(
           b.expectedStack == null || b.expectedStack === seat.stack,
           "O saldo do jogador na mesa mudou. Confira o valor e tente novamente.",
@@ -769,8 +770,8 @@ async function command(d, u, b) {
     case "seat": {
       authorizeRoom(r, u);
       check(
-        !r.hand && !r.tour,
-        "Mude de assento no intervalo de uma mesa livre.",
+        !r.hand && !r.tour && !pendingPrizeHand(d, r),
+        "Mude de assento após a premiação e no intervalo de uma mesa livre.",
       );
       const mine = r.seats.findIndex((p) => p.id === u.id);
       const at = z
@@ -790,7 +791,7 @@ async function command(d, u, b) {
     }
     case "away":
       authorizeRoom(r, u);
-      check(!r.tour && !r.hand, "Aguarde o intervalo.");
+      check(!r.tour && !r.hand && !pendingPrizeHand(d, r), "Aguarde a premiação para alterar o assento.");
       {
         const s = r.seats.find((s) => s.id === u.id);
         check(s, "Sente-se primeiro.");
@@ -833,7 +834,7 @@ async function command(d, u, b) {
           : r.owner === u.id,
         "Somente o dono pode iniciar ou retomar a mesa.",
       );
-      check(!r.hand && !r.closed && !r.roundDone, "Aguarde o intervalo.");
+      check(!r.hand && !r.closed && !r.roundDone && Date.now() >= (r.reviewUntil ?? 0), "Aguarde a revisão da mão e a premiação antes de iniciar a próxima.");
       if (r.game === "choice") {
         const resuming = !!r.paused;
         r.paused = false;
@@ -1579,11 +1580,11 @@ setInterval(() => {
         pendingCashouts.add(room.id);
     }
     for (const room of Object.values(store.value.rooms)) {
-      if (room.preStraddle && !room.hand && !room.paused && !room.closed) {
+      if (room.preStraddle && !room.hand && !room.paused && !room.closed && now >= (room.reviewUntil ?? 0)) {
         if (room.preStraddle.resolved || room.preStraddle.expiresAt <= now) due.add(room.id);
         continue;
       }
-      if (room.preHandStarted && !room.hand && !room.paused && !room.closed) {
+      if (room.preHandStarted && !room.hand && !room.paused && !room.closed && now >= (room.reviewUntil ?? 0)) {
         due.add(room.id);
         continue;
       }
