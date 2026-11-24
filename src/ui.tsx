@@ -51,9 +51,8 @@ export function Card({ c, selected = false, onClick }: any) {
           <span className="card-emblem" aria-hidden="true">
             {suits[c[1]]}
           </span>
-          {/* Fixed vector coordinates decouple rank/suit from inherited font rules.
-              The legacy text remains as no-JS/CSS fallback and is hidden by
-              royale-vector-card-face.css when the vector artwork is active. */}
+          {/* Royal Deck V4: one rank and one suit, hand-drawn at a fixed
+              64 x 90 aspect ratio. No nested SVG or giant suit overlap. */} 
           <svg
             className="royale-card-face-art"
             viewBox="0 0 64 90"
@@ -61,13 +60,8 @@ export function Card({ c, selected = false, onClick }: any) {
             aria-hidden="true"
             focusable="false"
           >
-            <svg className="royale-card-crest" x="35" y="70" width="23" height="16" viewBox="290 0 240 230" preserveAspectRatio="xMidYMid meet">
-              <path d="M303 102 340 32 391 77 410 14 429 77 480 32 517 102 500 144 320 144Z" />
-              <path d="M410 89 C376 62 350 101 376 125 L410 156 444 125 C470 101 444 62 410 89Z" />
-              <path d="M303 133 410 165 517 133 506 181 410 217 314 181Z" />
-            </svg>
-            <text className="royale-card-vector-rank" x="8" y="31">{value}</text>
-            <svg className="royale-card-vector-suit" x="9" y="37" width="43" height="43" viewBox="0 0 24 24" overflow="visible">
+            <text className="royale-card-vector-rank" x="7" y="28">{value}</text>
+            <g className="royale-card-vector-suit" transform="translate(19 42) scale(1.14)">
               {c[1] === "h" ? (
                 <path d="M12 21.1 3.6 12.5C-1 7.5 3.5 1.7 8.4 3.4c1.6.5 2.8 1.7 3.6 3.1.8-1.4 2-2.6 3.6-3.1 4.9-1.7 9.4 4.1 4.8 9.1Z" />
               ) : c[1] === "d" ? (
@@ -77,7 +71,11 @@ export function Card({ c, selected = false, onClick }: any) {
               ) : (
                 <path d="M12 1.4C9.7 5.5 3 9.7 2.3 14.3c-.5 3.3 1.7 5.7 4.6 5.7 2 0 3.5-1.2 4.2-2.7l-.4 2.7H7.8v2h8.4v-2h-2.9l-.4-2.7c.7 1.5 2.2 2.7 4.2 2.7 2.9 0 5.1-2.4 4.6-5.7C21 9.7 14.3 5.5 12 1.4Z" />
               )}
-            </svg>
+            </g>
+            <g className="royale-card-crest" transform="translate(39 72) scale(.042)" aria-hidden="true">
+              <path d="M303 102 340 32 391 77 410 14 429 77 480 32 517 102 500 144 320 144Z" />
+              <path d="M410 89 C376 62 350 101 376 125 L410 156 444 125 C470 101 444 62 410 89Z" />
+            </g>
           </svg>
         </>
       ) : (
