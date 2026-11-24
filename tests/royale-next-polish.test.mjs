@@ -4,10 +4,12 @@ import {readFileSync} from 'node:fs';
 import {revealAt, revealDuration} from '../src/runout-reveal.mjs';
 import {boardResults} from '../src/board-results.mjs';
 const css=readFileSync(new URL('../src/poker-royale-board-system.css',import.meta.url),'utf8');
+const finalLayout=readFileSync(new URL('../src/royale-double-board-final.css',import.meta.url),'utf8');
 const view=readFileSync(new URL('../src/PortraitBoard.tsx',import.meta.url),'utf8');
 
 test('three-run board layout uses compact identical slots; table stage itself is not scaled',()=>{
-  assert.match(css,/one authoritative layout for multiple community boards/);
+  assert.match(finalLayout,/SINGLE LAYOUT AUTHORITY/);
+  assert.match(finalLayout,/royale-multiple-boards/);
   assert.match(css,/royale-boards-3[\s\S]*--royale-community-w/);
   assert.doesNotMatch(css,/scale\(\.5\)/);
   assert.match(view,/royale-board-cluster/);
