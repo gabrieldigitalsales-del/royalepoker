@@ -1,0 +1,85 @@
+/* Poker Royale — Visual clarity pass.
+   Inspired by readable table UIs, not by copying another game's layout.
+   Only presentation: no game-state, timing, action, privacy or payout changes. */
+
+/* Plain ivory cards with clean borders. Gold is reserved for real winners. */
+html body .studio .card[data-royale-card="face"] {
+  background:#fffdf9!important;
+  background-image:linear-gradient(160deg,#fff 0%,#fffefa 75%,#f8f4eb 100%)!important;
+  border:1px solid #ddd7ce!important;
+  border-radius:7px!important;
+  box-shadow:0 2px 4px #0b07164d!important;
+  outline:0;
+  filter:none;
+}
+html body .studio .card[data-royale-card="face"]::before {
+  display:none!important;
+}
+/* Keep the single rank/suit vector; never add decorative suit duplicates. */
+html body .studio .card[data-royale-card="face"] > svg.royale-card-face-art {
+  inset:0!important;
+  filter:none!important;
+  overflow:hidden!important;
+}
+html body .studio .card[data-royale-card="face"] > svg.royale-card-face-art .royale-card-vector-rank {
+  font-weight:900!important;
+  letter-spacing:-1.25px!important;
+}
+/* Classic gold line without bloom when the card REALLY belongs to the best hand. */
+html body .studio .portrait-table :is(.winning-card,.royale-showdown-best-card) .card[data-royale-card="face"],
+html body .studio .portrait-table .royale-opponent-showdown-card.royale-showdown-best-card .card[data-royale-card="face"],
+html body .studio .royale-history-winning-card > .card[data-royale-card="face"] {
+  border:2px solid #e6b349!important;
+  box-shadow:0 0 0 1px #fff2bc,0 3px 7px #0b06177a!important;
+}
+/* Opponent winning zone can glow softly, but does not recolor unrelated cards. */
+html body .studio .portrait-table .royale-opponent-showdown-win .royale-opponent-showdown-card:not(.royale-showdown-best-card) .card[data-royale-card="face"] {
+  border:1px solid #ddd7ce!important;
+  box-shadow:0 2px 4px #0b07164d!important;
+}
+/* Selected hero cards use a thin accent, unlike the real winning combination. */
+html body .studio .card[data-royale-card="face"].selected,
+html body .studio button.card[data-royale-card="face"][aria-pressed="true"] {
+  outline:2px solid #b58bda!important;
+  outline-offset:1px!important;
+  box-shadow:0 2px 5px #0b071680!important;
+}
+/* Clear pockets in showdown; remove stacked bloom. */
+html body .studio .portrait-table .royale-opponent-showdown-cards {
+  filter:drop-shadow(0 2px 3px #10061c80)!important;
+}
+html body .studio .portrait-table .royale-opponent-showdown-card:not(.royale-showdown-best-card) .card[data-royale-card="face"] {
+  box-shadow:0 2px 4px #0b07164d!important;
+  border-color:#ddd7ce!important;
+}
+/* Less visual interference around table seats. */
+html body .studio .portrait-table .portrait-seat {
+  filter:none!important;
+}
+html body .studio .portrait-table .portrait-seat .nameplate,
+html body .studio .portrait-table .portrait-seat .stackplate {
+  text-shadow:none!important;
+}
+/* Crisp action labels and fewer competing shadows. Never change button geometry. */
+html body .studio .console .betbar > .action-choices button {
+  text-shadow:none!important;
+  box-shadow:inset 0 1px 0 #ffffff38,0 3px 5px #09041373!important;
+}
+/* Preserve genuine focus and action states. */
+html body .studio button.card:focus-visible {
+  outline:3px solid #ffe6a1!important;
+  outline-offset:3px!important;
+}
+@media(max-width:700px) {
+  html body .studio .card[data-royale-card="face"] {
+    border-radius:5px!important;
+  }
+  html body .studio .portrait-table :is(.winning-card,.royale-showdown-best-card) .card[data-royale-card="face"] {
+    border-width:1.5px!important;
+  }
+}
+@media(prefers-reduced-motion:reduce) {
+  html body .studio .portrait-table :is(.winning-card,.royale-showdown-best-card) .card[data-royale-card="face"] {
+    animation:none!important;
+  }
+}
