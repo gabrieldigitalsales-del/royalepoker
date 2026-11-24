@@ -93,20 +93,32 @@
   flex-wrap:nowrap!important;
   min-width:0;
 }
-.studio .console .player-hand > .royale-own-card {
-  flex:0 1 auto!important;
-  min-width:0;
-  max-width:clamp(28px,8vw,59px);
+/* The vector card has absolutely positioned children and therefore
+   no intrinsic width. NEVER size its button with flex-basis:auto: Chromium
+   collapses it to the two border pixels (confirmed in Playwright). */
+.studio .console .player-hand > button.royale-own-card {
+  box-sizing:border-box!important;
+  flex:0 0 clamp(32px,9vw,56px)!important;
+  width:clamp(32px,9vw,56px)!important;
+  min-width:clamp(32px,9vw,56px)!important;
+  max-width:56px!important;
   padding:0!important;
 }
-.studio .console .player-hand > .royale-own-card .card[data-royale-card="face"] {
+.studio .console .player-hand > button.royale-own-card > span:first-child {
+  display:block!important;
+  position:relative!important;
+  width:100%!important;
+  aspect-ratio:0.72!important;
+  min-width:0!important;
+}
+.studio .console .player-hand > button.royale-own-card .card[data-royale-card="face"] {
   display:block!important;
   width:100%!important;
-  max-width:59px!important;
-  aspect-ratio:0.72;
-  height:auto!important;
+  height:100%!important;
+  max-width:100%!important;
   min-height:0!important;
-  font-size:clamp(14px,2.5vw,27px)!important;
+  min-width:0!important;
+  font-size:16px!important;
 }
 /* Public community rows are centered and never acquire overlapping-card
    positioning. All five board ranks and suits remain visible. */
@@ -132,8 +144,11 @@
     max-width:40%!important;
     padding:0!important;
   }
-  .studio .console .player-hand > .royale-own-card {
-    max-width:clamp(28px,10vw,44px);
+  .studio .console .player-hand > button.royale-own-card {
+    flex-basis:clamp(32px,9.5vw,44px)!important;
+    width:clamp(32px,9.5vw,44px)!important;
+    min-width:clamp(32px,9.5vw,44px)!important;
+    max-width:44px!important;
   }
 }
 @media(max-width:390px) {
