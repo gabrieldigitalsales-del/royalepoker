@@ -397,3 +397,5 @@ import "./royale-signature-deck.css";
 import "./royale-dealer-choice-minimal.css";
 
 import "./royale-dealer-mode-announcement.css";
+
+import "./royale-board-qa-final.css";
