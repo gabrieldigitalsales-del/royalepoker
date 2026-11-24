@@ -48,7 +48,6 @@ export function Card({ c, selected = false, onClick }: any) {
       {c ? (
         <>
           <strong>{value}</strong>
-          <i>{suits[c[1]]}</i>
           <span className="card-emblem" aria-hidden="true">
             {suits[c[1]]}
           </span>
