@@ -1,0 +1,81 @@
+/* Royal Deck crisp rendering: no fractional scaling of the whole pocket.
+ * The previous visual rules shrunk the SVG after rasterization to .72-.79,
+ * while showdown fan cards were rotated. Keep card geometry at native
+ * raster size and separate cards by physical offsets instead. */
+html body .studio .portrait-table .portrait-seat .pocket.faceup,
+html body .studio .portrait-table .portrait-seat .pocket:not(.faceup):has(.card[data-royale-card="face"]) {
+  top:-26%!important;
+  bottom:auto!important;
+  left:50%!important;
+  right:auto!important;
+  transform:translateX(-50%)!important;
+  scale:1!important;
+  filter:none!important;
+  opacity:1!important;
+  transform-origin:center bottom!important;
+}
+html body .studio .portrait-table .portrait-seat .pocket:has(.card[data-royale-card="face"]) > span {
+  transform:none!important;
+  rotate:0deg!important;
+  scale:1!important;
+  filter:none!important;
+  opacity:1!important;
+}
+html body .studio .portrait-table .portrait-seat .pocket:has(.card[data-royale-card="face"]) .card[data-royale-card="face"] {
+  width:clamp(30px,3.3vw,42px)!important;
+  height:clamp(44px,4.7vw,61px)!important;
+  transform:none!important;
+  scale:1!important;
+  rotate:0deg!important;
+  filter:none!important;
+  background-color:#fffefa!important;
+  background-image:none!important;
+  box-shadow:0 2px 5px #09041480!important;
+}
+html body .studio .portrait-table .pocket:has(.card[data-royale-card="face"]) > span {
+  left:calc((var(--j) - (var(--count) - 1)/2)*var(--fan-step,16px))!important;
+}
+html body .studio .portrait-table .royale-opponent-showdown-card,
+html body .studio .portrait-table .royale-triple-hero-card,
+html body .studio .portrait-table .royale-opponent-showdown-card.royale-showdown-best-card {
+  transform:none!important;
+  rotate:0deg!important;
+  scale:1!important;
+  filter:none!important;
+}
+html body .studio .portrait-table .royale-opponent-showdown-card .card[data-royale-card="face"],
+html body .studio .portrait-table .royale-triple-hero-card .card[data-royale-card="face"] {
+  transform:none!important;
+  rotate:0deg!important;
+  scale:1!important;
+  filter:none!important;
+  opacity:1!important;
+  background-color:#fffefa!important;
+  background-image:none!important;
+  box-shadow:0 3px 6px #05030f8c!important;
+}
+html body .studio .portrait-table :is(.royale-opponent-showdown-card.royale-showdown-best-card,.winning-card) .card[data-royale-card="face"] {
+  border-color:#e0b96d!important;
+  box-shadow:0 0 0 1px #e8c77d,0 3px 6px #07030d99!important;
+}
+html body .studio .card[data-royale-card="face"] > svg.royale-card-face-art {
+  transform:none!important;
+  scale:1!important;
+  rotate:0deg!important;
+  filter:none!important;
+  shape-rendering:geometricPrecision;
+  text-rendering:geometricPrecision;
+}
+/* The in-flight pocket is intentionally dim only while its central
+ * animated copy is active. Do not override the game state. */
+html body .studio .portrait-table .portrait-seat .pocket.royale-pocket-in-flight {
+  opacity:.08!important;
+}
+@media(max-width:700px){
+ html body .studio .portrait-table .portrait-seat .pocket:has(.card[data-royale-card="face"]) .card[data-royale-card="face"]{
+   width:30px!important;height:43px!important;
+ }
+ html body .studio .portrait-table .portrait-seat .pocket:has(.card[data-royale-card="face"]){
+   top:-28%!important;
+ }
+}
