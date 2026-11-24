@@ -1,0 +1,169 @@
+/* Poker Royale · one card art direction for every poker mode.
+   Card width/height belong to existing table-layout containers; this file
+   only owns face, back, typography, finishing and winner states.
+   IMPORTANT: animations stay in the runout/showdown engine, not here. */
+
+/* Four independent suit inks: red ♥, blue ♦, emerald ♣, ink ♠. */
+html body .card[data-suit="h"] { --royale-ink:#c02143; --royale-halo:#f25c72; }
+html body .card[data-suit="d"] { --royale-ink:#245cba; --royale-halo:#70b8ff; }
+html body .card[data-suit="c"] { --royale-ink:#137e59; --royale-halo:#65d7a4; }
+html body .card[data-suit="s"] { --royale-ink:#241a45; --royale-halo:#ac9cd9; }
+
+html body .card[data-royale-card="face"] {
+  position:relative;
+  box-sizing:border-box;
+  overflow:hidden;
+  padding:clamp(2px,.27vw,5px);
+  border:1.5px solid #dfd8c5!important;
+  border-radius:clamp(4px,.65vw,10px)!important;
+  background:linear-gradient(135deg,#fffefa 0%,#ffffff 57%,#f3efe6 100%)!important;
+  color:var(--royale-ink)!important;
+  font-family:ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif!important;
+  font-weight:900;
+  text-shadow:none!important;
+  box-shadow:inset 0 1px 0 #ffffff,0 3px 6px #0005,0 1px 0 #7d6c4c!important;
+  transform-origin:center bottom;
+  backface-visibility:hidden;
+  -webkit-font-smoothing:antialiased;
+}
+html body .card[data-royale-card="face"]::before {
+  content:"";
+  position:absolute;
+  pointer-events:none;
+  inset:2px;
+  border:1px solid #b89c633b;
+  border-radius:inherit;
+  opacity:.65;
+}
+html body .card[data-royale-card="face"] > strong {
+  position:relative;
+  z-index:2;
+  align-self:flex-start;
+  font-family:inherit!important;
+  font-weight:950!important;
+  font-size:clamp(9px,.95em,32px)!important;
+  line-height:1!important;
+  font-variant-numeric:lining-nums tabular-nums;
+  letter-spacing:-.055em;
+  color:var(--royale-ink)!important;
+  text-shadow:none!important;
+}
+html body .card[data-royale-card="face"] > i {
+  z-index:2;
+  position:relative;
+  display:block;
+  color:var(--royale-ink)!important;
+  font-size:clamp(8px,.67em,25px)!important;
+  font-style:normal!important;
+  line-height:1;
+  align-self:flex-start;
+  margin-top:1px;
+  text-shadow:none!important;
+}
+html body .card[data-royale-card="face"] .card-emblem {
+  position:absolute!important;
+  display:grid!important;
+  place-items:center;
+  inset:28% 6% 6% 6%!important;
+  width:auto!important;
+  height:auto!important;
+  z-index:1;
+  font-size:clamp(12px,1.65em,58px)!important;
+  line-height:1!important;
+  color:var(--royale-ink)!important;
+  opacity:.94!important;
+  text-shadow:0 1px 0 #fff4!important;
+  pointer-events:none;
+}
+/* Compatibility for the four existing preferences: keep their color settings
+   without reverting to oversized colored faces. */
+html[data-card-style="classic"] body .card[data-royale-card="face"][data-suit="d"],
+html[data-card-style="classic"] body .card[data-royale-card="face"][data-suit="h"] { --royale-ink:#bc193b; }
+html[data-card-style="classic"] body .card[data-royale-card="face"][data-suit="c"],
+html[data-card-style="classic"] body .card[data-royale-card="face"][data-suit="s"] { --royale-ink:#24243a; }
+html[data-card-style="night"] body .card[data-royale-card="face"] {
+  background:linear-gradient(145deg,#f7f5f1,#e9e6ee)!important;
+  border-color:#c9c4d4!important;
+}
+html[data-card-style="ivory"] body .card[data-royale-card="face"] {
+  background:linear-gradient(135deg,#fffdf2,#f3ead2)!important;
+}
+html body .card[data-royale-card="back"] {
+  display:inline-grid!important;
+  place-items:center!important;
+  box-sizing:border-box;
+  padding:0!important;
+  border:2px solid #e6c37d!important;
+  border-radius:clamp(4px,.65vw,10px)!important;
+  background:#36172b url("/royale-card-back.svg") center / 100% 100% no-repeat!important;
+  box-shadow:inset 0 0 0 1px #fff8de63,0 3px 8px #03000caa!important;
+  overflow:hidden;
+}
+html body .card[data-royale-card="back"] .royale-card-back-symbol{opacity:0;pointer-events:none}
+html body .card[data-royale-card="face"].selected,
+html body button.card[data-royale-card="face"][aria-pressed="true"] {
+  outline:2px solid #f4d18b!important;
+  outline-offset:2px;
+  box-shadow:0 0 0 1px #c78e3f,0 0 15px #ffd58b96,0 5px 9px #0007!important;
+}
+/* Subtle tactile touch feedback; never interfere with deal/flip transforms. */
+@media (hover:hover) and (pointer:fine) {
+  html body button.card[data-royale-card="face"]:hover:not(:disabled) {
+    filter:brightness(1.05) drop-shadow(0 0 7px #eebf7a8c);
+  }
+}
+html body button.card[data-royale-card]:focus-visible {
+  outline:3px solid #fff1af!important;
+  outline-offset:3px!important;
+}
+html body .winning-card > .card[data-royale-card="face"],
+html body .royale-history-winning-card > .card[data-royale-card="face"],
+html body .royale-showdown-best-card .card[data-royale-card="face"],
+html body .royale-opponent-showdown-win .card[data-royale-card="face"],
+html body .royale-showdown-besthand .card[data-royale-card="face"] {
+  border-color:#ffd974!important;
+  box-shadow:0 0 0 2px #f7bb4f,0 0 17px #ffdc7fbc,0 4px 8px #0009!important;
+}
+.studio[data-visual-effects="high"] .royale-ceremony-showdown .winning-card > .card[data-royale-card="face"] {
+  filter:drop-shadow(0 0 10px #f6cf76);
+}
+/* Some game modes use very small cards: keep ranks clear without
+   forcing the emblem over the printed value. */
+.studio.royale-triple-run-active .portrait-table .card[data-royale-card="face"] .card-emblem,
+.studio .royale-triple-hero-card .card[data-royale-card="face"] .card-emblem,
+.studio .royale-opponent-showdown-card .card[data-royale-card="face"] .card-emblem,
+.mini .card[data-royale-card="face"] .card-emblem {
+  display:none!important;
+}
+.studio.royale-triple-run-active .portrait-table .card[data-royale-card="face"] > strong,
+.studio .royale-opponent-showdown-card .card[data-royale-card="face"] > strong {
+  font-size:clamp(9px,.85em,15px)!important;
+}
+.studio .royale-triple-run-active .card[data-royale-card="face"] {
+  padding:2px!important;
+}
+@media(max-width:700px){
+  .studio .portrait-table .card[data-royale-card="face"]{
+    border-width:1px!important;
+    border-radius:5px!important;
+    padding:2px!important;
+  }
+  .studio .portrait-table .card[data-royale-card="face"] > strong{
+    font-size:clamp(10px,1em,19px)!important;
+  }
+  .studio .portrait-table .card[data-royale-card="face"] > i{
+    font-size:clamp(8px,.7em,14px)!important;
+  }
+  .studio .portrait-table .card[data-royale-card="face"] .card-emblem{
+    font-size:clamp(13px,1.5em,25px)!important;
+  }
+}
+@media(max-width:420px){
+  .studio .portrait-table.royale-multiple-boards .card[data-royale-card="face"] .card-emblem{
+    display:none!important;
+  }
+}
+/* Honor disabled animations but never change game clock or visibility. */
+@media(prefers-reduced-motion:reduce){
+  html body .card[data-royale-card]{transition:none!important;}
+}
