@@ -388,3 +388,4 @@ import "./nexor-interface.css";
 import "./royale-app-layout.css";
 import "./royale-action-buttons.css";
 import "./royale-premium-cards.css";
+import "./royale-adaptive-fans.css";
