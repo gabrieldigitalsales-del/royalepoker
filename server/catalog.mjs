@@ -1,7 +1,7 @@
 import { housePresets } from "./local-rules.mjs";
 const games = [];
 function add(id, name, family, limit, rule, max = 6) {
-  games.push({ id, name, family, limit, rule, max, version: 1 });
+  games.push({ id, name, family, limit, rule, max: Math.min(max, 9), version: 1 });
 }
 add(
   "texas",
