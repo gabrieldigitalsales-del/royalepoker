@@ -520,11 +520,19 @@ export function viewFrame(h, f, id) {
   const idx = h.players.findIndex((p) => p.id === id);
   const { public: up, hiddenRows, combinations, awards, ...view } = f;
   const contestedShowdown = !!(f.finished && awards?.some((award) => !award.uncontested));
-  const publicCards = up.map((flags, i) => flags.map((flag, j) => {
-    // An uncontested pot (everyone else folded) must never auto-show hidden
-    // hole cards. A player's explicit selection is still respected.
+  // Some PokerKit variants clear a folded player's private cards from their
+  // final engine frame. Recover the actual card slots from the original hand
+  // for owners / explicit post-hand opt-in only; never auto-expose folded cards.
+  const holeSource = (f.hole ?? []).map((cards, i) => {
+    if (!f.finished || cards?.some(Boolean)) return cards ?? [];
+    const previous = h.frames?.find(frame => frame.hole?.[i]?.some(Boolean))?.hole?.[i];
+    return previous?.length ? previous : (cards ?? []);
+  });
+  const publicCards = holeSource.map((cards, i) => cards.map((_, j) => {
+    const flag = !!up?.[i]?.[j];
+    // Uncontested/folded hands can reveal only voluntarily selected indices.
     const volunteered = !!(f.finished && h.showCards?.[h.players[i].id]?.includes(j));
-    return volunteered || (!!flag && (!f.finished || contestedShowdown));
+    return volunteered || (flag && (!f.finished || contestedShowdown));
   }));
   return {
     ...view,
@@ -544,8 +552,8 @@ export function viewFrame(h, f, id) {
         ? labels
         : [],
     ),
-    hole: f.hole.map((cs, i) =>
-      cs.map((c, j) => (i === idx || publicCards[i][j] ? c : null)),
+    hole: holeSource.map((cs, i) =>
+      cs.map((c, j) => (i === idx || publicCards[i]?.[j] ? c : null)),
     ),
     rows: f.rows?.map((rs, i) =>
       hiddenRows[i] && i !== idx ? rs.map((row) => row.map(() => null)) : rs,
