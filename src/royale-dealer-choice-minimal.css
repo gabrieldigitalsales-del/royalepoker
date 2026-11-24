@@ -41,3 +41,31 @@
    min-width:108px!important;min-height:36px!important;font-size:12px!important;padding:7px 11px!important;
  }
 }
+
+/* The choice button belongs on the felt near the community board,
+   not against the screen's right edge. Specific to the actionable state. */
+html body .studio .table-stage .dealer-choice-spot.royale-dealer-pot-anchored:has(> .royale-choice-only-button){
+  position:absolute!important;
+  top:42%!important;
+  left:50%!important;
+  right:auto!important;
+  bottom:auto!important;
+  transform:translate(-50%,-50%)!important;
+  width:max-content!important;
+  min-width:0!important;
+  max-width:calc(100vw - 30px)!important;
+  z-index:65!important;
+}
+@media(max-width:900px){
+ html body .studio .table-stage .dealer-choice-spot.royale-dealer-pot-anchored:has(> .royale-choice-only-button){
+   top:41%!important;left:50%!important;right:auto!important;
+   transform:translate(-50%,-50%)!important;width:max-content!important;
+   max-width:calc(100vw - 24px)!important;
+ }
+}
+@media(max-width:600px){
+ html body .studio .table-stage .dealer-choice-spot.royale-dealer-pot-anchored:has(> .royale-choice-only-button){
+   top:41%!important;left:50%!important;right:auto!important;
+   transform:translate(-50%,-50%)!important;width:max-content!important;
+ }
+}
