@@ -22,6 +22,18 @@ test("Every visible card has exactly one suit marker, including compact mobile b
  assert.match(css,/royale-multiple-boards[\s\S]*?\.card-emblem/);
  assert.doesNotMatch(css,/\.card\[data-royale-card="face"\] \.card-emblem\s*\{\s*display:none!important/);
 });
+test("Fanned secondary cards keep the ONLY suit in the exposed left edge",()=>{
+ const css=read("../src/royale-premium-cards.css");
+ const ui=read("../src/ui.tsx");
+ const section=css.slice(css.indexOf("/* Fan visibility:"));
+ assert.ok(section.length>200);
+ for(const selector of [".pocket.faceup", ".royale-opponent-showdown-card", ".royale-triple-hero-card"])
+   assert.ok(section.includes(selector), "No exposed-suit layout for "+selector);
+ assert.match(section,/inset:34% auto auto 7%!important/);
+ assert.match(section,/display:block!important/);
+ const face=ui.slice(ui.indexOf("{c ? ("),ui.indexOf(") : (",ui.indexOf("{c ? (")));
+ assert.equal((face.match(/className="card-emblem"/g)||[]).length,1);
+});
 test("Unified card design shares existing table dimensions, includes history, winner and flip effects",()=>{
  const css=read("../src/royale-premium-cards.css");
  const board=read("../src/royale-double-board-final.css");
