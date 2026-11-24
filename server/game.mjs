@@ -11,6 +11,8 @@ export function requireThat(ok, message) {
 }
 const check = requireThat;
 export const token = () => randomBytes(24).toString("hex");
+export const MAX_TABLE_PLAYERS = 9;
+export const availableSeats = (room) => Math.max(0, Math.min(room.capacity, MAX_TABLE_PLAYERS) - room.seats.length);
 export function makeRoom(u, b) {
   const g = catalog[b.game];
   check(g, "Modalidade inválida.");
@@ -32,6 +34,7 @@ export function makeRoom(u, b) {
     g.id === "choice"
       ? g.max
       : Math.min(g.max, ...list.map((id) => catalog[id].max));
+  check(Number.isInteger(b.capacity) && b.capacity >= 2 && b.capacity <= MAX_TABLE_PLAYERS, "As mesas permitem entre 2 e 9 jogadores.");
   check(b.capacity <= limit, "Quantidade de assentos incompatível.");
   return {
     id: uid(),
@@ -114,7 +117,7 @@ export function seatSlots(r) {
 }
 export function sit(d, u, r, options = {}) {
   check(!r.closed && !r.hand && !r.tour, "Aguarde o intervalo entre mãos.");
-  check(r.seats.length < r.capacity, "Mesa cheia.");
+  check(availableSeats(r) > 0, "Mesa cheia (máximo de 9 jogadores).");
   check(
     !r.waitlist?.length || r.waitlist[0] === u.id,
     "A vaga está reservada para o primeiro da fila.",
@@ -129,7 +132,7 @@ export function sit(d, u, r, options = {}) {
   check(
     Number.isInteger(position) &&
       position >= 0 &&
-      position < r.capacity &&
+      position < Math.min(r.capacity, MAX_TABLE_PLAYERS) &&
       !slots.includes(position),
     "Escolha um assento livre.",
   );
