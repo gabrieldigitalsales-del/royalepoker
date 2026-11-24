@@ -157,3 +157,114 @@
   .studio .portrait-table .royale-opponent-showdown-card,
   .studio .portrait-table .royale-triple-hero-card{transition:none!important;}
 }
+
+
+/* FIX: screenshot regression — avoid em-based type scales on narrow fan cards.
+   The suit and rank each have a FIXED pixel scale and NEVER inherit the
+   oversized font-size from seat, avatar, showdown or community-board rules. */
+.studio .portrait-table :is(
+  .pocket.faceup,
+  .royale-triple-hero-card,
+  .royale-opponent-showdown-card
+) .card[data-royale-card="face"] {
+  position:relative!important;
+  display:block!important;
+  width:clamp(28px,3.7cqw,41px)!important;
+  height:clamp(40px,5.5cqw,58px)!important;
+  font-size:12px!important;
+  line-height:1!important;
+  padding:0!important;
+  overflow:hidden!important;
+  border:1px solid #d8bd7d!important;
+  border-radius:7px!important;
+  background:linear-gradient(145deg,#ffffff 20%,#f9f7f0 100%)!important;
+  box-shadow:inset 0 0 0 1px #f4e8d1,0 3px 6px #03030c88!important;
+  isolation:isolate;
+}
+.studio .portrait-table :is(
+  .pocket.faceup,
+  .royale-triple-hero-card,
+  .royale-opponent-showdown-card
+) .card[data-royale-card="face"] > strong {
+  position:absolute!important;
+  display:block!important;
+  top:4px!important;
+  left:4px!important;
+  right:auto!important;
+  bottom:auto!important;
+  z-index:3!important;
+  margin:0!important;
+  padding:0!important;
+  font-family:Arial,Helvetica,sans-serif!important;
+  font-size:14px!important;
+  font-weight:900!important;
+  line-height:1!important;
+  letter-spacing:-.04em!important;
+  text-shadow:none!important;
+  color:var(--royale-ink)!important;
+  transform:none!important;
+  white-space:nowrap!important;
+}
+.studio .portrait-table :is(
+  .pocket.faceup,
+  .royale-triple-hero-card,
+  .royale-opponent-showdown-card
+) .card[data-royale-card="face"] .card-emblem {
+  position:absolute!important;
+  display:block!important;
+  top:23px!important;
+  left:4px!important;
+  right:auto!important;
+  bottom:auto!important;
+  inset:23px auto auto 4px!important;
+  width:auto!important;
+  height:auto!important;
+  max-width:none!important;
+  margin:0!important;
+  padding:0!important;
+  z-index:3!important;
+  font-family:Georgia,"Times New Roman",serif!important;
+  font-size:13px!important;
+  font-weight:700!important;
+  line-height:1!important;
+  color:var(--royale-ink)!important;
+  transform:none!important;
+  filter:none!important;
+  opacity:1!important;
+  text-shadow:none!important;
+}
+.studio .portrait-table :is(
+  .pocket.faceup,
+  .royale-triple-hero-card,
+  .royale-opponent-showdown-card
+) .card[data-royale-card="face"]::before {
+  display:none!important;
+}
+/* On shorter cards the suit remains below the corner rank, not clipped. */
+@media(max-width:430px) {
+  .studio .portrait-table :is(
+    .pocket.faceup,
+    .royale-triple-hero-card,
+    .royale-opponent-showdown-card
+  ) .card[data-royale-card="face"] {
+    width:28px!important;
+    height:39px!important;
+  }
+  .studio .portrait-table :is(
+    .pocket.faceup,
+    .royale-triple-hero-card,
+    .royale-opponent-showdown-card
+  ) .card[data-royale-card="face"] > strong {
+    font-size:12px!important;
+    top:3px!important;
+    left:4px!important;
+  }
+  .studio .portrait-table :is(
+    .pocket.faceup,
+    .royale-triple-hero-card,
+    .royale-opponent-showdown-card
+  ) .card[data-royale-card="face"] .card-emblem {
+    inset:20px auto auto 4px!important;
+    font-size:12px!important;
+  }
+}
