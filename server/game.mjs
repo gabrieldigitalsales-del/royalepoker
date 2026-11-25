@@ -1,4 +1,5 @@
 import { showdownFlow } from "../src/showdown-flow.mjs";
+import { recordSeatAction } from "./sitout-policy.mjs";
 import { diamondAwards } from "./rewards.mjs";
 import { prepareDealerChoice, DEALER_REVIEW_MS } from "./dealer-seat-sync.mjs";
 import { takeRake, rakeAdmin, avatarFor, grossPayoutsFor, publicGrossResult } from "./progression.mjs";
@@ -460,8 +461,9 @@ export async function move(d, r, id, b, expired = false) {
     );
   const seat = r.seats.find((s) => s.id === id);
   if (seat && !r.tour) {
-    seat.timeouts = expired ? (seat.timeouts ?? 0) + 1 : 0;
-    if (seat.timeouts >= 2) seat.away = true;
+    // Count absent HANDS, not expired actions within a single hand.
+    // The third distinct missed hand triggers sit out and begins its timer.
+    recordSeatAction(seat, { expired, handId: h.id });
   }
   const result = await step({ state: live.state, action: a });
   const labels = {
