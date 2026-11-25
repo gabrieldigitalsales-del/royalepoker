@@ -16,6 +16,8 @@ test("API, WebSocket, carteiras, torneio, recuperação, privacidade e reinício
         ...process.env,
         PORT: port,
         HOST: "127.0.0.1",
+        NODE_ENV: "test",
+        POKER_ROYALE_TEST_REVIEW_MS: "150",
         ADMIN_EMAIL: "admin@example.net",
         POKER_ROYALE_ADMIN_CODE: "test-audit-admin-unlock-secret",
         DATA_FILE: join(dir, "game.db"),
@@ -229,8 +231,24 @@ test("API, WebSocket, carteiras, torneio, recuperação, privacidade e reinício
     const tr = (await call("home", a.token)).rooms.find(
       (r) => r.tour === tour,
     ).id;
+    // A fresh hand is forbidden during the review window. The test server
+    // runs that real gate for 150ms; production remains at 9000ms.
+    const dealWhenReviewEnds = async () => {
+      const deadline = Date.now() + 6000;
+      while (true) {
+        try {
+          return await call("deal", a.token, { room: tr });
+        } catch (error) {
+          if (!/Aguarde a revisão da mão/.test(String(error)) || Date.now() >= deadline) throw error;
+          await new Promise(resolve => setTimeout(resolve, 35));
+        }
+      }
+    };
     for (let hand = 0; hand < 10; hand++) {
-      await call("deal", a.token, { room: tr });
+      if (hand === 1) {
+        await assert.rejects(call("deal", a.token, { room: tr }), /Aguarde a revisão da mão/);
+      }
+      await dealWhenReviewEnds();
       r = await call("room", a.token, { room: tr });
       while (r.live) {
         let f = r.live.frames[0];
