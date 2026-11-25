@@ -1,0 +1,155 @@
+/* Poker Royale | Mobile Stable Stage 1.0
+ * Stable screen geometry, no touch-driven table drift, modestly smaller
+ * furniture. Game rules, user input, reveal animations and card SVG untouched.
+ * IMPORT LAST: narrowly scoped to mobile table view only.
+ */
+@media (max-width: 800px), (pointer:coarse) and (max-height: 600px) {
+  html:has(.studio),
+  body:has(.studio),
+  #root:has(.studio) {
+    width:100%!important;
+    min-width:0!important;
+    height:100%!important;
+    max-height:100%!important;
+    overflow:hidden!important;
+    overscroll-behavior:none!important;
+  }
+  html body .shell:has(.studio),
+  html body .shell:has(.studio) > .content,
+  html body .content:has(.studio) > .page {
+    height:100svh!important;
+    max-height:100svh!important;
+    overflow:hidden!important;
+    overscroll-behavior:none!important;
+  }
+  html body .studio {
+    --mobile-stage-height:100svh;
+    position:relative!important;
+    width:100vw!important;
+    max-width:100vw!important;
+    height:var(--mobile-stage-height)!important;
+    min-height:0!important;
+    max-height:var(--mobile-stage-height)!important;
+    overflow:hidden!important;
+    overscroll-behavior:none!important;
+    touch-action:none!important;
+    -webkit-user-select:none;
+    user-select:none;
+  }
+  html body .studio .studio-layout,
+  html body .studio .table-stage,
+  html body .studio .table-stage > .portrait-table {
+    height:100%!important;
+    min-height:0!important;
+    max-height:100%!important;
+    overflow:hidden!important;
+    overscroll-behavior:none!important;
+    touch-action:none!important;
+  }
+  /* Prevent perspective/translation layers changing fixed control anchoring. */
+  html body .studio .table-stage > .portrait-table {
+    transform:none!important;
+    will-change:auto!important;
+    contain:none!important;
+  }
+  /* Do not interpolate geometry when server rotates the acting player. */
+  html body .studio .portrait-table .portrait-seat,
+  html body .studio .portrait-table .empty-chair,
+  html body .studio .portrait-table .felt-stake,
+  html body .studio .portrait-table .portrait-board,
+  html body .studio .portrait-table .extra-runout-boards,
+  html body .studio .portrait-table .royale-board-cluster,
+  html body .studio .portrait-table .pot-tag {
+    transition-property:opacity,box-shadow,border-color,background-color!important;
+    transition-duration:.12s!important;
+    will-change:auto!important;
+  }
+  html body .studio .portrait-table .portrait-seat {
+    filter:none!important;
+  }
+  /* Keep clear action glow, but do not animate entire seat coordinates. */
+  html body .studio .portrait-table .portrait-seat.acting .portrait-avatar {
+    box-shadow:0 0 0 2px #fbe4a8,0 0 13px 5px #e4b435a8!important;
+  }
+  /* Inputs still work; touch gestures should not drag the gaming stage. */
+  html body .studio :is(button,[role="button"],input,select,textarea,a,label),
+  html body .studio .portrait-seat .portrait-avatar {
+    touch-action:manipulation!important;
+    -webkit-tap-highlight-color:transparent!important;
+  }
+  /* Scroll stays available inside actual menus, chat and card histories. */
+  html body .studio :is(.modal,.modal-body,.table-drawer,.studio-tools,.bet-popover,[role="dialog"],.chat-messages,.history-list) {
+    touch-action:pan-y!important;
+    overscroll-behavior:contain!important;
+    -webkit-overflow-scrolling:touch;
+  }
+  html body .studio .studio-top {
+    top:0!important;
+    transform:none!important;
+    backface-visibility:visible!important;
+    will-change:auto!important;
+  }
+  html body .studio .studio-layout > .console {
+    bottom:max(6px,env(safe-area-inset-bottom))!important;
+    position:absolute!important;
+    max-height:21svh!important;
+    backface-visibility:visible!important;
+    will-change:auto!important;
+  }
+  html body .studio .table-stage > .host-controls {
+    position:absolute!important;
+  }
+  /* Slightly calmer furniture rather than scaling/blurring whole card SVGs. */
+  html body .studio .portrait-table .portrait-seat {
+    width:clamp(46px,11.8vw,72px)!important;
+    max-width:72px!important;
+  }
+  html body .studio .portrait-table .portrait-seat .portrait-avatar {
+    width:clamp(28px,8vw,43px)!important;
+    height:clamp(28px,8vw,43px)!important;
+  }
+  html body .studio .portrait-table .portrait-seat .nameplate {
+    font-size:clamp(9px,2.35vw,11px)!important;
+    padding:3px 3px 2px!important;
+  }
+  html body .studio .portrait-table .portrait-seat .stackplate {
+    font-size:clamp(10px,2.7vw,13px)!important;
+    padding:1px 3px 3px!important;
+  }
+  html body .studio .portrait-table .empty-chair {
+    width:clamp(27px,7.1vw,36px)!important;
+    height:clamp(27px,7.1vw,36px)!important;
+  }
+  /* Make the felt breathe: inset stays inside the fixed stage. */
+  html body .studio .portrait-table .table-rail {
+    inset:21% 5% 18%!important;
+  }
+  /* Preserve the tested 29x42 minimum for card legibility. */
+  html body .studio .console .player-hand .card[data-royale-card="face"] {
+    min-width:29px!important;
+    min-height:42px!important;
+    transform:none!important;
+    filter:none!important;
+  }
+}
+@media(max-width:800px) and (orientation:portrait) {
+  html body .studio .table-stage > .portrait-table::before {
+    inset:23% 5.5% 20%!important;
+  }
+  html body .studio .portrait-table .table-rail {
+    inset:24% 6% 21%!important;
+  }
+  html body .studio .portrait-table:not(.royale-multiple-boards) .portrait-board {
+    top:49%!important;
+  }
+  html body .studio .portrait-table .pot-tag {top:38%!important;}
+  html body .studio .studio-layout > .console {
+    width:calc(100vw - 14px)!important;
+    bottom:max(6px,env(safe-area-inset-bottom))!important;
+  }
+}
+@media(max-width:800px) and (orientation:landscape) {
+  html body .studio .table-stage > .portrait-table::before {inset:18% 4% 18%!important;}
+  html body .studio .portrait-table .table-rail {inset:19% 4% 17%!important;}
+  html body .studio .studio-layout > .console {max-height:18svh!important;}
+}
