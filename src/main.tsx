@@ -422,3 +422,5 @@ import "./royale-flat-reference-cards.css";
 
 import "./royale-opponent-pocket-fan.css";
 
+
+import "./royale-mobile-stable-stage.css";
