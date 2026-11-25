@@ -101,3 +101,17 @@ test("All playing and showdown cards use one approved flat vector component", ()
  assert.match(css,/background-image:none!important/);
  assert.ok(main.lastIndexOf("royale-flat-reference-cards.css")>main.lastIndexOf("royale-showdown-v2.css"));
 });
+
+test("Concealed opponent pockets remain compact beside each avatar, with a true overlapping fan",()=>{
+ const board=read("../src/PortraitBoard.tsx");
+ const css=read("../src/royale-opponent-pocket-fan.css");
+ const main=read("../src/main.tsx");
+ assert.match(board,/royale-opponent-pocket/);
+ assert.match(board,/--opponent-fan-angle/);
+ assert.match(board,/--opponent-fan-drop/);
+ assert.match(css,/--opponent-fan-step/);
+ assert.match(css,/transform:translateY\(var\(--opponent-fan-drop,0px\)\) rotate\(var\(--opponent-fan-angle,0deg\)\)!important/);
+ assert.match(css,/\.portrait-seat\.right \.pocket\.royale-opponent-pocket/);
+ assert.match(css,/\[hidden\][^{]*\{\s*display:none!important/);
+ assert.ok(main.lastIndexOf("royale-opponent-pocket-fan.css")>main.lastIndexOf("royale-flat-reference-cards.css"));
+});
