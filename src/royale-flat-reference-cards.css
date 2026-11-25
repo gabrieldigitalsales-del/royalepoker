@@ -150,3 +150,23 @@ html body .studio .portrait-table .royale-triple-hero-card[aria-pressed="true"] 
     border-radius:6px!important;
   }
 }
+
+/* Outrank older .studio-specific deck typography without changing game states. */
+html body .studio .card[data-royale-card="face"] > svg.royale-card-face-art .royale-card-vector-rank {
+  font-size:31px!important;
+  font-weight:900!important;
+  letter-spacing:-1.8px!important;
+  fill:var(--flat-card-ink)!important;
+}
+html body .studio .card[data-royale-card="face"][data-rank="10"] > svg.royale-card-face-art .royale-card-vector-rank {
+  font-size:26px!important;
+  letter-spacing:-2.2px!important;
+}
+html body .studio .card[data-royale-card="face"] > svg.royale-card-face-art .flat-card-corner-suit,
+html body .studio .card[data-royale-card="face"] > svg.royale-card-face-art .flat-card-corner-suit :is(path,circle),
+html body .studio .card[data-royale-card="face"] > svg.royale-card-face-art .royale-card-vector-suit,
+html body .studio .card[data-royale-card="face"] > svg.royale-card-face-art .royale-card-vector-suit :is(path,circle) {
+  fill:var(--flat-card-ink)!important;
+  stroke:none!important;
+  filter:none!important;
+}
