@@ -2,6 +2,7 @@ import { Face } from "./PlayerIdentity";
 import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { Card } from "./ui";
 import { RoyalShowdownCard } from "./RoyalShowdownCard";
+import { FlatCardArtwork } from "./FlatCardArtwork";
 import { num } from "./api";
 import { seatPerspective } from "./seat-view.mjs";
 import { revealAt } from "./runout-reveal.mjs";
@@ -599,7 +600,7 @@ export function Board({
                   {combo.length === 5 && <div className="royale-run-score-five" aria-label={`Cinco cartas da combinação de ${winner.name}`}>
                     {combo.map((card: string, i: number) => (
                       <span key={`${card}-${i}`} className="royale-run-score-card" data-suit={card[1]} aria-label={`${card[0] === 'T' ? '10' : card[0]} de ${{s:'espadas',h:'copas',d:'ouros',c:'paus'}[card[1]]}`}>
-                        <b>{card[0] === 'T' ? '10' : card[0]}</b><i>{{s:'♠',h:'♥',d:'♦',c:'♣'}[card[1]]}</i>
+                        <FlatCardArtwork rank={card[0] === 'T' ? '10' : card[0]} suit={card[1]} showdown />
                       </span>
                     ))}
                   </div>}
