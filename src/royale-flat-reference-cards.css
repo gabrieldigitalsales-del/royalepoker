@@ -170,3 +170,51 @@ html body .studio .card[data-royale-card="face"] > svg.royale-card-face-art .roy
   stroke:none!important;
   filter:none!important;
 }
+
+/* Five-card run result cards also use the same flat face rather than
+   the historical decorative mini-card design. */
+html body .studio .portrait-table .royale-run-score-five > .royale-run-score-card {
+  --flat-card-ink:#262063;
+  --reveal-ink:var(--flat-card-ink);
+  position:relative!important;
+  overflow:hidden!important;
+  display:block!important;
+  background:#fff!important;
+  background-image:none!important;
+  border:1px solid #d8d8d8!important;
+  border-radius:5px!important;
+  box-shadow:0 1px 2px #00000019!important;
+  padding:0!important;
+}
+html body .studio .portrait-table .royale-run-score-card[data-suit="s"]{--flat-card-ink:#262063;}
+html body .studio .portrait-table .royale-run-score-card[data-suit="c"]{--flat-card-ink:#143fc0;}
+html body .studio .portrait-table .royale-run-score-card[data-suit="h"]{--flat-card-ink:#f52768;}
+html body .studio .portrait-table .royale-run-score-card[data-suit="d"]{--flat-card-ink:#c7252d;}
+html body .studio .portrait-table .royale-run-score-card > svg.royal-reveal-card__art {
+  display:block!important;
+  position:absolute!important;
+  inset:0!important;
+  width:100%!important;
+  height:100%!important;
+  opacity:1!important;
+  filter:none!important;
+  transform:none!important;
+  scale:1!important;
+  shape-rendering:geometricPrecision;
+  text-rendering:geometricPrecision;
+}
+html body .studio .portrait-table .royale-run-score-card .royal-reveal-card__rank {
+  fill:var(--flat-card-ink)!important;
+  font:900 31px Arial,Helvetica,sans-serif!important;
+  letter-spacing:-1.8px!important;
+  stroke:none!important;
+}
+html body .studio .portrait-table .royale-run-score-card > svg .flat-card-corner-suit :is(path,circle),
+html body .studio .portrait-table .royale-run-score-card > svg .royal-reveal-card__suit :is(path,circle) {
+  fill:var(--flat-card-ink)!important;
+  stroke:none!important;
+}
+html body .studio .portrait-table .royale-run-score-card[data-suit] > svg .royal-reveal-card__suit,
+html body .studio .portrait-table .royale-run-score-card[data-suit] > svg .flat-card-corner-suit {
+  fill:var(--flat-card-ink)!important;
+}
