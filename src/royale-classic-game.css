@@ -280,7 +280,7 @@ html body .studio[data-royale-visual="focus"] .portrait-seat.acting :is(.namepla
   width:clamp(24px,5vw,39px)!important;height:clamp(24px,5vw,39px)!important;
  }
  html body .studio[data-royale-visual="classic"] .console .player-hand .card[data-royale-card="face"]{
-  width:clamp(25px,5.6vw,48px)!important;height:clamp(37px,8vw,69px)!important;
+  width:clamp(29px,5.6vw,48px)!important;height:clamp(42px,8vw,69px)!important;
  }
  html body .studio[data-royale-visual="classic"] .console {width:98vw!important;}
 }
@@ -288,7 +288,7 @@ html body .studio[data-royale-visual="focus"] .portrait-seat.acting :is(.namepla
  html body .studio[data-royale-visual="classic"] .studio-top .royale-hud-logo {height:clamp(40px,17vh,76px)!important;top:0!important;}
  html body .studio[data-royale-visual="classic"] .portrait-table .table-rail {inset:20% 2% 20%!important;}
  html body .studio[data-royale-visual="classic"] .console .player-hand .card[data-royale-card="face"]{
-  width:clamp(24px,7vh,44px)!important;height:clamp(35px,10vh,64px)!important;
+  width:clamp(29px,7vh,44px)!important;height:clamp(42px,10vh,64px)!important;
  }
  html body .studio[data-royale-visual="classic"] .console .betbar > .action-choices button {min-height:36px!important;}
 }
