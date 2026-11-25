@@ -75,6 +75,33 @@ async function openRoom(token, viewport, label, roomId, expectedCards=2) {
     assert.ok(card.suitInside,label+" suit not clipped: "+JSON.stringify(card));
     assert.ok(card.hiddenFallback,label+" old oversized HTML rank hidden");
   }
+  if (viewport.width <= 800) {
+    const mobile=await page.evaluate(()=>{
+      const root=document.querySelector(".studio");
+      const stage=root?.querySelector(".table-stage");
+      const table=stage?.querySelector(".portrait-table");
+      const top=root?.querySelector(".studio-top");
+      const consoleBox=root?.querySelector(".console");
+      const bounds=root?.getBoundingClientRect();
+      return {
+        height:bounds?.height,
+        viewportHeight:window.innerHeight,
+        width:bounds?.width,
+        viewportWidth:window.innerWidth,
+        scrollWidth:document.documentElement.scrollWidth,
+        scrollHeight:document.documentElement.scrollHeight,
+        touch:getComputedStyle(root).touchAction,
+        tableTouch:table?getComputedStyle(table).touchAction:null,
+        headerVisible:!!top && top.getBoundingClientRect().top >= -1,
+        consoleVisible:!!consoleBox && consoleBox.getBoundingClientRect().bottom <= window.innerHeight+2,
+      };
+    });
+    assert.equal(mobile.touch,"none",label+" stage must not pan on touch: "+JSON.stringify(mobile));
+    assert.equal(mobile.tableTouch,"none",label+" playing felt must not pan on touch: "+JSON.stringify(mobile));
+    assert.ok(mobile.scrollWidth <= mobile.viewportWidth+2,label+" horizontal bounce forbidden: "+JSON.stringify(mobile));
+    assert.ok(mobile.scrollHeight <= mobile.viewportHeight+2,label+" vertical bounce forbidden: "+JSON.stringify(mobile));
+    assert.ok(mobile.headerVisible && mobile.consoleVisible,label+" controls must remain inside screen: "+JSON.stringify(mobile));
+  }
   const screenshot=join("artifacts","royale-"+label+".png");
   await page.screenshot({path:screenshot,fullPage:true,animations:"disabled"});
   return {page,context,cards,cardInfo};
