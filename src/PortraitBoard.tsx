@@ -1,6 +1,7 @@
 import { Face } from "./PlayerIdentity";
 import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { Card } from "./ui";
+import { RoyalShowdownCard } from "./RoyalShowdownCard";
 import { num } from "./api";
 import { seatPerspective } from "./seat-view.mjs";
 import { revealAt } from "./runout-reveal.mjs";
@@ -799,9 +800,9 @@ export function Board({
               disabled={!canSelectReveal || heroCardBusy || !onHeroCardClick}
               onClick={() => onHeroCardClick?.(j)}
               className={"royale-triple-hero-card" + (selectedHeroCards.includes(j) ? " royale-card-marked" : "")}
-              style={{ "--card-index": j, ...fanCardStyle(heroCards.length, j, "hero") } as React.CSSProperties}
+              style={{ "--card-index": j } as React.CSSProperties}
             >
-              <Card c={card} />
+              <RoyalShowdownCard card={card} />
               {selectedHeroCards.includes(j) && <i aria-hidden="true">✓</i>}
             </button>
           ))}
@@ -816,7 +817,7 @@ export function Board({
         >
           <small>{player.name}</small>
           <div className="royale-opponent-showdown-cards">
-            {cards.map((card: string, j: number) => <span key={j} className={"royale-opponent-showdown-card" + (resultsReady && settledBoards.some((board: any) => board.winners.some((winner: any) => winner.index === index && comboCardsForWinner(winner).includes(card))) ? " royale-showdown-best-card" : "")} style={fanCardStyle(cards.length, j) as React.CSSProperties}><Card c={card}/></span>)}
+            {cards.map((card: string, j: number) => <span key={j} className={"royale-opponent-showdown-card" + (resultsReady && settledBoards.some((board: any) => board.winners.some((winner: any) => winner.index === index && comboCardsForWinner(winner).includes(card))) ? " royale-showdown-best-card" : "")} style={{"--reveal-index": j} as React.CSSProperties}><RoyalShowdownCard card={card} winning={resultsReady && settledBoards.some((board: any) => board.winners.some((winner: any) => winner.index === index && comboCardsForWinner(winner).includes(card)))} /></span>)}
           </div>
           {awardsReady && f?.payouts?.[index] > 0 && <span className="royale-showdown-crown" aria-hidden="true">👑</span>}
         </div>
