@@ -380,7 +380,13 @@ function finish(d, r) {
   // Never deal another hand until all boards and the winning hands were shown.
   const presentation = showdownFlow(f, 0);
   const multiRun = f.runoutFrom != null && (f.boards?.length ?? 0) > 1;
-  r.reviewUntil = h.ended + (multiRun ? presentation.awardAt : 0) + DEALER_REVIEW_MS;
+  // Integration-only acceleration of the real review gate. Production always
+  // retains the full nine seconds; the isolated API test uses 150ms and still
+  // verifies that early deals are rejected and later deals are permitted.
+  const reviewMs = process.env.NODE_ENV === "test" &&
+    process.env.POKER_ROYALE_TEST_REVIEW_MS === "150"
+    ? 150 : DEALER_REVIEW_MS;
+  r.reviewUntil = h.ended + (multiRun ? presentation.awardAt : 0) + reviewMs;
   r.hand = null;
   // The selection countdown is server-authoritative and survives reconnects.
   if (r.game === "choice" && !r.paused && !r.closed) {
