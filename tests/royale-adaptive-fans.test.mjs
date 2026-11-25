@@ -83,18 +83,21 @@ test("Avatar-adjacent fan cards keep normal-size rank and one visible suit, not 
  assert.equal((face.match(/className="card-emblem"/g)||[]).length,1);
 });
 
-test("Ranks and single suit use scaled SVG, immune to nested CSS font-size collisions", () => {
+test("All playing and showdown cards use one approved flat vector component", () => {
  const ui=read("../src/ui.tsx");
- const css=read("../src/royale-vector-card-face.css");
+ const reveal=read("../src/RoyalShowdownCard.tsx");
+ const art=read("../src/FlatCardArtwork.tsx");
  const main=read("../src/main.tsx");
- assert.match(ui,/className="royale-card-face-art"/);
- assert.match(ui,/viewBox="0 0 64 90"/);
- assert.match(ui,/className="royale-card-vector-rank"/);
- assert.match(ui,/className="royale-card-vector-suit"/);
- assert.equal((ui.match(/className="royale-card-vector-suit"/g)||[]).length,1);
- assert.match(css,/\.card\[data-royale-card="face"\] > svg\.royale-card-face-art/);
- assert.match(css,/font-size:25px!important/);
- assert.match(css,/font-size:22px!important/);
- assert.match(css,/\.royale-card-face-art\) > \.card-emblem/);
- assert.ok(main.lastIndexOf("royale-vector-card-face.css") > main.lastIndexOf("royale-adaptive-fans.css"));
+ const css=read("../src/royale-flat-reference-cards.css");
+ assert.match(ui,/import \{ FlatCardArtwork \} from "\.\/FlatCardArtwork"/);
+ assert.match(ui,/<FlatCardArtwork rank=\{value\} suit=\{c\[1\]\}/);
+ assert.match(reveal,/<FlatCardArtwork rank=\{rank\} suit=\{suit\} showdown/);
+ assert.match(art,/viewBox="0 0 70 96"/);
+ assert.match(art,/className="flat-card-corner-suit"/);
+ assert.match(art,/className=\{showdown \? "royal-reveal-card__suit" : "royale-card-vector-suit"\}/);
+ assert.doesNotMatch(art,/crest|watermark|logo/i);
+ assert.equal((art.match(/<SuitShape suit=\{resolved\}/g)||[]).length,2);
+ assert.match(css,/background:#fff!important/);
+ assert.match(css,/background-image:none!important/);
+ assert.ok(main.lastIndexOf("royale-flat-reference-cards.css")>main.lastIndexOf("royale-showdown-v2.css"));
 });
