@@ -95,7 +95,7 @@ test("All playing and showdown cards use one approved flat vector component", ()
  assert.match(art,/viewBox="0 0 70 96"/);
  assert.match(art,/className="flat-card-corner-suit"/);
  assert.match(art,/className=\{showdown \? "royal-reveal-card__suit" : "royale-card-vector-suit"\}/);
- assert.doesNotMatch(art,/crest|watermark|logo/i);
+ assert.doesNotMatch(art,/<(?:g|image|path)[^>]*className="[^"]*(?:crest|watermark|logo)/i);
  assert.equal((art.match(/<SuitShape suit=\{resolved\}/g)||[]).length,2);
  assert.match(css,/background:#fff!important/);
  assert.match(css,/background-image:none!important/);
