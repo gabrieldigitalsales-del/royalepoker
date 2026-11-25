@@ -32,6 +32,7 @@ import { upgradeDealerRotation } from "./dealer-rotation.mjs";
 import { ensureDealerChoiceModes } from "./dealer-choice-modes.mjs";
 import { statistics } from "./stats.mjs";
 import { storage } from "./store.mjs";
+import { setSeatAway, isExpiredSitoutSeat, backfillSitoutTimestamp } from "./sitout-policy.mjs";
 import {
   deal,
   move,
@@ -799,7 +800,7 @@ async function command(d, u, b) {
       {
         const s = r.seats.find((s) => s.id === u.id);
         check(s, "Sente-se primeiro.");
-        s.away = !s.away;
+        setSeatAway(s, !s.away);
         // A returning player changes the clockwise eligible-player order.
         // Keep the pending selector in sync with the server before the next hand.
         // Next dealer is recomputed after sit out / return.
@@ -1590,6 +1591,25 @@ setInterval(() => {
     const due = new Set();
     const pendingCashouts = new Set();
     const expiredDealerPauses = new Set();
+    const expiredSitouts = new Map();
+    let needsSitoutBackfill = false;
+    for (const room of Object.values(store.value.rooms)) {
+      if (room.tour || room.closed) continue;
+      for (const seat of room.seats) {
+        if (!seat.away) continue;
+        if (!Number.isFinite(seat.awaySince)) {
+          needsSitoutBackfill = true;
+        } else if (isExpiredSitoutSeat(seat, now)) {
+          // The standard leave() routine requires the hand to be finished
+          // and every runout prize to be publicly released.
+          if (!room.hand && !pendingPrizeHand(store.value, room, now)) {
+            const ids = expiredSitouts.get(room.id) ?? [];
+            ids.push(seat.id);
+            expiredSitouts.set(room.id, ids);
+          }
+        }
+      }
+    }
     for (const room of Object.values(store.value.rooms)) {
       if (room.game === "choice" && room.nextChoice?.heldAt &&
           now >= (room.nextChoice.holdUntil ?? room.nextChoice.heldAt + DEALER_PAUSE_MS))
@@ -1627,11 +1647,32 @@ setInterval(() => {
     }
     if (
       !due.size && !pendingCashouts.size && !expiredDealerPauses.size &&
+      !expiredSitouts.size && !needsSitoutBackfill &&
       !Object.values(store.value.rooms).some((r) => r.hand?.deadline < now)
     )
       return;
     const d = structuredClone(store.value);
     for (const r of Object.values(d.rooms)) {
+      if (!r.tour && !r.closed) {
+        for (const seat of r.seats) backfillSitoutTimestamp(seat, now);
+        if (expiredSitouts.has(r.id)) {
+          for (const id of expiredSitouts.get(r.id)) {
+            const seat = r.seats.find(s => s.id === id);
+            if (!seat || !isExpiredSitoutSeat(seat, now)) continue;
+            const user = d.users[id];
+            if (!user) continue;
+            const returned = seat.stack;
+            leave(d, user, r);
+            notify(user, "Você ficou em sit out por 3 minutos e saiu automaticamente da mesa. " +
+              returned.toLocaleString("pt-BR") + " fichas devolvidas à carteira.", r.id);
+          }
+          // A new eligible button or Dealer Choice selector must not belong
+          // to an evicted player. This is rechecked on the next deal.
+          if (r.game === "choice" && r.choiceStarted && !r.paused)
+            syncDealerChoiceAfterSeatChange(r, catalog, now);
+          readySince.delete(r.id);
+        }
+      }
       if (expiredDealerPauses.has(r.id)) resumeDealerChoice(r.nextChoice, now);
       if (pendingCashouts.has(r.id)) {
         for (const seat of [...r.seats].filter(s => s.leaveAfterHand))
