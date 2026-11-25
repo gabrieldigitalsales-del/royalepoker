@@ -409,6 +409,7 @@ export default function Table() {
     [entry, setEntry] = useState<{ position: number; amount: number }>(),
     [tableOptions, setTableOptions] = useState(false),
     [visualEffects, setVisualEffects] = useState(() => localStorage.getItem("royale-effects") ?? "normal"),
+    [royaleVisual, setRoyaleVisual] = useState(() => {const saved=localStorage.getItem("poker-royale-visual-mode");return ["classic","current","focus"].includes(saved ?? "") ? saved! : "classic";}),
     [closingResults, setClosingResults] = useState<any>(null),
     [mobileDock, setMobileDock] = useState(() => localStorage.getItem("mesa-mobile-dock") !== "off"),
     [bbView, setBbView] = useState(() => localStorage.getItem("mesa-bb-view") === "on"),
@@ -875,6 +876,7 @@ export default function Table() {
   return (
     <div
       data-table-theme={theme}
+      data-royale-visual={royaleVisual}
       data-visual-effects={visualEffects}
       className={"studio" + (me.preferences.largeCards ? " large-cards" : "") + (mobileDock ? " mobile-game-dock" : "") + (f?.runoutCount >= 2 && f?.boards?.length >= 2 && f?.runoutFrom != null ? " royale-triple-run-active" : "") + (awardPending ? " royale-runout-settling" : "")}
     >
@@ -1422,6 +1424,18 @@ export default function Table() {
                 }}
               />
               <div className="table-options-list">
+                <Field title="Visual da mesa">
+                  <select aria-label="Visual da mesa" value={royaleVisual} onChange={(event) => {
+                    const next = event.target.value;
+                    if (!["classic", "current", "focus"].includes(next)) return;
+                    setRoyaleVisual(next);
+                    localStorage.setItem("poker-royale-visual-mode", next);
+                  }}>
+                    <option value="classic">Royale Classic · Roxo e dourado</option>
+                    <option value="current">Royale Atual · Versão anterior</option>
+                    <option value="focus">Royale Focus · Verde simplificado</option>
+                  </select>
+                </Field>
                 <Field title="Intensidade dos efeitos">
                   <select value={visualEffects} onChange={(event) => {
                     setVisualEffects(event.target.value);
