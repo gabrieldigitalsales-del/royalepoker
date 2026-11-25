@@ -426,3 +426,5 @@ import "./royale-opponent-pocket-fan.css";
 import "./royale-mobile-stable-stage.css";
 
 import "./royale-mobile-fixed-lobby-nav.css";
+
+import "./royale-score-desktop-refinement.css";
