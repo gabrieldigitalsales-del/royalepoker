@@ -480,10 +480,25 @@ export default function Table() {
       .finally(() => { if (active) setVipLoading(false); });
     return () => { active = false; };
   }, [player?.id, me.id, me.vip]);
+  // Idle tables do not need two full React renders per second.
+  // Keep the 250ms reveal clock only while Run It Twice/Three is actually
+  // presenting its boards; ordinary turn counters change once per second.
+  const fastRevealClock = !!r?.lastHand?.frames?.at(-1)?.finished &&
+    r.lastHand.frames.at(-1).runoutFrom != null &&
+    (r.lastHand.frames.at(-1).boards?.length ?? 0) > 1 &&
+    Date.now() < (r.reviewUntil ?? 0);
   useEffect(() => {
-    const t = setInterval(() => T(Date.now()), 500);
-    return () => clearInterval(t);
-  }, []);
+    const tick = () => {
+      if (document.visibilityState === "visible") T(Date.now());
+    };
+    const t = window.setInterval(tick, fastRevealClock ? 250 : 1000);
+    const resume = () => { if (document.visibilityState === "visible") T(Date.now()); };
+    document.addEventListener("visibilitychange", resume);
+    return () => {
+      window.clearInterval(t);
+      document.removeEventListener("visibilitychange", resume);
+    };
+  }, [fastRevealClock]);
   const [pendingAllIn, setPendingAllIn] = useState<{
     action: any;
     rev: number;
