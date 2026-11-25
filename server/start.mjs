@@ -1681,6 +1681,19 @@ setInterval(() => {
         continue;
       }
       if (due.has(r.id)) {
+        // An idle-seat cash-out can remove a player that qualified when
+        // this tick was scheduled. Never let a rejected auto-deal roll
+        // back the wallet refund for the departed player.
+        if (!r.tour && !r.hand && r.seats.filter(seat =>
+          !seat.away && (
+            seat.stack > 0 ||
+            (seat.autoRefill && d.users[seat.id]?.wallet > 0) ||
+            catalog[r.game]?.family === "Chinês"
+          )
+        ).length < 2) {
+          readySince.delete(r.id);
+          continue;
+        }
         // If seating changed (leave/sit out/reconnect), discard a stale gate.
         if (r.preStraddle && !r.preStraddle.resolved &&
           nextUtg(r)?.id !== r.preStraddle.playerId) {
