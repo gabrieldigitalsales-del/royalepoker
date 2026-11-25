@@ -734,7 +734,7 @@ export function Board({
                 </span>
               )}
               <div
-                className={"pocket " + (p.id === me.id ? "faceup" : "")}
+                className={"pocket " + (p.id === me.id ? "faceup" : "royale-opponent-pocket")}
                 hidden={handBelow && p.id === me.id}
                 style={
                   { "--count": f?.hole[i]?.length || 0, "--fan-step": (Math.max(11, 21 - Math.max(0, (f?.hole[i]?.length ?? 2) - 2) * 1.4)).toFixed(1) + "px" } as React.CSSProperties
@@ -743,7 +743,7 @@ export function Board({
                 {f?.hole[i]?.map((c, j) => (
                   <span
                     key={id + ":" + j}
-                    style={{ "--j": j } as React.CSSProperties}
+                    style={{ "--j": j, "--opponent-fan-angle": (((j - ((f?.hole[i]?.length ?? 1) - 1) / 2) * (f?.hole[i]?.length === 2 ? 12 : 32 / Math.max(1, (f?.hole[i]?.length ?? 2) - 1))).toFixed(2) + "deg"), "--opponent-fan-drop": (Math.abs(j - ((f?.hole[i]?.length ?? 1) - 1) / 2) * 1.7).toFixed(1) + "px" } as React.CSSProperties}
                   >
                     <Card c={c} />
                   </span>
