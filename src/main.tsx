@@ -66,7 +66,8 @@ function App() {
       ws: WebSocket,
       t,
       loading = false,
-      again = false;
+      again = false,
+      socketRefreshTimer: ReturnType<typeof setTimeout> | undefined;
     const sync = async () => {
       if (!alive) return;
       if (loading) {
@@ -91,9 +92,15 @@ function App() {
       ws = new WebSocket(backend.replace(/^http/, "ws") + "/live");
       ws.onopen = () => ws.send(token);
       ws.onmessage = () => {
-        if (alive) {
-          set({ liveStatus: "online" });
-          sync();
+        if (!alive) return;
+        if (useApp.getState().liveStatus !== "online") set({ liveStatus: "online" });
+        // A rapid burst of lobby notifications needs only one fresh
+        // snapshot. Never debounce player actions on the server.
+        if (socketRefreshTimer === undefined) {
+          socketRefreshTimer = setTimeout(() => {
+            socketRefreshTimer = undefined;
+            sync();
+          }, 100);
         }
       };
       ws.onclose = () => {
@@ -136,6 +143,7 @@ function App() {
       window.removeEventListener("online", resume);
       clearInterval(poll);
       clearTimeout(t);
+      clearTimeout(socketRefreshTimer);
       ws?.close();
     };
   }, [token]);
