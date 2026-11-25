@@ -27,8 +27,16 @@ test("Live opponents, triple-run hero and face-up pockets receive adaptive fan g
   const table=read("../src/PortraitBoard.tsx");
   const css=read("../src/royale-adaptive-fans.css");
   assert.match(table,/import \{ fanCardStyle, fanGeometry \} from "\.\/card-fan\.mjs"/);
-  assert.match(table,/fanCardStyle\(cards\.length, j\)/);
-  assert.match(table,/fanCardStyle\(heroCards\.length, j, "hero"\)/);
+  // New showdown cards are intentionally independent of the old angled fans.
+  const isolated=read("../src/RoyalShowdownCard.tsx");
+  const showdownCss=read("../src/royale-showdown-v2.css");
+  assert.match(table,/import \{ RoyalShowdownCard \} from "\.\/RoyalShowdownCard"/);
+  assert.match(table,/<RoyalShowdownCard card=\{card\}/);
+  assert.match(isolated,/className=\{"royal-reveal-card"/);
+  assert.match(showdownCss,/\.royal-reveal-card__art/);
+  assert.match(showdownCss,/transform:none!important/);
+  assert.doesNotMatch(table, /style=\{fanCardStyle\(cards\.length, j\)/);
+
   assert.match(table,/fanGeometry\(cards\.length\)\.overlap/);
   assert.match(table,/--fan-step/);
   assert.match(css,/margin-left:calc\(-1 \* var\(--fan-overlap/);
