@@ -123,6 +123,32 @@ try {
     ["mobile-390",b.token,{width:390,height:844}],
     ["desktop-1366",a.token,{width:1366,height:768}],
   ]) views.push(await openRoom(token,viewport,label,room.id));
+  // Real session scoreboard must fit in both the narrow bottom sheet and
+  // centered desktop dialog, independent of the live end-of-hand result.
+  for (const v of views) {
+    const viewport=v.page.viewportSize();
+    const label="score-"+viewport.width;
+    await v.page.locator(".balances-toggle").click({force:true});
+    await v.page.locator("dialog.balances-sheet[open]").waitFor({timeout:5000});
+    const shape=await v.page.locator("dialog.balances-sheet").evaluate(el=>{
+      const rect=el.getBoundingClientRect();
+      const modal=el.querySelector(".modal");
+      return {
+        left:rect.left,right:rect.right,top:rect.top,bottom:rect.bottom,
+        width:rect.width,height:rect.height,
+        overflow:getComputedStyle(modal).overflowY,
+        summaryCount:el.querySelectorAll(".balances-list summary").length,
+      };
+    });
+    assert.ok(shape.left>=-2 && shape.right<=viewport.width+2,label+" scoreboard width fits: "+JSON.stringify(shape));
+    assert.ok(shape.top>=-2 && shape.bottom<=viewport.height+2,label+" scoreboard height fits: "+JSON.stringify(shape));
+    assert.ok(shape.summaryCount>=2,label+" online player scores rendered: "+JSON.stringify(shape));
+    if(viewport.width<=800){
+      assert.ok(shape.bottom>=viewport.height-3,label+" scoreboard anchored to bottom: "+JSON.stringify(shape));
+    }
+    await v.page.screenshot({path:join("artifacts","royale-"+label+".png"),animations:"disabled"});
+    await v.page.getByRole("button",{name:"Fechar",exact:true}).last().click();
+  }
   // The lobby uses an independent scrolling page and a bottom dock.
   // Mobile Safari previously let the tabs scroll away, or placed them
   // beyond the visible viewport after dynamic browser-bar changes.
