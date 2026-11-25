@@ -123,6 +123,37 @@ try {
     ["mobile-390",b.token,{width:390,height:844}],
     ["desktop-1366",a.token,{width:1366,height:768}],
   ]) views.push(await openRoom(token,viewport,label,room.id));
+  // The lobby uses an independent scrolling page and a bottom dock.
+  // Mobile Safari previously let the tabs scroll away, or placed them
+  // beyond the visible viewport after dynamic browser-bar changes.
+  for(const width of [360,390]){
+    const ctx=await browser.newContext({viewport:{width,height:740},deviceScaleFactor:1,locale:"pt-BR"});
+    await ctx.addInitScript(token=>localStorage.setItem("mesaToken",token),a.token);
+    const page=await ctx.newPage();
+    page.on("pageerror",err=>errors.push("lobby-"+width+": "+err.message));
+    await page.goto(base+"/",{waitUntil:"domcontentloaded"});
+    await page.locator(".lobby-app-nav").waitFor({timeout:18000});
+    const state=await page.evaluate(()=>{
+      const nav=document.querySelector(".lobby-app-nav");
+      const scroll=document.querySelector(".lobby-shell .page");
+      const box=nav.getBoundingClientRect();
+      return {bottom:box.bottom,windowHeight:window.innerHeight,
+        left:box.left,right:box.right,windowWidth:window.innerWidth,
+        scrollable:scroll.scrollHeight>scroll.clientHeight,
+        navParent:nav.parentElement?.className,
+        navPosition:getComputedStyle(nav).position};
+    });
+    assert.ok(state.bottom <= state.windowHeight+2 &&
+      state.bottom >= state.windowHeight-25,"Lobby bottom nav in viewport: "+JSON.stringify(state));
+    assert.ok(state.left>=-1 && state.right<=state.windowWidth+2,
+      "Lobby bottom nav within horizontal viewport: "+JSON.stringify(state));
+    await page.locator(".lobby-shell .page").evaluate(el=>el.scrollTop=el.scrollHeight);
+    const bottom=await page.locator(".lobby-app-nav").evaluate(el=>el.getBoundingClientRect().bottom);
+    assert.ok(Math.abs(bottom-state.bottom)<2,
+      "Lobby bottom nav must not move while scrolling page: "+state.bottom+" vs "+bottom);
+    await page.screenshot({path:join("artifacts","royale-lobby-"+width+".png"),fullPage:true,animations:"disabled"});
+    await ctx.close();
+  }
   // Real game screens for the variants prone to hidden symbols on phones.
   for (const [game,expectedCards] of [["watermelon",4],["om5db",5],["om7",7]]) {
     const fresh=await request("create",a.token,{name:"Browser "+game,
