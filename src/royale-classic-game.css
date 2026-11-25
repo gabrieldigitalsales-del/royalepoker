@@ -1,0 +1,297 @@
+/* Poker Royale · Royale Classic 2026.
+   Applied only to the selected table visual mode. Server gameplay, cards,
+   payouts, read-only runouts, card selection and seat positions stay intact. */
+html body .studio[data-royale-visual="classic"] {
+  --classic-gold:#f9c151;
+  --classic-bright:#ffeb8b;
+  --classic-purple:#6a0d79;
+  background:#100519 url("/royale-classic-chamber.svg") center/100% 100% no-repeat!important;
+  color:#fff6dc!important;
+}
+html body .studio[data-royale-visual="classic"]::before {
+  background:linear-gradient(180deg,#0b06103a 0%,transparent 24%,transparent 76%,#15071b75 100%)!important;
+}
+html body .studio[data-royale-visual="classic"] .portrait-table .table-rail {
+  display:block!important;position:absolute!important;
+  inset:17.8% 3.1% 18.9%!important;
+  border:clamp(8px,1.45vw,23px) solid #c37821!important;
+  border-radius:50% / 47%!important;
+  background:radial-gradient(ellipse at 50% 47%,#520754 0%,#460641 59%,#280528 100%)!important;
+  box-shadow:
+    inset 0 0 0 3px #ffe59b,
+    inset 0 0 0 6px #7f227c,
+    inset 0 0 0 10px #dc2dce,
+    inset 0 0 18px 12px #f13aff55,
+    0 0 0 2px #fff3a3,
+    0 0 0 6px #9b4c0f,
+    0 14px 20px #07020bdb,
+    0 0 20px #fdb63c77!important;
+  z-index:0!important;opacity:1!important;
+}
+html body .studio[data-royale-visual="classic"] .portrait-table .table-rail::before,
+html body .studio[data-royale-visual="classic"] .portrait-table .table-rail::after {
+  display:none!important;
+}
+html body .studio[data-royale-visual="classic"] .portrait-table .table-wordmark {
+  display:block!important;
+  top:53%!important;left:50%!important;opacity:.10!important;
+  width:min(34vw,480px)!important;height:140px!important;
+  transform:translate(-50%,-50%)!important;z-index:1!important;
+  pointer-events:none!important;
+}
+html body .studio[data-royale-visual="classic"] .portrait-table .table-wordmark .royale-table-watermark {
+  display:block!important;
+  width:100%!important;height:100%!important;object-fit:contain!important;
+  filter:grayscale(1) sepia(1) hue-rotate(252deg) saturate(2)!important;
+}
+html body .studio[data-royale-visual="classic"] .studio-top {
+  height:clamp(46px,8vh,75px)!important;
+  background:none!important;border:none!important;
+  padding:clamp(4px,.65vw,10px) clamp(8px,1.6vw,26px)!important;
+  align-items:flex-start!important;
+  z-index:28!important;
+}
+html body .studio[data-royale-visual="classic"] .studio-top .royale-hud-logo {
+  display:block!important;position:absolute!important;
+  left:50%!important;top:1px!important;
+  width:clamp(145px,19.8vw,325px)!important;
+  height:clamp(70px,15vh,150px)!important;max-width:none!important;
+  object-fit:contain!important;
+  transform:translateX(-50%)!important;
+  filter:drop-shadow(0 2px 5px #08030ad9)!important;
+  z-index:4!important;pointer-events:none!important;
+}
+html body .studio[data-royale-visual="classic"] .studio-top .studio-nav {gap:6px!important;align-items:flex-start!important;}
+html body .studio[data-royale-visual="classic"] .studio-top .studio-title {justify-content:flex-end!important;}
+html body .studio[data-royale-visual="classic"] .studio-top .studio-title>div:first-child {
+  position:absolute!important;left:50%!important;top:clamp(103px,15.5vh,150px)!important;
+  transform:translateX(-50%)!important;max-width:min(36vw,360px)!important;
+  background:#16091ab8!important;border:1px solid #bb7b3980!important;
+  border-radius:10px!important;opacity:0!important;pointer-events:none!important;
+}
+html body .studio[data-royale-visual="classic"] .studio-top button {
+  background:linear-gradient(180deg,#3e194a,#210b2b)!important;
+  border:1px solid #c6894f!important;
+  border-radius:11px!important;
+  color:#ffe8a3!important;
+  box-shadow:0 2px 8px #08041175!important;
+  text-shadow:none!important;min-height:35px!important;
+}
+html body .studio[data-royale-visual="classic"] .portrait-table .portrait-seat {
+  filter:none!important;opacity:1!important;
+  width:clamp(65px,9.4vw,148px)!important;
+}
+html body .studio[data-royale-visual="classic"] .portrait-table .portrait-seat .portrait-avatar {
+  border:1px solid #daaf6c!important;background:#2b092d!important;
+  box-shadow:0 2px 6px #09020ec5!important;
+  width:clamp(32px,3.2vw,54px)!important;
+  height:clamp(32px,3.2vw,54px)!important;
+  opacity:.35!important;
+}
+html body .studio[data-royale-visual="classic"] .portrait-table .portrait-seat .nameplate,
+html body .studio[data-royale-visual="classic"] .portrait-table .portrait-seat .stackplate {
+  width:100%!important;max-width:100%!important;
+  border:1px solid #a9518a!important;
+  background:linear-gradient(180deg,#341035f8,#17071ff7)!important;
+  color:#fff3e6!important;text-shadow:none!important;
+  font-weight:850!important;
+  box-shadow:0 2px 6px #08030db0!important;
+}
+html body .studio[data-royale-visual="classic"] .portrait-table .portrait-seat .nameplate {
+  border-bottom:0!important;
+  border-radius:14px 14px 0 0!important;
+  font-size:clamp(11px,1.12vw,18px)!important;
+  padding:8px 4px 2px!important;
+  margin-top:-7px!important;
+  z-index:6!important;
+}
+html body .studio[data-royale-visual="classic"] .portrait-table .portrait-seat .stackplate {
+  border-top:0!important;
+  border-radius:0 0 14px 14px!important;
+  color:#ffdb74!important;
+  font-size:clamp(13px,1.4vw,23px)!important;
+  padding:1px 4px 7px!important;
+  z-index:6!important;
+}
+html body .studio[data-royale-visual="classic"] .portrait-table .portrait-seat.acting {
+  filter:drop-shadow(0 0 4px #ffe25c)!important;
+}
+html body .studio[data-royale-visual="classic"] .portrait-table .portrait-seat.acting .nameplate,
+html body .studio[data-royale-visual="classic"] .portrait-table .portrait-seat.acting .stackplate {
+  border-color:#fff39c!important;
+  box-shadow:0 0 0 2px #fff2a6,0 0 12px 5px #ffc327,0 0 28px 10px #ffa90093!important;
+}
+html body .studio[data-royale-visual="classic"] .portrait-table .portrait-seat.acting .portrait-avatar {
+  border-color:#ffe5a1!important;opacity:1!important;
+}
+html body .studio[data-royale-visual="classic"] .portrait-table .portrait-seat.winner .nameplate,
+html body .studio[data-royale-visual="classic"] .portrait-table .portrait-seat.winner .stackplate {
+  border-color:#f4d074!important;box-shadow:0 0 9px #edb354!important;
+}
+html body .studio[data-royale-visual="classic"] .portrait-table .portrait-seat.seat-sitout .portrait-avatar {opacity:.3!important;}
+html body .studio[data-royale-visual="classic"] .portrait-table .portrait-seat .pocket.royale-opponent-pocket:not(:has(.card[data-royale-card="face"])) {
+  top:-3px!important;
+  left:calc(50% - clamp(26px,3vw,45px))!important;
+  z-index:9!important;
+}
+html body .studio[data-royale-visual="classic"] .portrait-table .portrait-seat.right .pocket.royale-opponent-pocket:not(:has(.card[data-royale-card="face"])) {
+  left:calc(50% + clamp(26px,3vw,45px))!important;
+}
+html body .studio[data-royale-visual="classic"] .portrait-table .pot-tag {
+  top:31%!important;filter:none!important;
+}
+html body .studio[data-royale-visual="classic"] .pot-tag > small:first-child {
+  font-size:clamp(10px,1vw,16px)!important;
+  text-shadow:none!important;color:#ffe9ba!important;
+}
+html body .studio[data-royale-visual="classic"] .pot-tag > span,
+html body .studio[data-royale-visual="classic"] .pot-tag .royale-pot-value-bubble {
+  min-width:0!important;
+  padding:6px 16px!important;
+  background:#220a27e9!important;
+  border:2px solid #e3af48!important;
+  border-radius:14px!important;
+  box-shadow:0 2px 8px #0b0412cc!important;
+  color:#f7ce60!important;
+  font-size:clamp(15px,1.55vw,24px)!important;
+}
+html body .studio[data-royale-visual="classic"] .portrait-table:not(.royale-multiple-boards) .portrait-board {
+  top:42%!important;
+  gap:clamp(5px,.8vw,12px)!important;
+}
+html body .studio[data-royale-visual="classic"] .portrait-table .board-slot {
+  background:linear-gradient(160deg,#380637,#230624)!important;
+  border:2px solid #cc27b8!important;
+  border-radius:12px!important;
+  box-shadow:inset 0 1px 3px #1a061b8a!important;
+}
+html body .studio[data-royale-visual="classic"] .portrait-table .royale-board-game-name {
+  color:#dfb989!important;text-shadow:none!important;
+  font-size:clamp(11px,.95vw,16px)!important;
+}
+html body .studio[data-royale-visual="classic"] .portrait-table .felt-stake {
+  background:#26092ee9!important;color:#ffe1a3!important;
+  border:1px solid #ab4590!important;
+  box-shadow:0 2px 5px #070309b0!important;
+}
+html body .studio[data-royale-visual="classic"] .console {
+  bottom:1.4%!important;width:min(92vw,1450px)!important;max-height:22vh!important;
+}
+html body .studio[data-royale-visual="classic"] .console .player-hand {
+  bottom:calc(100% + 7px)!important;
+  gap:clamp(3px,.5vw,8px)!important;
+}
+html body .studio[data-royale-visual="classic"] .console .player-hand .card[data-royale-card="face"] {
+  width:clamp(32px,4.6vw,76px)!important;
+  height:clamp(45px,6.6vw,108px)!important;
+  border-radius:clamp(5px,.62vw,9px)!important;
+  background:#fff!important;
+  border:1px solid #d7d7d7!important;
+  box-shadow:0 3px 5px #1005139e!important;
+}
+html body .studio[data-royale-visual="classic"] .console .panel.actions {
+  width:100%!important;max-height:18vh!important;
+  border:0!important;background:transparent!important;
+  padding:4px 0!important;box-shadow:none!important;
+}
+html body .studio[data-royale-visual="classic"] .console .betbar > .action-choices {
+  gap:clamp(7px,.9vw,14px)!important;
+}
+html body .studio[data-royale-visual="classic"] .console .betbar > .action-choices button {
+  min-height:clamp(43px,7.4vh,76px)!important;
+  border-radius:13px!important;
+  border:2px solid #dca848!important;
+  color:#ffe8af!important;
+  text-shadow:none!important;
+  font-weight:850!important;
+  background:linear-gradient(180deg,#3b1840,#17091e)!important;
+  box-shadow:0 3px 8px #08030dcc,inset 0 1px #fff2b322!important;
+  font-size:clamp(12px,1.25vw,20px)!important;
+}
+html body .studio[data-royale-visual="classic"] .console .betbar > .action-choices button.royale-call,
+html body .studio[data-royale-visual="classic"] .console .betbar > .action-choices button.royale-check {
+  background:linear-gradient(180deg,#801894,#39084c)!important;
+  border-color:#fad266!important;color:#fff6de!important;
+}
+html body .studio[data-royale-visual="classic"] .console .betbar > .action-choices button.primary {
+  background:linear-gradient(180deg,#5e175e,#2e0836)!important;
+  border-color:#ecc157!important;color:#ffdf89!important;
+}
+html body .studio[data-royale-visual="classic"] .console .betbar > .action-choices button.danger {
+  background:linear-gradient(180deg,#441f45,#210923)!important;
+  color:#ffe5bb!important;border-color:#d99d49!important;
+}
+html body .studio[data-royale-visual="classic"] .console .betbar > .action-choices button:disabled {
+  opacity:.45!important;box-shadow:none!important;
+}
+html body .studio[data-royale-visual="classic"] .console button:not(.royale-own-card) {
+  touch-action:manipulation;
+}
+html body .studio[data-royale-visual="classic"] .console :is(.seat-menu,.seat-options,.side-tools) button {
+  border:1px solid #d5a548!important;
+  color:#ffe6a9!important;background:#2f0b35!important;
+}
+html body .studio[data-royale-visual="classic"] .royale-visual-switcher {
+  position:absolute!important;top:9px!important;left:50%!important;
+  transform:translateX(-50%)!important;
+  z-index:30!important;
+}
+/* Alternate modes remain available and keep the entire existing system. */
+html body .studio[data-royale-visual="current"] {--royale-mode-current:1;}
+html body .studio[data-royale-visual="focus"] {
+  background:radial-gradient(ellipse at 50% 44%,#137544 0%,#0e5b38 65%,#083b29 100%)!important;
+  background-image:radial-gradient(ellipse at 50% 44%,#137544 0%,#0e5b38 65%,#083b29 100%)!important;
+}
+html body .studio[data-royale-visual="focus"] .portrait-table .table-rail {
+  background:#116c40!important;
+  border:5px solid #239e61!important;
+  box-shadow:inset 0 0 0 2px #42b77d33,0 4px 14px #042f1c99!important;
+}
+html body .studio[data-royale-visual="focus"] .portrait-table .board-slot {
+  background:#155a3e!important;border-color:#9ccbb166!important;box-shadow:none!important;
+}
+html body .studio[data-royale-visual="focus"] .portrait-seat.acting {
+  filter:drop-shadow(0 0 12px #d5fa3899)!important;
+}
+html body .studio[data-royale-visual="focus"] .portrait-seat.acting :is(.nameplate,.stackplate) {
+  box-shadow:0 0 0 2px #e5ff80,0 0 15px 7px #eafa3a88!important;
+}
+@media(max-width:850px){
+ html body .studio[data-royale-visual="classic"] {
+  background-size:auto 100%!important;
+ }
+ html body .studio[data-royale-visual="classic"] .portrait-table .table-rail{
+  inset:19% 2% 18%!important;border-width:clamp(5px,1.8vw,10px)!important;
+  box-shadow:inset 0 0 0 1px #ffe59b,inset 0 0 0 3px #cc27b8,0 2px 8px #e6a2476b!important;
+ }
+ html body .studio[data-royale-visual="classic"] .studio-top .royale-hud-logo{
+  width:clamp(120px,26vw,205px)!important;height:clamp(60px,12vh,95px)!important;
+ }
+ html body .studio[data-royale-visual="classic"] .portrait-table .portrait-seat {
+  width:clamp(48px,12vw,84px)!important;
+ }
+ html body .studio[data-royale-visual="classic"] .portrait-table .portrait-seat .nameplate {
+  font-size:clamp(9px,1.7vw,12px)!important;padding:4px 3px 2px!important;
+ }
+ html body .studio[data-royale-visual="classic"] .portrait-table .portrait-seat .stackplate {
+  font-size:clamp(10px,2vw,14px)!important;padding:1px 3px 4px!important;
+ }
+ html body .studio[data-royale-visual="classic"] .portrait-table .portrait-seat .portrait-avatar{
+  width:clamp(24px,5vw,39px)!important;height:clamp(24px,5vw,39px)!important;
+ }
+ html body .studio[data-royale-visual="classic"] .console .player-hand .card[data-royale-card="face"]{
+  width:clamp(25px,5.6vw,48px)!important;height:clamp(37px,8vw,69px)!important;
+ }
+ html body .studio[data-royale-visual="classic"] .console {width:98vw!important;}
+}
+@media(max-height:600px) and (orientation:landscape){
+ html body .studio[data-royale-visual="classic"] .studio-top .royale-hud-logo {height:clamp(40px,17vh,76px)!important;top:0!important;}
+ html body .studio[data-royale-visual="classic"] .portrait-table .table-rail {inset:20% 2% 20%!important;}
+ html body .studio[data-royale-visual="classic"] .console .player-hand .card[data-royale-card="face"]{
+  width:clamp(24px,7vh,44px)!important;height:clamp(35px,10vh,64px)!important;
+ }
+ html body .studio[data-royale-visual="classic"] .console .betbar > .action-choices button {min-height:36px!important;}
+}
+@media(prefers-reduced-motion:reduce){
+ html body .studio[data-royale-visual="classic"] .portrait-seat.acting {transition:none!important;animation:none!important;}
+}
