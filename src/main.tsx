@@ -407,3 +407,5 @@ import "./royale-crisp-seat-cards.css";
 import "./royale-deck-v4.css";
 
 import "./royale-showdown-sharp-only.css";
+
+import "./royale-showdown-v2.css";
