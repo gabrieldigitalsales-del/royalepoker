@@ -417,3 +417,5 @@ import "./royale-deck-v4.css";
 import "./royale-showdown-sharp-only.css";
 
 import "./royale-showdown-v2.css";
+
+import "./royale-flat-reference-cards.css";
