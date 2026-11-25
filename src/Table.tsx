@@ -486,7 +486,7 @@ export default function Table() {
   const fastRevealClock = !!r?.lastHand?.frames?.at(-1)?.finished &&
     r.lastHand.frames.at(-1).runoutFrom != null &&
     (r.lastHand.frames.at(-1).boards?.length ?? 0) > 1 &&
-    Date.now() < (r.reviewUntil ?? 0);
+    time < (r.reviewUntil ?? 0);
   useEffect(() => {
     const tick = () => {
       if (document.visibilityState === "visible") T(Date.now());
